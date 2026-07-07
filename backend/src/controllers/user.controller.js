@@ -50,13 +50,12 @@ const getDataTable = async (req, res) => {
   res.status(200).json({
     success: true,
     message: "success",
-    data: {
+    data: rows,
+    meta: {
       total: count,
-      users: rows,
-      pages: pages,
-      page: page,
-      limit: limit,
-      offset: offset,
+      page,
+      limit,
+      pages,
     },
   });
 };
