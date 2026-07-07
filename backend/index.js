@@ -11,6 +11,8 @@ const not_found = require("./src/middleware/not_found.js");
 
 const auth_router = require("./src/routes/auth.route.js");
 const user_router = require("./src/routes/user.route.js");
+const company_router = require("./src/routes/company.route.js");
+const status_router = require("./src/routes/status.route.js");
 
 dotenv.config();
 
@@ -51,6 +53,8 @@ app.use(express.static("public"));
 //route
 app.use("/api/v1/auth", auth_router);
 app.use("/api/v1/user", user_router);
+app.use("/api/v1/company", company_router);
+app.use("/api/v1/status", status_router);
 
 //handle errors
 app.use(errorHandlerMiddleware);
