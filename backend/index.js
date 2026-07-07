@@ -10,6 +10,7 @@ const errorHandlerMiddleware = require("./src/middleware/error_handler.js");
 const not_found = require("./src/middleware/not_found.js");
 
 const auth_router = require("./src/routes/auth.route.js");
+const user_router = require("./src/routes/user.route.js");
 
 dotenv.config();
 
@@ -49,6 +50,7 @@ app.use(express.static("public"));
 
 //route
 app.use("/api/v1/auth", auth_router);
+app.use("/api/v1/user", user_router);
 
 //handle errors
 app.use(errorHandlerMiddleware);
