@@ -14,6 +14,7 @@ module.exports = {
         name: "admin",
         email: "admin@gmail.com",
         password: await argon.hash("admin"),
+        birth_date: new Date("1990-01-01"),
         phone_number: "+6285885633055",
         company_id: 2,
         status_id: 2,
