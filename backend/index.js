@@ -1,0 +1,59 @@
+const express = require("express");
+const cors = require("cors");
+const session = require("express-session");
+const fileUpload = require("express-fileupload");
+const SequelizeStore = require("connect-session-sequelize");
+
+const dotenv = require("dotenv");
+const db = require("./src/models/index.js");
+const errorHandlerMiddleware = require("./src/middleware/error_handler.js");
+const not_found = require("./src/middleware/not_found.js");
+
+const auth_router = require("./src/routes/auth.route.js");
+
+dotenv.config();
+
+const app = express();
+
+const sessionStore = SequelizeStore(session.Store);
+
+const store = new sessionStore({
+  db: db.sequelize,
+});
+
+app.use(
+  session({
+    secret: process.env.SESS_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    store: store,
+    cookie: {
+      secure: "auto",
+      expires: 1000 * 60 * 60 * process.env.SESS_EXPIRES,
+    },
+  }),
+);
+
+app.use(
+  cors({
+    credentials: true,
+    origin: [process.env.LINK_FRONTEND],
+  }),
+);
+
+app.use(express.json());
+app.use(fileUpload());
+
+//setup public folder
+app.use(express.static("public"));
+
+//route
+app.use("/api/v1/auth", auth_router);
+
+//handle errors
+app.use(errorHandlerMiddleware);
+app.use(not_found);
+
+app.listen(process.env.BACKEND_PORT, () => {
+  console.log(`server running at port ${process.env.BACKEND_PORT}`);
+});
