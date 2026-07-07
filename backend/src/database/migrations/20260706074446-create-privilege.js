@@ -17,18 +17,23 @@ module.exports = {
       },
       voting_page: {
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       dashboard: {
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       user_data: {
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       setting: {
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       is_active: {
         type: Sequelize.BOOLEAN,
+        defaultValue: true,
       },
       created_at: {
         allowNull: false,

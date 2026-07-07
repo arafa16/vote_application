@@ -27,6 +27,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "privilege",
+      created_at: "created_at",
+      updated_at: "updated_at",
       underscored: true,
     },
   );
