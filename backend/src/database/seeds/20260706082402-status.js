@@ -12,7 +12,7 @@ module.exports = {
         id: index + 1,
         uuid: crypto.randomUUID(),
         name: status,
-        sequelize: index + 1,
+        sequence: index + 1,
         code: index + 1,
         is_active: true,
         created_at: new Date(),

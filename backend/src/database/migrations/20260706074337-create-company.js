@@ -15,7 +15,7 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
       },
-      sequelize: {
+      sequence: {
         type: Sequelize.DECIMAL,
       },
       code: {

@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: DataTypes.UUIDV4,
       },
       name: DataTypes.STRING,
-      sequelize: DataTypes.DECIMAL,
+      sequence: DataTypes.DECIMAL,
       code: DataTypes.DECIMAL,
       is_active: DataTypes.BOOLEAN,
     },
