@@ -3,7 +3,7 @@ const { Op } = require("sequelize");
 const CustomHttpError = require("../utils/custom_http_error.js");
 
 const getDatas = async (req, res) => {
-  const { uuid, name, sequence, code, sort } = req.query;
+  const { name, sort } = req.query;
 
   const where = {};
   let order = [];
@@ -22,6 +22,7 @@ const getDatas = async (req, res) => {
 
   const findDatas = await statusModel.findAll({
     where,
+    order,
   });
 
   return res.status(200).json({
@@ -60,6 +61,7 @@ const getDataTable = async (req, res) => {
   const offset = (page - 1) * limit;
   const { rows, count } = await statusModel.findAndCountAll({
     where: whereClause,
+    order,
     limit,
     offset,
   });

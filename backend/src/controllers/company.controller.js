@@ -132,7 +132,6 @@ const updateData = async (req, res) => {
 
   await findData.update({
     name,
-    name,
     sequence,
     code,
   });
