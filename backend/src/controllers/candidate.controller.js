@@ -7,6 +7,7 @@ const path = require("path");
 const crypto = require("crypto");
 const fs = require("fs");
 const CustomHttpError = require("../utils/custom_http_error.js");
+const { createLogHandler } = require("./write_log.controller.js");
 
 const getDatas = async (req, res) => {
   const { uuid, name, sort } = req.query;
@@ -159,7 +160,13 @@ const createData = async (req, res) => {
         mission,
       });
 
-      return res.status(201).json({ message: "file uploaded" });
+      await createLogHandler({
+        user_id: req.user.id,
+        activity: "candidate-create",
+        description: `${req.user.name} has created candidate ${name}`,
+      });
+
+      return res.status(201).json({ message: "success", data: candidate });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
@@ -196,6 +203,12 @@ const updateData = async (req, res) => {
       name,
       vision,
       mission,
+    });
+
+    await createLogHandler({
+      user_id: req.user.id,
+      activity: "candidate-update",
+      description: `${req.user.name} has updated candidate ${name}`,
     });
 
     return res.status(201).json({
@@ -255,6 +268,12 @@ const updateData = async (req, res) => {
         mission,
       });
 
+      await createLogHandler({
+        user_id: req.user.id,
+        activity: "candidate-update",
+        description: `${req.user.name} has updated candidate ${name}`,
+      });
+
       return res.status(201).json({
         status: 201,
         success: true,
@@ -298,6 +317,12 @@ const deleteData = async (req, res) => {
         fs.unlinkSync(filePath);
       }
     }
+
+    await createLogHandler({
+      user_id: req.user.id,
+      activity: "candidate-delete",
+      description: `${req.user.name} has deleted candidate ${findData.name}`,
+    });
     await findData.destroy();
   } else {
     await findData.update({

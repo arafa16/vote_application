@@ -4,6 +4,7 @@ const path = require("path");
 const crypto = require("crypto");
 const fs = require("fs");
 const CustomHttpError = require("../utils/custom_http_error.js");
+const { createLogHandler } = require("./write_log.controller.js");
 
 const getDatas = async (req, res) => {
   const { uuid, name, sort } = req.query;
@@ -112,6 +113,12 @@ const createData = async (req, res) => {
     end_date,
   });
 
+  await createLogHandler({
+    user_id: req.user.id,
+    activity: "voting period-create",
+    description: `${req.user.name} has created voting period ${name}`,
+  });
+
   return res.status(201).json({
     success: true,
     message: "success",
@@ -138,6 +145,12 @@ const updateData = async (req, res) => {
     end_date,
   });
 
+  await createLogHandler({
+    user_id: req.user.id,
+    activity: "voting period-update",
+    description: `${req.user.name} has updated voting period ${name}`,
+  });
+
   return res.status(200).json({
     success: true,
     message: "data updated successfully",
@@ -157,6 +170,12 @@ const deleteData = async (req, res) => {
   }
 
   if (Boolean(permanent) === true) {
+    await createLogHandler({
+      user_id: req.user.id,
+      activity: "voting period-delete",
+      description: `${req.user.name} has deleted voting period ${findData.name}`,
+    });
+
     await findData.destroy();
   } else {
     await findData.update({

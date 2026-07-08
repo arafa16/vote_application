@@ -6,6 +6,7 @@ const {
   user: userModel,
 } = require("../models/index.js");
 const CustomHttpError = require("../utils/custom_http_error.js");
+const { createLogHandler } = require("./write_log.controller.js");
 
 const getDatas = async (req, res) => {
   const { uuid, name, sort } = req.query;
@@ -140,6 +141,12 @@ const createData = async (req, res) => {
     ip_address: req.ip,
   });
 
+  await createLogHandler({
+    user_id: findUser.id,
+    activity: "vote",
+    description: `${findUser.name} has vote ${findCandidate.name}`,
+  });
+
   return res.status(201).json({
     success: true,
     message: "success",
@@ -192,6 +199,12 @@ const updateData = async (req, res) => {
     ip_address: req.ip,
   });
 
+  await createLogHandler({
+    user_id: findUser.id,
+    activity: "vote-update",
+    description: `${findUser.name} has updated vote ${findCandidate.name}`,
+  });
+
   return res.status(201).json({
     success: true,
     message: "success",
@@ -212,6 +225,12 @@ const deleteData = async (req, res) => {
   }
 
   if (Boolean(permanent) === true) {
+    await createLogHandler({
+      user_id: req.user.id,
+      activity: "vote-delete",
+      description: `${req.user.name} has deleted vote ${findData.name}`,
+    });
+
     await findData.destroy();
   } else {
     await findData.update({

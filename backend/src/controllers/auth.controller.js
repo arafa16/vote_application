@@ -10,6 +10,7 @@ const argon = require("argon2");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const CustomHttpError = require("../utils/custom_http_error.js");
+const { createLogHandler } = require("./write_log.controller.js");
 
 const register = async (req, res) => {
   const {
@@ -156,7 +157,7 @@ const login = async (req, res) => {
 
   req.session.token = token;
 
-  await auditLogModel.create({
+  await createLogHandler({
     user_id: findUser.id,
     activity: "login",
     description: `${findUser.name} has logged in`,
