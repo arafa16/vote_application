@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.STRING,
       logo: DataTypes.STRING,
       logo_url: DataTypes.TEXT,
+      sequence: DataTypes.DECIMAL,
       is_active: DataTypes.BOOLEAN,
     },
     {

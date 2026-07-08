@@ -12,6 +12,7 @@ module.exports = {
         description: "application",
         logo: "logo.png",
         logo_url: "/images/logo.png",
+        sequence: 1,
         is_active: true,
         created_at: new Date(),
         updated_at: new Date(),

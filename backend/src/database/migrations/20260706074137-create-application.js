@@ -24,6 +24,9 @@ module.exports = {
       logo_url: {
         type: Sequelize.TEXT,
       },
+      sequence: {
+        type: Sequelize.DECIMAL,
+      },
       is_active: {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
