@@ -13,6 +13,12 @@ const auth_router = require("./src/routes/auth.route.js");
 const user_router = require("./src/routes/user.route.js");
 const company_router = require("./src/routes/company.route.js");
 const status_router = require("./src/routes/status.route.js");
+const privilege_router = require("./src/routes/privilege.route.js");
+const voting_period_router = require("./src/routes/voting_period.route.js");
+const candidate_router = require("./src/routes/candidate.route.js");
+const vote_router = require("./src/routes/vote.route.js");
+const application_router = require("./src/routes/application.route.js");
+const audit_log_router = require("./src/routes/audit_log.route.js");
 
 dotenv.config();
 
@@ -55,6 +61,12 @@ app.use("/api/v1/auth", auth_router);
 app.use("/api/v1/user", user_router);
 app.use("/api/v1/company", company_router);
 app.use("/api/v1/status", status_router);
+app.use("/api/v1/privilege", privilege_router);
+app.use("/api/v1/voting_period", voting_period_router);
+app.use("/api/v1/candidate", candidate_router);
+app.use("/api/v1/vote", vote_router);
+app.use("/api/v1/application", application_router);
+app.use("/api/v1/audit_log", audit_log_router);
 
 //handle errors
 app.use(errorHandlerMiddleware);
