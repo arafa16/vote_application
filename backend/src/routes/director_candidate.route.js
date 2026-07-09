@@ -6,7 +6,7 @@ const {
   updateData,
   deleteData,
   getDataTable,
-} = require("../controllers/vote.controller");
+} = require("../controllers/director_candidate.controller");
 const { verifyToken } = require("../middleware/auth.middleware");
 
 const router = express.Router();

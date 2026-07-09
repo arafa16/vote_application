@@ -1,5 +1,5 @@
 const {
-  candidate: candidateModel,
+  director_candidate: directorCandidateModel,
   voting_period: votingPeriodModel,
 } = require("../models/index.js");
 const { Op } = require("sequelize");
@@ -27,7 +27,7 @@ const getDatas = async (req, res) => {
     };
   }
 
-  const findDatas = await candidateModel.findAll({ where });
+  const findDatas = await directorCandidateModel.findAll({ where });
 
   return res.status(200).json({
     success: true,
@@ -63,7 +63,7 @@ const getDataTable = async (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
 
   const offset = (page - 1) * limit;
-  const { rows, count } = await candidateModel.findAndCountAll({
+  const { rows, count } = await directorCandidateModel.findAndCountAll({
     where: whereClause,
     limit,
     offset,
@@ -87,7 +87,7 @@ const getDataTable = async (req, res) => {
 const getDataById = async (req, res) => {
   const { uuid } = req.params;
 
-  const findData = await candidateModel.findOne({
+  const findData = await directorCandidateModel.findOne({
     where: { uuid },
   });
 
@@ -128,7 +128,7 @@ const createData = async (req, res) => {
   const ext = path.extname(file.name);
   const rename = name ? name + ext : file.name;
   const photo_name = crypto.randomUUID() + ext;
-  const photo_url = `/images/candidates/${photo_name}`;
+  const photo_url = `/images/director_candidates/${photo_name}`;
 
   if (file_size > 50000000) {
     return res.status(422).json({ msg: "Image must be less than 50 MB" });
@@ -148,10 +148,10 @@ const createData = async (req, res) => {
     });
   }
 
-  file.mv(`./public/images/candidates/${photo_name}`, async (err) => {
+  file.mv(`./public/images/director_candidates/${photo_name}`, async (err) => {
     if (err) return res.status(500).json({ message: err.message });
     try {
-      const candidate = await candidateModel.create({
+      const director_candidate = await directorCandidateModel.create({
         voting_period_id: findVotingPeriod.id,
         name,
         photo_name,
@@ -162,11 +162,13 @@ const createData = async (req, res) => {
 
       await createLogHandler({
         user_id: req.user.id,
-        activity: "candidate-create",
-        description: `${req.user.name} has created candidate ${name}`,
+        activity: "director_candidate-create",
+        description: `${req.user.name} has created director candidate ${name}`,
       });
 
-      return res.status(201).json({ message: "success", data: candidate });
+      return res
+        .status(201)
+        .json({ message: "success", data: director_candidate });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
@@ -177,7 +179,7 @@ const updateData = async (req, res) => {
   const { uuid } = req.params;
   const { voting_period_uuid, name, vision, mission } = req.body;
 
-  const findData = await candidateModel.findOne({
+  const findData = await directorCandidateModel.findOne({
     where: { uuid },
   });
 
@@ -198,7 +200,7 @@ const updateData = async (req, res) => {
   }
 
   if (!req.files || !req.files.file || req.files.file.length === 0) {
-    const candidate = await findData.update({
+    const director_candidate = await findData.update({
       voting_period_id: findVotingPeriod.id,
       name,
       vision,
@@ -207,14 +209,14 @@ const updateData = async (req, res) => {
 
     await createLogHandler({
       user_id: req.user.id,
-      activity: "candidate-update",
-      description: `${req.user.name} has updated candidate ${name}`,
+      activity: "director_candidate-update",
+      description: `${req.user.name} has updated director candidate ${name}`,
     });
 
     return res.status(201).json({
       status: 201,
       success: true,
-      datas: candidate,
+      datas: director_candidate,
     });
   }
 
@@ -225,7 +227,7 @@ const updateData = async (req, res) => {
   const ext = path.extname(file.name);
   const rename = name ? name + ext : file.name;
   const photo_name = crypto.randomUUID() + ext;
-  const photo_url = `/images/candidates/${photo_name}`;
+  const photo_url = `/images/director_candidates/${photo_name}`;
 
   if (file_size > 50000000) {
     return res.status(422).json({ msg: "Image must be less than 50 MB" });
@@ -247,7 +249,7 @@ const updateData = async (req, res) => {
 
   //delete foto
   if (findData.photo_name !== null) {
-    const filePath = `./public/images/candidates/${findData.photo_name}`;
+    const filePath = `./public/images/director_candidates/${findData.photo_name}`;
 
     const fileExist = fs.existsSync(filePath);
 
@@ -256,7 +258,7 @@ const updateData = async (req, res) => {
     }
   }
 
-  file.mv(`./public/images/candidates/${photo_name}`, async (err) => {
+  file.mv(`./public/images/director_candidates/${photo_name}`, async (err) => {
     if (err) return res.status(500).json({ message: err.message });
     try {
       await findData.update({
@@ -270,8 +272,8 @@ const updateData = async (req, res) => {
 
       await createLogHandler({
         user_id: req.user.id,
-        activity: "candidate-update",
-        description: `${req.user.name} has updated candidate ${name}`,
+        activity: "director_candidate-update",
+        description: `${req.user.name} has updated director candidate ${name}`,
       });
 
       return res.status(201).json({
@@ -298,7 +300,7 @@ const deleteData = async (req, res) => {
   const { uuid } = req.params;
   const { permanent } = req.query;
 
-  const findData = await candidateModel.findOne({
+  const findData = await directorCandidateModel.findOne({
     where: { uuid },
   });
 
@@ -309,7 +311,7 @@ const deleteData = async (req, res) => {
   if (Boolean(permanent) === true) {
     //delete foto
     if (findData.photo_name !== null) {
-      const filePath = `./public/images/candidates/${findData.photo_name}`;
+      const filePath = `./public/images/director_candidates/${findData.photo_name}`;
 
       const fileExist = fs.existsSync(filePath);
 
@@ -320,8 +322,8 @@ const deleteData = async (req, res) => {
 
     await createLogHandler({
       user_id: req.user.id,
-      activity: "candidate-delete",
-      description: `${req.user.name} has deleted candidate ${findData.name}`,
+      activity: "director_candidate-delete",
+      description: `${req.user.name} has deleted director candidate ${findData.name}`,
     });
     await findData.destroy();
   } else {

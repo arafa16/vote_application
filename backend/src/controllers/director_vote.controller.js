@@ -1,8 +1,8 @@
 const moment = require("moment/moment.js");
 const {
-  vote: voteModel,
+  director_vote: directorVoteModel,
   voting_period: votingPeriodModel,
-  candidate: candidateModel,
+  director_candidate: directorCandidateModel,
   user: userModel,
 } = require("../models/index.js");
 const CustomHttpError = require("../utils/custom_http_error.js");
@@ -26,7 +26,7 @@ const getDatas = async (req, res) => {
     };
   }
 
-  const findDatas = await voteModel.findAll({ where, order });
+  const findDatas = await directorVoteModel.findAll({ where, order });
 
   return res.status(200).json({
     success: true,
@@ -62,7 +62,7 @@ const getDataTable = async (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
 
   const offset = (page - 1) * limit;
-  const { rows, count } = await voteModel.findAndCountAll({
+  const { rows, count } = await directorVoteModel.findAndCountAll({
     where: whereClause,
     limit,
     offset,
@@ -87,7 +87,7 @@ const getDataTable = async (req, res) => {
 const getDataById = async (req, res) => {
   const { uuid } = req.params;
 
-  const findData = await voteModel.findOne({
+  const findData = await directorVoteModel.findOne({
     where: { uuid },
   });
 
@@ -103,9 +103,9 @@ const getDataById = async (req, res) => {
 };
 
 const createData = async (req, res) => {
-  const { voting_period_uuid, user_uuid, candidate_uuid } = req.body;
+  const { voting_period_uuid, user_uuid, director_candidate_uuid } = req.body;
 
-  if (!voting_period_uuid || !user_uuid || !candidate_uuid) {
+  if (!voting_period_uuid || !user_uuid || !director_candidate_uuid) {
     throw new CustomHttpError("vote not valid", 400);
   }
 
@@ -125,26 +125,26 @@ const createData = async (req, res) => {
     throw new CustomHttpError("user not found", 404);
   }
 
-  const findCandidate = await candidateModel.findOne({
-    where: { uuid: candidate_uuid },
+  const findDirectorCandidate = await directorCandidateModel.findOne({
+    where: { uuid: director_candidate_uuid },
   });
 
-  if (!findCandidate) {
-    throw new CustomHttpError("candidate not found", 404);
+  if (!findDirectorCandidate) {
+    throw new CustomHttpError("director candidate not found", 404);
   }
 
-  const newData = await voteModel.create({
+  const newData = await directorVoteModel.create({
     voting_period_id: findVotingPeriod.id,
     user_id: findUser.id,
-    candidate_id: findCandidate.id,
+    director_candidate_id: findDirectorCandidate.id,
     vote_time: new Date(),
     ip_address: req.ip,
   });
 
   await createLogHandler({
     user_id: findUser.id,
-    activity: "vote",
-    description: `${findUser.name} has vote ${findCandidate.name}`,
+    activity: "director_vote",
+    description: `${findUser.name} has director vote ${findDirectorCandidate.name}`,
   });
 
   return res.status(201).json({
@@ -157,13 +157,13 @@ const createData = async (req, res) => {
 const updateData = async (req, res) => {
   const { uuid } = req.params;
 
-  const { voting_period_uuid, user_uuid, candidate_uuid } = req.body;
+  const { voting_period_uuid, user_uuid, director_candidate_uuid } = req.body;
 
-  if (!voting_period_uuid || !user_uuid || !candidate_uuid) {
+  if (!voting_period_uuid || !user_uuid || !director_candidate_uuid) {
     throw new CustomHttpError("vote not valid", 400);
   }
 
-  const findData = await voteModel.findOne({
+  const findData = await directorVoteModel.findOne({
     where: { uuid },
   });
 
@@ -183,26 +183,26 @@ const updateData = async (req, res) => {
     throw new CustomHttpError("user not found", 404);
   }
 
-  const findCandidate = await candidateModel.findOne({
-    where: { uuid: candidate_uuid },
+  const findDirectorCandidate = await directorCandidateModel.findOne({
+    where: { uuid: director_candidate_uuid },
   });
 
-  if (!findCandidate) {
-    throw new CustomHttpError("candidate not found", 404);
+  if (!findDirectorCandidate) {
+    throw new CustomHttpError("director candidate not found", 404);
   }
 
   const newData = await findData.update({
     voting_period_id: findVotingPeriod.id,
     user_id: findUser.id,
-    candidate_id: findCandidate.id,
+    director_candidate_id: findDirectorCandidate.id,
     vote_time: new Date(),
     ip_address: req.ip,
   });
 
   await createLogHandler({
     user_id: findUser.id,
-    activity: "vote-update",
-    description: `${findUser.name} has updated vote ${findCandidate.name}`,
+    activity: "director_vote-update",
+    description: `${findUser.name} has updated director vote ${findDirectorCandidate.name}`,
   });
 
   return res.status(201).json({
@@ -216,7 +216,7 @@ const deleteData = async (req, res) => {
   const { uuid } = req.params;
   const { permanent } = req.query;
 
-  const findData = await voteModel.findOne({
+  const findData = await directorVoteModel.findOne({
     where: { uuid },
   });
 
@@ -227,8 +227,8 @@ const deleteData = async (req, res) => {
   if (Boolean(permanent) === true) {
     await createLogHandler({
       user_id: req.user.id,
-      activity: "vote-delete",
-      description: `${req.user.name} has deleted vote ${findData.name}`,
+      activity: "director_vote-delete",
+      description: `${req.user.name} has deleted director vote ${findData.name}`,
     });
 
     await findData.destroy();
