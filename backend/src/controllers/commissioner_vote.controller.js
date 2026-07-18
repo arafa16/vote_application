@@ -1,6 +1,7 @@
 const moment = require("moment/moment.js");
 const {
   commissioner_vote: commissionerVoteModel,
+  director_vote: directorVoteModel,
   voting_period: votingPeriodModel,
   commissioner_candidate: commissionerCandidateModel,
   user: userModel,
@@ -102,56 +103,85 @@ const getDataById = async (req, res) => {
   });
 };
 
+const getDataCommissionerByUserNPeriod = async (req, res) => {
+  const findData = await commissionerVoteModel.findOne({
+    where: { user_id: req.user_id, voting_period_id: req.vote_period_id },
+    include: [
+      {
+        model: commissionerCandidateModel,
+        attributes: {
+          exclude: ["id"],
+        },
+      },
+    ],
+  });
+
+  let director_check = false;
+
+  const cekDataDirectorVote = await directorVoteModel.findOne({
+    where: {
+      voting_period_id: req.vote_period_id,
+      user_id: req.user_id,
+      is_validate: 1,
+    },
+    attributes: {
+      exclude: ["id"],
+    },
+  });
+
+  if (cekDataDirectorVote) {
+    director_check = true;
+  }
+
+  let commissioner_check = false;
+
+  const cekDataCommissionerVote = await commissionerVoteModel.findOne({
+    where: {
+      voting_period_id: req.vote_period_id,
+      user_id: req.user_id,
+      is_validate: 1,
+    },
+    attributes: {
+      exclude: ["id"],
+    },
+  });
+
+  if (cekDataCommissionerVote) {
+    commissioner_check = true;
+  }
+
+  if (!findData) {
+    throw new CustomHttpError("data not found", 404);
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: "success",
+    data: findData,
+    data_check: {
+      commissioner_check,
+      director_check,
+    },
+  });
+};
+
 const createData = async (req, res) => {
-  const { voting_period_uuid, user_uuid, commissioner_candidate_uuid } =
-    req.body;
-
-  if (!voting_period_uuid || !user_uuid || !commissioner_candidate_uuid) {
-    throw new CustomHttpError("vote not valid", 400);
-  }
-
-  const findVotingPeriod = await votingPeriodModel.findOne({
-    where: { uuid: voting_period_uuid },
-  });
-
-  if (!findVotingPeriod) {
-    throw new CustomHttpError("voting period not found", 404);
-  }
-
-  const findUser = await userModel.findOne({
-    where: { uuid: user_uuid },
-  });
-
-  if (!findUser) {
-    throw new CustomHttpError("user not found", 404);
-  }
-
-  const findCommissionerCandidate = await commissionerCandidateModel.findOne({
-    where: { uuid: commissioner_candidate_uuid },
-  });
-
-  if (!findCommissionerCandidate) {
-    throw new CustomHttpError("commissioner candidate not found", 404);
-  }
-
   const newData = await commissionerVoteModel.create({
-    voting_period_id: findVotingPeriod.id,
-    user_id: findUser.id,
-    commissioner_candidate_id: findCommissionerCandidate.id,
-    vote_time: new Date(),
+    voting_period_id: req.voting_period_id,
+    user_id: req.user_id,
+    commissioner_candidate_id: req.commissioner_candidate_id,
     ip_address: req.ip,
   });
 
   await createLogHandler({
-    user_id: findUser.id,
+    user_id: req.user_id,
     activity: "commissioner_vote",
-    description: `${findUser.name} has commissioner vote ${findCommissionerCandidate.name}`,
+    description: `${req.user_name} has commissioner vote ${req.commissioner_candidate_name}`,
   });
 
   return res.status(201).json({
     success: true,
     message: "success",
-    data: newData,
   });
 };
 
@@ -197,7 +227,6 @@ const updateData = async (req, res) => {
     voting_period_id: findVotingPeriod.id,
     user_id: findUser.id,
     commissioner_candidate_id: findCommissionerCandidate.id,
-    vote_time: new Date(),
     ip_address: req.ip,
   });
 
@@ -210,7 +239,6 @@ const updateData = async (req, res) => {
   return res.status(201).json({
     success: true,
     message: "success",
-    data: newData,
   });
 };
 
@@ -250,6 +278,7 @@ module.exports = {
   getDatas,
   getDataTable,
   getDataById,
+  getDataCommissionerByUserNPeriod,
   createData,
   updateData,
   deleteData,
