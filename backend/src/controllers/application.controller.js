@@ -190,7 +190,7 @@ const updateData = async (req, res) => {
     return res.status(201).json({
       status: 201,
       success: true,
-      datas: candidate,
+      datas: application,
     });
   }
 
@@ -279,10 +279,6 @@ const deleteData = async (req, res) => {
       is_active: false,
     });
   }
-
-  await findData.update({
-    is_active: false,
-  });
 
   return res.status(200).json({
     success: true,
