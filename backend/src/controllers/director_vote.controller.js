@@ -1,5 +1,6 @@
 const moment = require("moment/moment.js");
 const {
+  commissioner_vote: commissionerVoteModel,
   director_vote: directorVoteModel,
   voting_period: votingPeriodModel,
   director_candidate: directorCandidateModel,
@@ -102,55 +103,85 @@ const getDataById = async (req, res) => {
   });
 };
 
+const getDataByUserNPeriod = async (req, res) => {
+  const findData = await directorVoteModel.findOne({
+    where: { user_id: req.user_id, voting_period_id: req.vote_period_id },
+    include: [
+      {
+        model: directorCandidateModel,
+        attributes: {
+          exclude: ["id"],
+        },
+      },
+    ],
+  });
+
+  let director_check = false;
+
+  const cekDataDirectorVote = await directorVoteModel.findOne({
+    where: {
+      voting_period_id: req.vote_period_id,
+      user_id: req.user_id,
+      is_validate: 1,
+    },
+    attributes: {
+      exclude: ["id"],
+    },
+  });
+
+  if (cekDataDirectorVote) {
+    director_check = true;
+  }
+
+  let commissioner_check = false;
+
+  const cekDataCommissionerVote = await commissionerVoteModel.findOne({
+    where: {
+      voting_period_id: req.vote_period_id,
+      user_id: req.user_id,
+      is_validate: 1,
+    },
+    attributes: {
+      exclude: ["id"],
+    },
+  });
+
+  if (cekDataCommissionerVote) {
+    commissioner_check = true;
+  }
+
+  if (!findData) {
+    throw new CustomHttpError("data not found", 404);
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: "success",
+    data: findData,
+    data_check: {
+      commissioner_check,
+      director_check,
+    },
+  });
+};
+
 const createData = async (req, res) => {
-  const { voting_period_uuid, user_uuid, director_candidate_uuid } = req.body;
-
-  if (!voting_period_uuid || !user_uuid || !director_candidate_uuid) {
-    throw new CustomHttpError("vote not valid", 400);
-  }
-
-  const findVotingPeriod = await votingPeriodModel.findOne({
-    where: { uuid: voting_period_uuid },
-  });
-
-  if (!findVotingPeriod) {
-    throw new CustomHttpError("voting period not found", 404);
-  }
-
-  const findUser = await userModel.findOne({
-    where: { uuid: user_uuid },
-  });
-
-  if (!findUser) {
-    throw new CustomHttpError("user not found", 404);
-  }
-
-  const findDirectorCandidate = await directorCandidateModel.findOne({
-    where: { uuid: director_candidate_uuid },
-  });
-
-  if (!findDirectorCandidate) {
-    throw new CustomHttpError("director candidate not found", 404);
-  }
-
   const newData = await directorVoteModel.create({
-    voting_period_id: findVotingPeriod.id,
-    user_id: findUser.id,
-    director_candidate_id: findDirectorCandidate.id,
-    vote_time: new Date(),
+    voting_period_id: req.voting_period_id,
+    user_id: req.user_id,
+    director_candidate_id: req.director_candidate_id,
     ip_address: req.ip,
   });
 
   await createLogHandler({
-    user_id: findUser.id,
+    user_id: req.user_id,
     activity: "director_vote",
-    description: `${findUser.name} has director vote ${findDirectorCandidate.name}`,
+    description: `${req.user_name} has director vote ${req.director_candidate_name}`,
   });
 
   return res.status(201).json({
     success: true,
     message: "success",
-    data: newData,
   });
 };
 
@@ -195,7 +226,6 @@ const updateData = async (req, res) => {
     voting_period_id: findVotingPeriod.id,
     user_id: findUser.id,
     director_candidate_id: findDirectorCandidate.id,
-    vote_time: new Date(),
     ip_address: req.ip,
   });
 
@@ -248,6 +278,7 @@ module.exports = {
   getDatas,
   getDataTable,
   getDataById,
+  getDataByUserNPeriod,
   createData,
   updateData,
   deleteData,
