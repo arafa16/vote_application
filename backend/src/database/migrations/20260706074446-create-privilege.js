@@ -15,11 +15,31 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
       },
-      voting_page: {
+      tata_cara_voting: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      profile_kandidat_pengawas: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      profile_kandidat_pengurus: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      mulai_voting: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      riwayat_voting: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
       dashboard: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      status_voting_anggota: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },

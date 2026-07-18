@@ -24,15 +24,17 @@ module.exports = {
       password: {
         type: Sequelize.STRING,
       },
-      birth_date: {
-        type: Sequelize.DATE,
-      },
-      phone_number: {
-        type: Sequelize.STRING,
-      },
       company_id: {
         type: Sequelize.INTEGER,
         allowNull: true,
+      },
+      verification_date: {
+        type: Sequelize.DATE,
+        defaultValue: null,
+      },
+      verification_token: {
+        type: Sequelize.TEXT,
+        defaultValue: null,
       },
       status_id: {
         type: Sequelize.INTEGER,

@@ -30,6 +30,10 @@ module.exports = {
       ip_address: {
         type: Sequelize.STRING,
       },
+      is_validate: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
       is_active: {
         type: Sequelize.BOOLEAN,
         defaultValue: true,

@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       director_candidate_id: DataTypes.INTEGER,
       vote_time: DataTypes.DATE,
       ip_address: DataTypes.STRING,
+      is_validate: DataTypes.BOOLEAN,
       is_active: DataTypes.BOOLEAN,
     },
     {
