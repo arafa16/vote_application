@@ -21,6 +21,8 @@ const commissioner_candidate_router = require("./src/routes/commissioner_candida
 const commissioner_vote_router = require("./src/routes/commissioner_vote.route.js");
 const application_router = require("./src/routes/application.route.js");
 const audit_log_router = require("./src/routes/audit_log.route.js");
+const slider_router = require("./src/routes/slider.route.js");
+const status_voting = require("./src/routes/status_voting.route.js");
 
 dotenv.config();
 
@@ -71,6 +73,8 @@ app.use("/api/v1/commissioner_candidate", commissioner_candidate_router);
 app.use("/api/v1/commissioner_vote", commissioner_vote_router);
 app.use("/api/v1/application", application_router);
 app.use("/api/v1/audit_log", audit_log_router);
+app.use("/api/v1/slider", slider_router);
+app.use("/api/v1/status_voting", status_voting);
 
 //handle errors
 app.use(errorHandlerMiddleware);
