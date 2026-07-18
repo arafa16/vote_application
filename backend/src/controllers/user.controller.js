@@ -9,23 +9,18 @@ const {
 } = require("../models");
 const CustomHttpError = require("../utils/custom_http_error.js");
 const argon = require("argon2");
+const { Op } = require("sequelize");
 
 const getDataTable = async (req, res) => {
-  const { search, sort } = req.query;
+  const { search, company, status, sort } = req.query;
 
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const offset = (page - 1) * limit;
 
-  const whereClause = search
-    ? {
-        [Op.or]: [
-          { name: { [Op.like]: `%${search}%` } },
-          { email: { [Op.like]: `%${search}%` } },
-        ],
-        is_active: true,
-      }
-    : {};
+  const whereClause = {
+    [Op.and]: [],
+  };
 
   let order;
 
@@ -37,9 +32,53 @@ const getDataTable = async (req, res) => {
     order = [["name", "ASC"]];
   }
 
+  if (search) {
+    whereClause[Op.and].push({
+      [Op.or]: [
+        { name: { [Op.like]: `%${search}%` } },
+        { membership_number: { [Op.like]: `%${search}%` } },
+      ],
+    });
+  }
+
+  if (company) {
+    const findData = await companyModel.findOne({
+      where: {
+        uuid: company,
+      },
+    });
+
+    if (findData) {
+      whereClause[Op.and].push({
+        company_id: findData.id,
+      });
+    }
+  }
+
+  if (status) {
+    const findData = await statusModel.findOne({
+      where: {
+        uuid: status,
+      },
+    });
+
+    if (findData) {
+      whereClause[Op.and].push({
+        status_id: findData.id,
+      });
+    }
+  }
+
   const { count, rows } = await userModel.findAndCountAll({
     where: whereClause,
-    attributes: { exclude: ["id", "password"] },
+    include: [
+      {
+        model: companyModel,
+      },
+      {
+        model: statusModel,
+      },
+    ],
     limit,
     offset,
     order,
@@ -112,8 +151,7 @@ const getCreateAttributes = async (req, res) => {
   return res.status(200).json({
     success: true,
     message: "User data retrieved successfully",
-    data: null,
-    attributes: {
+    data: {
       status,
       company,
     },
@@ -126,7 +164,6 @@ const createData = async (req, res) => {
     name,
     email,
     password,
-    birth_date,
     phone_number,
     status_uuid,
     company_uuid,
@@ -192,7 +229,6 @@ const createData = async (req, res) => {
         email: email,
         password: hashedPassword,
         membership_number: membership_number,
-        birth_date: birth_date,
         phone_number: phone_number,
         status_id,
         company_id,
@@ -205,8 +241,13 @@ const createData = async (req, res) => {
       {
         user_id: user_result.id,
         name: name,
-        voting_page: false,
+        tata_cara_voting: true,
+        profile_kandidat_pengawas: true,
+        profile_kandidat_pengurus: true,
+        mulai_voting: true,
+        riwayat_voting: true,
         dashboard: false,
+        status_voting_anggota: false,
         user_data: false,
         setting: false,
         is_active: true,
@@ -228,7 +269,6 @@ const createData = async (req, res) => {
         name: user_result.name,
         email: user_result.email,
         membership_number: user_result.membership_number,
-        birth_date: user_result.birth_date,
         phone_number: user_result.phone_number,
         status_id: user_result.status_id,
         company_id: user_result.company_id,
@@ -302,7 +342,6 @@ const updateData = async (req, res) => {
     name,
     email,
     password,
-    birth_date,
     phone_number,
     status_uuid,
     company_uuid,
@@ -349,7 +388,6 @@ const updateData = async (req, res) => {
     name: name || findUser.name,
     email: email || findUser.email,
     password: password ? await argon.hash(password) : findUser.password,
-    birth_date: birth_date || findUser.birth_date,
     phone_number: phone_number || findUser.phone_number,
     status_id: status_id || findUser.status_id,
     company_id: company_id || findUser.company_id,
