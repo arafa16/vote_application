@@ -1,5 +1,12 @@
-const { voting_period: votingPeriodModel } = require("../models/index.js");
-const { Op } = require("sequelize");
+const {
+  user: userModel,
+  voting_period: votingPeriodModel,
+  director_candidate: directorCandidateModel,
+  director_vote: directorVoteModel,
+  commissioner_candidate: commissionerCandidateModel,
+  commissioner_vote: commissionerVoteModel,
+} = require("../models/index.js");
+const { Op, where } = require("sequelize");
 const path = require("path");
 const crypto = require("crypto");
 const fs = require("fs");
@@ -7,7 +14,7 @@ const CustomHttpError = require("../utils/custom_http_error.js");
 const { createLogHandler } = require("./write_log.controller.js");
 
 const getDatas = async (req, res) => {
-  const { uuid, name, sort } = req.query;
+  const { uuid, name, sort, status } = req.query;
 
   const where = {};
   let order = [];
@@ -22,6 +29,12 @@ const getDatas = async (req, res) => {
     where.name = {
       [Op.like]: `%${name}%`,
     };
+  }
+
+  if (status) {
+    where.is_active = status;
+  } else {
+    where.is_active = true;
   }
 
   const findDatas = await votingPeriodModel.findAll({ where });
@@ -96,6 +109,170 @@ const getDataById = async (req, res) => {
     success: true,
     message: "success",
     data: findData,
+  });
+};
+
+const getDataCommissionerNDirectorById = async (req, res) => {
+  const { voting_period_uuid, user_uuid, is_validate } = req.query;
+
+  const findData = await votingPeriodModel.findOne({
+    where: { uuid: voting_period_uuid },
+  });
+
+  if (!findData) {
+    throw new CustomHttpError("data not found", 404);
+  }
+
+  const findUser = await userModel.findOne({
+    where: { uuid: user_uuid },
+  });
+
+  if (!findUser) {
+    throw new CustomHttpError("user not found", 404);
+  }
+
+  const findDirector = await directorVoteModel.findOne({
+    where: {
+      voting_period_id: findData.id,
+      user_id: findUser.id,
+      is_validate: is_validate,
+    },
+    include: [
+      {
+        model: directorCandidateModel,
+        attributes: {
+          exclude: ["id"],
+        },
+      },
+    ],
+    attributes: {
+      exclude: ["id"],
+    },
+  });
+
+  const findCommissioner = await commissionerVoteModel.findOne({
+    where: {
+      voting_period_id: findData.id,
+      user_id: findUser.id,
+      is_validate: is_validate,
+    },
+    include: [
+      {
+        model: commissionerCandidateModel,
+        attributes: {
+          exclude: ["id"],
+        },
+      },
+    ],
+    attributes: {
+      exclude: ["id"],
+    },
+  });
+
+  let director_check = false;
+
+  const cekDataDirectorVote = await directorVoteModel.findOne({
+    where: {
+      voting_period_id: findData.id,
+      user_id: findUser.id,
+      is_validate: 1,
+    },
+    attributes: {
+      exclude: ["id"],
+    },
+  });
+
+  if (cekDataDirectorVote) {
+    director_check = true;
+  }
+
+  let commissioner_check = false;
+
+  const cekDataCommissionerVote = await commissionerVoteModel.findOne({
+    where: {
+      voting_period_id: findData.id,
+      user_id: findUser.id,
+      is_validate: 1,
+    },
+    attributes: {
+      exclude: ["id"],
+    },
+  });
+
+  if (cekDataCommissionerVote) {
+    commissioner_check = true;
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: "success",
+    data: {
+      director: findDirector,
+      commissioner: findCommissioner,
+      user: { name: findUser.name },
+      commissioner_check,
+      director_check,
+    },
+  });
+};
+
+const updateDataCommissionerNDirectorById = async (req, res) => {
+  const { uuid } = req.params;
+
+  const { commissioner_vote_uuid, director_vote_uuid } = req.body;
+
+  if (!commissioner_vote_uuid || !director_vote_uuid) {
+    throw new CustomHttpError("Incomplete data, please check your choose", 403);
+  }
+
+  const findVotingPeriod = await votingPeriodModel.findOne({
+    where: {
+      uuid: uuid,
+    },
+  });
+
+  if (!findVotingPeriod) {
+    throw new CustomHttpError("voting period not found", 404);
+  }
+
+  const commissionerVoteFind = await commissionerVoteModel.findOne({
+    where: {
+      uuid: commissioner_vote_uuid,
+      voting_period_id: findVotingPeriod.id,
+    },
+  });
+
+  if (!commissionerVoteFind) {
+    throw new CustomHttpError("commissioner vote not found", 404);
+  }
+
+  const directorVoteFind = await directorVoteModel.findOne({
+    where: {
+      uuid: director_vote_uuid,
+      voting_period_id: findVotingPeriod.id,
+    },
+  });
+
+  if (!directorVoteFind) {
+    throw new CustomHttpError("director vote not found", 404);
+  }
+
+  const date_now = new Date();
+
+  await commissionerVoteFind.update({
+    is_validate: true,
+    vote_time: date_now,
+  });
+
+  await directorVoteFind.update({
+    is_validate: true,
+    vote_time: date_now,
+  });
+
+  return res.status(201).json({
+    success: true,
+    message: "success",
+    data: null,
   });
 };
 
@@ -193,6 +370,8 @@ module.exports = {
   getDatas,
   getDataTable,
   getDataById,
+  getDataCommissionerNDirectorById,
+  updateDataCommissionerNDirectorById,
   createData,
   updateData,
   deleteData,
