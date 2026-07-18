@@ -3,6 +3,7 @@ backend/.env
 backend/package-lock.json
 backend/public/images/commissioner_candidates/*
 backend/public/images/director_candidates/*
+backend/public/images/sliders/*
 
 frontend/node_modules
 frontend/dist
