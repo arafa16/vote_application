@@ -266,14 +266,6 @@ const createData = async (req, res) => {
       message: "User created successfully",
       data: {
         uuid: user_result.uuid,
-        name: user_result.name,
-        email: user_result.email,
-        membership_number: user_result.membership_number,
-        phone_number: user_result.phone_number,
-        status_id: user_result.status_id,
-        company_id: user_result.company_id,
-        is_member: user_result.is_member,
-        privilege_id: user_result.privilege_id,
       },
     });
   } catch (error) {
@@ -490,6 +482,39 @@ const changePassword = async (req, res) => {
   }
 };
 
+const changePasswordById = async (req, res) => {
+  const { password, conf_password } = req.body;
+  const { uuid } = req.params;
+
+  if (password !== conf_password) {
+    throw new CustomHttpError("password not match, please check again", 401);
+  }
+
+  try {
+    const user = await userModel.findOne({
+      where: {
+        uuid: uuid,
+      },
+    });
+
+    const hasPassword = await argon.hash(password);
+
+    await user.update({
+      password: hasPassword,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Change Password Success",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message || "An error occurred while deleting the user",
+    });
+  }
+};
+
 module.exports = {
   getDataTable,
   getDataById,
@@ -499,4 +524,5 @@ module.exports = {
   updateData,
   deleteData,
   changePassword,
+  changePasswordById,
 };
