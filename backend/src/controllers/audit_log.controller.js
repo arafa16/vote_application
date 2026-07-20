@@ -39,17 +39,20 @@ const getDataTable = async (req, res) => {
   const { search, is_active, sort } = req.query;
 
   let whereClause = {};
+  let whereUser = {};
   let order = [];
 
   if (sort) {
     const direction = sort.startsWith("-") ? "DESC" : "ASC";
     const columnName = sort.replace(/^-/, "");
     order.push([columnName, direction]);
+  } else {
+    order.push(["id", "DESC"]);
   }
 
   if (search) {
-    whereClause = {
-      ...whereClause,
+    whereUser = {
+      ...whereUser,
       [Op.or]: [{ name: { [Op.like]: `%${search}%` } }],
     };
   }
@@ -64,6 +67,10 @@ const getDataTable = async (req, res) => {
   const offset = (page - 1) * limit;
   const { rows, count } = await auditLogModel.findAndCountAll({
     where: whereClause,
+    include: [
+      { model: userModel, where: whereUser, attributes: { exclude: ["id"] } },
+    ],
+    attributes: { exclude: ["id"] },
     order,
     limit,
     offset,
@@ -89,6 +96,8 @@ const getDataById = async (req, res) => {
 
   const findData = await auditLogModel.findOne({
     where: { uuid },
+    include: [{ model: userModel, attributes: { exclude: ["id"] } }],
+    attributes: { exclude: ["id"] },
   });
 
   if (!findData) {
@@ -100,6 +109,40 @@ const getDataById = async (req, res) => {
     message: "success",
     data: findData,
   });
+};
+
+const getCreateAttributes = async (req, res) => {
+  const users = await userModel.findAll({
+    where: {
+      is_active: true,
+    },
+    attributes: { exclude: ["id"] },
+  });
+
+  return res.status(200).json({ message: "success", data: { users } });
+};
+
+const getUpdateAttributesById = async (req, res) => {
+  const { uuid } = req.params;
+
+  const users = await userModel.findAll({
+    where: {
+      is_active: true,
+    },
+    attributes: { exclude: ["id"] },
+  });
+
+  const findData = await auditLogModel.findOne({
+    where: {
+      uuid: uuid,
+    },
+    include: [{ model: userModel, attributes: { exclude: ["id"] } }],
+    attributes: { exclude: ["id"] },
+  });
+
+  return res
+    .status(200)
+    .json({ message: "success", data: findData, attributes: { users } });
 };
 
 const createData = async (req, res) => {
@@ -219,6 +262,8 @@ module.exports = {
   getDataTable,
   getDataById,
   createData,
+  getCreateAttributes,
+  getUpdateAttributesById,
   updateData,
   deleteData,
 };
