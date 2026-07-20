@@ -6,7 +6,9 @@ interface variabel {
   isError: boolean;
   isSuccess: boolean;
   isLoading: boolean;
+  isLoadingPatch: boolean;
   message: string;
+  messagePatch: string;
 }
 
 const initialState: variabel = {
@@ -14,7 +16,9 @@ const initialState: variabel = {
   isError: false,
   isSuccess: false,
   isLoading: false,
+  isLoadingPatch: false,
   message: "",
+  messagePatch: "",
 };
 
 export const GetSliderDatas: any = createAsyncThunk(
@@ -79,27 +83,6 @@ export const GetSliderById: any = createAsyncThunk(
   },
 );
 
-export const GetUpdateAttributeById: any = createAsyncThunk(
-  "Slider/GetUpdateAttributeById",
-  async (uuid: string, thunkAPI) => {
-    try {
-      const response = await axios.get(
-        import.meta.env.VITE_REACT_APP_API_URL +
-          `/api/v1/slider/update_attributes/${uuid}`,
-        {
-          withCredentials: true, // Now this is was the missing piece in the client side
-        },
-      );
-
-      return response.data;
-    } catch (error: any) {
-      if (error.response) {
-        return thunkAPI.rejectWithValue(error.response);
-      }
-    }
-  },
-);
-
 export const UpdateSliderData: any = createAsyncThunk(
   "Slider/UpdateSliderData",
   async (datas: any, thunkAPI) => {
@@ -108,27 +91,6 @@ export const UpdateSliderData: any = createAsyncThunk(
         import.meta.env.VITE_REACT_APP_API_URL +
           `/api/v1/slider/data/${datas.uuid}`,
         datas.formData,
-        {
-          withCredentials: true, // Now this is was the missing piece in the client side
-        },
-      );
-
-      return response.data;
-    } catch (error: any) {
-      if (error.response) {
-        return thunkAPI.rejectWithValue(error.response);
-      }
-    }
-  },
-);
-
-export const GetCreateAttribute: any = createAsyncThunk(
-  "Slider/GetCreateAttribute",
-  async (_, thunkAPI) => {
-    try {
-      const response = await axios.get(
-        import.meta.env.VITE_REACT_APP_API_URL +
-          `/api/v1/slider/create_attributes`,
         {
           withCredentials: true, // Now this is was the missing piece in the client side
         },
@@ -170,7 +132,7 @@ export const DeleteSliderData: any = createAsyncThunk(
     try {
       const response = await axios.delete(
         import.meta.env.VITE_REACT_APP_API_URL +
-          `/api/v1/slider/data/${datas.uuid}`,
+          `/api/v1/slider/data/${datas.uuid}?permanent=1`,
         {
           withCredentials: true, // Now this is was the missing piece in the client side
         },
@@ -237,64 +199,34 @@ export const SliderSlice = createSlice({
       state.message = action.payload;
     });
 
-    //GetUpdateAttributeById
-    builder.addCase(GetUpdateAttributeById.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(GetUpdateAttributeById.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.isSuccess = true;
-      state.data = action.payload;
-    });
-    builder.addCase(GetUpdateAttributeById.rejected, (state, action) => {
-      state.isLoading = false;
-      state.isError = true;
-      state.message = action.payload;
-    });
-
     //UpdateSliderData
     builder.addCase(UpdateSliderData.pending, (state) => {
-      state.isLoading = true;
+      state.isLoadingPatch = true;
     });
     builder.addCase(UpdateSliderData.fulfilled, (state, action) => {
-      state.isLoading = false;
+      state.isLoadingPatch = false;
       state.isSuccess = true;
-      state.message = action.payload;
+      state.messagePatch = action.payload;
     });
     builder.addCase(UpdateSliderData.rejected, (state, action) => {
-      state.isLoading = false;
+      state.isLoadingPatch = false;
       state.isError = true;
-      state.message = action.payload;
-    });
-
-    //GetCreateAttribute
-    builder.addCase(GetCreateAttribute.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(GetCreateAttribute.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.isSuccess = true;
-      state.data = action.payload;
-    });
-    builder.addCase(GetCreateAttribute.rejected, (state, action) => {
-      state.isLoading = false;
-      state.isError = true;
-      state.message = action.payload;
+      state.messagePatch = action.payload;
     });
 
     //CreateDataSlider
     builder.addCase(CreateSliderData.pending, (state) => {
-      state.isLoading = true;
+      state.isLoadingPatch = true;
     });
     builder.addCase(CreateSliderData.fulfilled, (state, action) => {
-      state.isLoading = false;
+      state.isLoadingPatch = false;
       state.isSuccess = true;
-      state.message = action.payload;
+      state.messagePatch = action.payload;
     });
     builder.addCase(CreateSliderData.rejected, (state, action) => {
-      state.isLoading = false;
+      state.isLoadingPatch = false;
       state.isError = true;
-      state.message = action.payload;
+      state.messagePatch = action.payload;
     });
 
     //DeleteDataSlider

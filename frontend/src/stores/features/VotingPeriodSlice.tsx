@@ -10,6 +10,7 @@ interface variabel {
   isLoading: boolean;
   isLoadingPatch: boolean;
   message: string;
+  messagePatch: string;
   messageCommissionerDirector: string;
 }
 
@@ -22,6 +23,7 @@ const initialState: variabel = {
   isLoading: false,
   isLoadingPatch: false,
   message: "",
+  messagePatch: "",
   messageCommissionerDirector: "",
 };
 
@@ -222,7 +224,7 @@ export const DeleteVotingPeriodData: any = createAsyncThunk(
     try {
       const response = await axios.delete(
         import.meta.env.VITE_REACT_APP_API_URL +
-          `/api/v1/voting_period/data/${datas.uuid}`,
+          `/api/v1/voting_period/data/${datas.uuid}?permanent=1`,
         {
           withCredentials: true, // Now this is was the missing piece in the client side
         },
@@ -354,17 +356,17 @@ export const VotingPeriodSlice = createSlice({
 
     //UpdateVotingPeriodData
     builder.addCase(UpdateVotingPeriodData.pending, (state) => {
-      state.isLoading = true;
+      state.isLoadingPatch = true;
     });
     builder.addCase(UpdateVotingPeriodData.fulfilled, (state, action) => {
-      state.isLoading = false;
+      state.isLoadingPatch = false;
       state.isSuccess = true;
-      state.message = action.payload;
+      state.messagePatch = action.payload;
     });
     builder.addCase(UpdateVotingPeriodData.rejected, (state, action) => {
-      state.isLoading = false;
+      state.isLoadingPatch = false;
       state.isError = true;
-      state.message = action.payload;
+      state.messagePatch = action.payload;
     });
 
     //GetCreateAttribute

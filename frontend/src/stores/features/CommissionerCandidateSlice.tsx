@@ -6,7 +6,9 @@ interface variabel {
   isError: boolean;
   isSuccess: boolean;
   isLoading: boolean;
+  isLoadingPatch: boolean;
   message: string;
+  messagePatch: string;
 }
 
 const initialState: variabel = {
@@ -14,7 +16,9 @@ const initialState: variabel = {
   isError: false,
   isSuccess: false,
   isLoading: false,
+  isLoadingPatch: false,
   message: "",
+  messagePatch: "",
 };
 
 export const GetCommissionerCandidateDatas: any = createAsyncThunk(
@@ -172,7 +176,7 @@ export const DeleteCommissionerCandidateData: any = createAsyncThunk(
     try {
       const response = await axios.delete(
         import.meta.env.VITE_REACT_APP_API_URL +
-          `/api/v1/commissioner_candidate/data/${datas.uuid}`,
+          `/api/v1/commissioner_candidate/data/${datas.uuid}?permanent=1`,
         {
           withCredentials: true, // Now this is was the missing piece in the client side
         },
@@ -262,22 +266,22 @@ export const CommissionerCandidateSlice = createSlice({
 
     //UpdateCommissionerCandidateData
     builder.addCase(UpdateCommissionerCandidateData.pending, (state) => {
-      state.isLoading = true;
+      state.isLoadingPatch = true;
     });
     builder.addCase(
       UpdateCommissionerCandidateData.fulfilled,
       (state, action) => {
-        state.isLoading = false;
+        state.isLoadingPatch = false;
         state.isSuccess = true;
-        state.message = action.payload;
+        state.messagePatch = action.payload;
       },
     );
     builder.addCase(
       UpdateCommissionerCandidateData.rejected,
       (state, action) => {
-        state.isLoading = false;
+        state.isLoadingPatch = false;
         state.isError = true;
-        state.message = action.payload;
+        state.messagePatch = action.payload;
       },
     );
 
@@ -298,22 +302,22 @@ export const CommissionerCandidateSlice = createSlice({
 
     //CreateDataCommissionerCandidate
     builder.addCase(CreateCommissionerCandidateData.pending, (state) => {
-      state.isLoading = true;
+      state.isLoadingPatch = true;
     });
     builder.addCase(
       CreateCommissionerCandidateData.fulfilled,
       (state, action) => {
-        state.isLoading = false;
+        state.isLoadingPatch = false;
         state.isSuccess = true;
-        state.message = action.payload;
+        state.messagePatch = action.payload;
       },
     );
     builder.addCase(
       CreateCommissionerCandidateData.rejected,
       (state, action) => {
-        state.isLoading = false;
+        state.isLoadingPatch = false;
         state.isError = true;
-        state.message = action.payload;
+        state.messagePatch = action.payload;
       },
     );
 

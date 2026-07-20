@@ -6,7 +6,9 @@ interface variabel {
   isError: boolean;
   isSuccess: boolean;
   isLoading: boolean;
+  isLoadingPatch: boolean;
   message: string;
+  messagePatch: string;
 }
 
 const initialState: variabel = {
@@ -14,7 +16,9 @@ const initialState: variabel = {
   isError: false,
   isSuccess: false,
   isLoading: false,
+  isLoadingPatch: false,
   message: "",
+  messagePatch: "",
 };
 
 export const GetDirectorCandidateDatas: any = createAsyncThunk(
@@ -256,17 +260,17 @@ export const DirectorCandidateSlice = createSlice({
 
     //UpdateDirectorCandidateData
     builder.addCase(UpdateDirectorCandidateData.pending, (state) => {
-      state.isLoading = true;
+      state.isLoadingPatch = true;
     });
     builder.addCase(UpdateDirectorCandidateData.fulfilled, (state, action) => {
-      state.isLoading = false;
+      state.isLoadingPatch = false;
       state.isSuccess = true;
-      state.message = action.payload;
+      state.messagePatch = action.payload;
     });
     builder.addCase(UpdateDirectorCandidateData.rejected, (state, action) => {
-      state.isLoading = false;
+      state.isLoadingPatch = false;
       state.isError = true;
-      state.message = action.payload;
+      state.messagePatch = action.payload;
     });
 
     //GetCreateAttribute
@@ -286,17 +290,17 @@ export const DirectorCandidateSlice = createSlice({
 
     //CreateDataDirectorCandidate
     builder.addCase(CreateDirectorCandidateData.pending, (state) => {
-      state.isLoading = true;
+      state.isLoadingPatch = true;
     });
     builder.addCase(CreateDirectorCandidateData.fulfilled, (state, action) => {
-      state.isLoading = false;
+      state.isLoadingPatch = false;
       state.isSuccess = true;
-      state.message = action.payload;
+      state.messagePatch = action.payload;
     });
     builder.addCase(CreateDirectorCandidateData.rejected, (state, action) => {
-      state.isLoading = false;
+      state.isLoadingPatch = false;
       state.isError = true;
-      state.message = action.payload;
+      state.messagePatch = action.payload;
     });
 
     //DeleteDataDirectorCandidate
