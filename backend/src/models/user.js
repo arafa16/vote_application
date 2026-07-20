@@ -35,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       verification_token: DataTypes.TEXT,
       status_id: DataTypes.INTEGER,
       privilege_id: DataTypes.INTEGER,
+      is_verified: DataTypes.BOOLEAN,
       is_member: DataTypes.BOOLEAN,
       is_active: DataTypes.BOOLEAN,
     },

@@ -18,6 +18,7 @@ module.exports = {
         verification_date: new Date(),
         status_id: 2,
         privilege_id: 1,
+        is_verified: true,
         is_member: false,
         is_active: true,
         created_at: new Date(),

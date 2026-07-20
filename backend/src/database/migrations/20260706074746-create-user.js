@@ -44,6 +44,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: true,
       },
+      is_verified: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
       is_member: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,

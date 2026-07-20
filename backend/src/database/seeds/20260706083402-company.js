@@ -4,7 +4,7 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     const crypto = require("crypto");
-    const companies = ["Lintasarta", "Kopkarla", "KSPS", "LMD"];
+    const companies = ["Lintasarta", "Kopkarla", "KSPS", "LMD", "ANK"];
 
     const records = [];
     companies.forEach((company, index) => {
