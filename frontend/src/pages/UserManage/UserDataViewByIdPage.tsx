@@ -10,7 +10,7 @@ import Button from "../../base-components/Button";
 import Lucide from "../../base-components/Lucide";
 import dayjs from "dayjs";
 import { Menu, Dialog } from "../../base-components/Headless";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { FormInput, FormLabel } from "../../base-components/Form";
 import { NotificationChangePassword } from "../../components/Notification/NotificationChangePassword";
 
@@ -22,6 +22,8 @@ const UserDataViewByIdPage = () => {
     password: "",
     conf_password: "",
   });
+
+  const [searchParams] = useSearchParams();
 
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -107,7 +109,9 @@ const UserDataViewByIdPage = () => {
   }, [dispatch, id]);
 
   const handleBack = () => {
-    navigate("/users");
+    const page = searchParams.get("page");
+    const limit = searchParams.get("limit");
+    navigate(`/users?page=${page}&limit=${limit}`);
   };
 
   const handleEdit = () => {

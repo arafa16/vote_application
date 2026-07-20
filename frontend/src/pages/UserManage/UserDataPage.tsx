@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { GetMe, resetGetMe } from "../../stores/features/GetMeSlice";
 import {
   GetUserTable,
@@ -23,8 +23,13 @@ const UserDataPage = () => {
   const [group, setGroup] = useState<any>("");
   const [statusDatas, setStatusDatas] = useState<any>(null);
   const [status, setStatus] = useState<any>("");
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+
+  const [searchParams] = useSearchParams();
+
+  const [page, setPage] = useState<number | any>(searchParams.get("page") || 1);
+  const [limit, setLimit] = useState<number | any>(
+    searchParams.get("limit") || 10,
+  );
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -126,7 +131,7 @@ const UserDataPage = () => {
   };
 
   const handleClickData = (id: any) => {
-    navigate(`/user/${id}`);
+    navigate(`/user/${id}?page=${page}&limit=${limit}`);
   };
 
   const handleNext = () => {
