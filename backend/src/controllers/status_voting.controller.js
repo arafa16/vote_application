@@ -1,5 +1,6 @@
 const {
   user: userModel,
+  status: statusModel,
   voting_period: votingPeriodModel,
   director_candidate: directorCandidateModel,
   director_vote: directorVoteModel,
@@ -19,7 +20,7 @@ const getDataTable = async (req, res) => {
     search,
     is_active,
     sort,
-    status,
+    status_user,
     status_vote,
     company,
     is_member,
@@ -57,6 +58,32 @@ const getDataTable = async (req, res) => {
     if (findData) {
       whereClause[Op.and].push({
         company_id: findData.id,
+      });
+    }
+  }
+
+  if (status_user) {
+    const findData = await statusModel.findOne({
+      where: {
+        uuid: status_user,
+      },
+    });
+
+    if (findData) {
+      whereClause[Op.and].push({
+        status_id: findData.id,
+      });
+    }
+  } else {
+    const findData = await statusModel.findOne({
+      where: {
+        code: 2,
+      },
+    });
+
+    if (findData) {
+      whereClause[Op.and].push({
+        status_id: findData.id,
       });
     }
   }
