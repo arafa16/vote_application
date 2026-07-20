@@ -28,14 +28,18 @@ const init = async <C extends React.ElementType>(
   }: {
     props: CkeditorProps<C>;
     cacheData: MutableRefObject<string>;
-  }
+  },
 ) => {
   // Initial data
   cacheData.current = props.value;
-  props.config.initialData = props.value;
+  const config = {
+    ...props.config,
+    initialData: props.value,
+  };
 
   // Init CKEditor
-  const editor = await editorBuild.create(el, props.config);
+  // const editor = await editorBuild.create(el, props.config);
+  const editor = await editorBuild.create(el, config);
 
   // Attach CKEditor instance
   el.CKEditor = editor;
@@ -79,7 +83,7 @@ const updateData = <C extends React.ElementType>(
   }: {
     props: CkeditorProps<C>;
     cacheData: MutableRefObject<string>;
-  }
+  },
 ) => {
   if (cacheData.current !== props.value) {
     el.CKEditor.setData(props.value);
