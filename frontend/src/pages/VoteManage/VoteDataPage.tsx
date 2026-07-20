@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import VotingPeriodForm from "../../components/Form/VotingPeriodForm";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { GetMe, resetGetMe } from "../../stores/features/GetMeSlice";
 import {
   GetVotingPeriodDatas,
@@ -31,8 +31,12 @@ const VoteDataPage = () => {
   const [statusDatas, setStatusDatas] = useState<any>(null);
   const [status, setStatus] = useState<any>("");
 
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [searchParams] = useSearchParams();
+
+  const [page, setPage] = useState<number | any>(searchParams.get("page") || 1);
+  const [limit, setLimit] = useState<number | any>(
+    searchParams.get("limit") || 10,
+  );
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -203,7 +207,7 @@ const VoteDataPage = () => {
   };
 
   const handleClickData = (id: any) => {
-    navigate(`/vote_data/${id}`);
+    navigate(`/vote_data/${id}?page=${page}&limit=${limit}`);
   };
 
   const handleNext = () => {
