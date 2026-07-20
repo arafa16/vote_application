@@ -85,20 +85,8 @@ const initialState: SideMenuState = {
         },
         {
           icon: "Settings",
-          title: "audit log",
-          pathname: "/audit_log",
-          privilege: "setting",
-        },
-        {
-          icon: "Settings",
           title: "commissioner candidate",
           pathname: "/commissioner_candidate_setup",
-          privilege: "setting",
-        },
-        {
-          icon: "Settings",
-          title: "company",
-          pathname: "/company",
           privilege: "setting",
         },
         {
@@ -109,14 +97,14 @@ const initialState: SideMenuState = {
         },
         {
           icon: "Settings",
-          title: "privilege",
-          pathname: "/privilege",
+          title: "slider",
+          pathname: "/slider",
           privilege: "setting",
         },
         {
           icon: "Settings",
-          title: "slider",
-          pathname: "/slider",
+          title: "company",
+          pathname: "/company",
           privilege: "setting",
         },
         {
@@ -125,13 +113,13 @@ const initialState: SideMenuState = {
           pathname: "/status",
           privilege: "setting",
         },
+        {
+          icon: "Settings",
+          title: "audit log",
+          pathname: "/audit_log",
+          privilege: "setting",
+        },
       ],
-    },
-    {
-      icon: "LogOut",
-      title: "Keluar",
-      pathname: "/cara_voting",
-      privilege: "setting",
     },
   ],
 };
