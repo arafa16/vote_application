@@ -162,7 +162,9 @@ const createData = async (req, res) => {
 const updateData = async (req, res) => {
   const { page_view, sequence } = req.body;
 
-  if (page_view) {
+  const { uuid } = req.params;
+
+  if (!page_view) {
     throw new CustomHttpError("page view are required", 400);
   }
 
@@ -192,7 +194,6 @@ const updateData = async (req, res) => {
   const file_type = file.mimetype;
 
   const ext = path.extname(file.name);
-  const rename = name ? name + ext : file.name;
   const image_name = crypto.randomUUID() + ext;
   const image_url = `/images/sliders/${image_name}`;
 
