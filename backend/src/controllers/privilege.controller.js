@@ -122,7 +122,18 @@ const createData = async (req, res) => {
 
 const updateData = async (req, res) => {
   const { uuid } = req.params;
-  const { name, voting_page, dashboard, user_data, setting } = req.body;
+  const {
+    name,
+    tata_cara_voting,
+    profile_kandidat_pengawas,
+    profile_kandidat_pengurus,
+    mulai_voting,
+    riwayat_voting,
+    dashboard,
+    status_voting_anggota,
+    user_data,
+    setting,
+  } = req.body;
 
   const findData = await privilegeModel.findOne({
     where: { uuid },
@@ -134,8 +145,13 @@ const updateData = async (req, res) => {
 
   await findData.update({
     name,
-    voting_page,
+    tata_cara_voting,
+    profile_kandidat_pengawas,
+    profile_kandidat_pengurus,
+    mulai_voting,
+    riwayat_voting,
     dashboard,
+    status_voting_anggota,
     user_data,
     setting,
   });
