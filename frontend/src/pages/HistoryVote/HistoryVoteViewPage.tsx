@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Lucide from "../../base-components/Lucide";
 import Alert from "../../base-components/Alert";
-import CandidateView from "../../components/DataView/CandidateView";
+import CandidateVoteView from "../../components/DataView/CandidateVoteView";
 import VotingPeriodForm from "../../components/Form/VotingPeriodForm";
 import dayjs from "dayjs";
 
@@ -203,50 +203,49 @@ const HistoryVoteViewPage = () => {
           </div>
         </div>
       </div>
-      <div
-        className={`w-full md:px-4 ${commissionerVote === null ? "hidden" : ""} `}
-      >
+      <div className="grid grid-cols-12 gap-4">
         <div
-          className={`w-full bg-warning rounded-md py-2 px-4 mb-4 ${commissionerVote === null ? "hidden" : ""}`}
+          className={`col-span-12 md:col-span-6 ${commissionerVote === null ? "hidden" : ""} `}
         >
-          <p className="text-[14px] text-white">PILIHAN PENGAWAS</p>
-        </div>
-        <div>
-          <div className={`mb-4 ${commissionerVote === null ? "hidden" : ""}`}>
-            <CandidateView
-              data={commissionerVote?.commissioner_candidate}
-              user_uuid={meData?.uuid}
-              voting_period_uuid={votingPeriodData?.uuid}
-              color="warning"
-              view_button={false}
-              is_check={true}
-              // handleClick={handleClickVote}
-              // is_loading={isLoadingDirectorVote}
-            />
+          <div
+            className={`w-full bg-warning rounded-md py-2 px-4 mb-4 ${commissionerVote === null ? "hidden" : ""}`}
+          >
+            <p className="text-[14px] text-white">PILIHAN PENGAWAS</p>
+          </div>
+          <div>
+            <div
+              className={`mb-4 ${commissionerVote === null ? "hidden" : ""}`}
+            >
+              <CandidateVoteView
+                data={commissionerVote?.commissioner_candidate}
+                user_uuid={meData?.uuid}
+                voting_period_uuid={votingPeriodData?.uuid}
+                color="warning"
+                view_button={false}
+                is_check={true}
+              />
+            </div>
           </div>
         </div>
-        <hr className="my-8 border-t-2 border-gray-300"></hr>
-      </div>
-      <div
-        className={`w-full md:px-4 ${directorVote === null ? "hidden" : ""} `}
-      >
         <div
-          className={`w-full bg-primary rounded-md py-2 px-4 mb-4 ${directorVote === null ? "hidden" : ""}`}
+          className={`col-span-12 md:col-span-6 ${directorVote === null ? "hidden" : ""} `}
         >
-          <p className="text-[14px] text-white">PILIHAN PENGURUS</p>
-        </div>
-        <div>
-          <div className={`mb-4 ${directorVote === null ? "hidden" : ""}`}>
-            <CandidateView
-              data={directorVote?.director_candidate}
-              user_uuid={meData?.uuid}
-              voting_period_uuid={votingPeriodData?.uuid}
-              color="primary"
-              view_button={false}
-              is_check={true}
-              // handleClick={handleClickVote}
-              // is_loading={isLoadingDirectorVote}
-            />
+          <div
+            className={`w-full bg-primary rounded-md py-2 px-4 mb-4 ${directorVote === null ? "hidden" : ""}`}
+          >
+            <p className="text-[14px] text-white">PILIHAN PENGURUS</p>
+          </div>
+          <div>
+            <div className={`mb-4 ${directorVote === null ? "hidden" : ""}`}>
+              <CandidateVoteView
+                data={directorVote?.director_candidate}
+                user_uuid={meData?.uuid}
+                voting_period_uuid={votingPeriodData?.uuid}
+                color="primary"
+                view_button={false}
+                is_check={true}
+              />
+            </div>
           </div>
         </div>
       </div>
