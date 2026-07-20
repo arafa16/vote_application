@@ -1,18 +1,16 @@
-import React from "react";
 import { FormInput, FormLabel, FormSelect } from "../../base-components/Form";
-import dayjs from "dayjs";
 
-const VotingPeriodDataCreateForm = (props: any) => {
-  const { formData, setFormData } = props;
+const ApplicationDataCreateForm = (props: any) => {
+  const { formData, setFormData, chagePhoto } = props;
 
   return (
     <div className="box">
       <div className="grid grid-cols-12 px-8 py-4 gap-4">
         <div className="col-span-12 md:col-span-6 grid grid-cols-12">
           <div className="col-span-12">
-            <FormLabel htmlFor="name_user">Name</FormLabel>
+            <FormLabel htmlFor="name">Name</FormLabel>
             <FormInput
-              id="name_user"
+              id="name"
               type="text"
               formInputSize="sm"
               className="w-full"
@@ -31,7 +29,6 @@ const VotingPeriodDataCreateForm = (props: any) => {
               type="text"
               formInputSize="sm"
               className="w-full"
-              placeholder=""
               value={formData?.description}
               onChange={(e) =>
                 setFormData({ ...formData, description: e.target.value })
@@ -41,49 +38,45 @@ const VotingPeriodDataCreateForm = (props: any) => {
         </div>
         <div className="col-span-12 md:col-span-6 grid grid-cols-12">
           <div className="col-span-12">
-            <FormLabel htmlFor="start_date">Start Date</FormLabel>
+            <FormLabel htmlFor="file">Image</FormLabel>
             <FormInput
-              id="start_date"
-              type="datetime-local"
-              step="1"
+              id="file"
+              type="file"
               formInputSize="sm"
               className="w-full"
-              placeholder=""
-              value={
-                formData?.start_date
-                  ? dayjs(formData.start_date).format("YYYY-MM-DD HH:mm:ss")
-                  : ""
-              }
-              onChange={(e) =>
-                setFormData({ ...formData, start_date: e.target.value })
-              }
+              onChange={chagePhoto}
             />
           </div>
         </div>
         <div className="col-span-12 md:col-span-6 grid grid-cols-12">
           <div className="col-span-12">
-            <FormLabel htmlFor="end_date">End Date</FormLabel>
+            <FormLabel htmlFor="sequence">Sequence</FormLabel>
             <FormInput
-              id="end_date"
-              type="datetime-local"
-              step="1"
+              id="sequence"
+              type="number"
               formInputSize="sm"
               className="w-full"
-              placeholder=""
-              value={
-                formData?.end_date
-                  ? dayjs(formData.end_date).format("YYYY-MM-DD HH:mm:ss")
-                  : ""
-              }
+              value={formData?.sequence}
               onChange={(e) =>
-                setFormData({ ...formData, end_date: e.target.value })
+                setFormData({ ...formData, sequence: e.target.value })
               }
             />
           </div>
+        </div>
+        <div className="col-span-12 md:col-span-1 grid grid-cols-12">
+          {formData?.file_url && (
+            <div className="col-span-12">
+              <img
+                src={formData.file_url}
+                alt="image"
+                className="w-full object-cover"
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default VotingPeriodDataCreateForm;
+export default ApplicationDataCreateForm;

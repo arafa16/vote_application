@@ -117,6 +117,7 @@ const UserDataCreateForm = (props: any) => {
                 setFormData({ ...formData, status_uuid: e.target.value })
               }
             >
+              <option value={""}></option>
               {dataAttributes?.status?.map((data: any, index: any) => (
                 <option value={data?.uuid} key={index}>
                   {data?.name}
