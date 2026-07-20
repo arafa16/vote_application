@@ -13,6 +13,10 @@ import CommissionerCandidateReducer from "./features/CommissionerCandidateSlice"
 import CommissionerVoteReducer from "./features/CommissionerVoteSlice";
 import DirectorVoteReducer from "./features/DirectorVoteSlice";
 import SliderReducer from "./features/SliderSlice";
+import CompanyReducer from "./features/CompanySlice";
+import StatusReducer from "./features/StatusSlice";
+import ApplicationReducer from "./features/ApplicationSlice";
+import AuditLogReducer from "./features/AuditLogSlice";
 
 export const store = configureStore({
   reducer: {
@@ -30,6 +34,10 @@ export const store = configureStore({
     votingPeriod: VotingPeriodReducer,
     statusVoting: StatusVotingReducer,
     slider: SliderReducer,
+    company: CompanyReducer,
+    status: StatusReducer,
+    application: ApplicationReducer,
+    auditLog: AuditLogReducer,
   },
 });
 
