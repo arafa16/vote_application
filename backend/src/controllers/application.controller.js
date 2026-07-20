@@ -154,7 +154,9 @@ const createData = async (req, res) => {
         sequence,
       });
 
-      return res.status(201).json({ message: "file uploaded" });
+      return res
+        .status(201)
+        .json({ message: "file uploaded", data: { uuid: application.uuid } });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
@@ -181,7 +183,7 @@ const updateData = async (req, res) => {
   }
 
   if (!req.files || !req.files.file || req.files.file.length === 0) {
-    const application = await applicationModel.create({
+    const application = await findData.update({
       name,
       description,
       sequence,
@@ -190,7 +192,7 @@ const updateData = async (req, res) => {
     return res.status(201).json({
       status: 201,
       success: true,
-      datas: application,
+      datas: { uuid: application.uuid },
     });
   }
 
@@ -199,7 +201,6 @@ const updateData = async (req, res) => {
   const file_type = file.mimetype;
 
   const ext = path.extname(file.name);
-  const rename = name ? name + ext : file.name;
   const photo_name = crypto.randomUUID() + ext;
   const photo_url = `/images/${photo_name}`;
 
@@ -243,7 +244,9 @@ const updateData = async (req, res) => {
         sequence,
       });
 
-      return res.status(201).json({ message: "file uploaded" });
+      return res
+        .status(201)
+        .json({ message: "file uploaded", data: { uuid: application.uuid } });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
