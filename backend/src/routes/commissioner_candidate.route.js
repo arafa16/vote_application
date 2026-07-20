@@ -3,6 +3,8 @@ const {
   getDatas,
   getDataById,
   createData,
+  createDataAttributes,
+  updateDataByIdAttributes,
   updateData,
   deleteData,
   getDataTable,
@@ -15,6 +17,8 @@ router.get("/datas", verifyToken, getDatas);
 router.get("/table", verifyToken, getDataTable);
 router.get("/data/:uuid", verifyToken, getDataById);
 router.post("/data", verifyToken, createData);
+router.get("/create_attributes", verifyToken, createDataAttributes);
+router.get("/update_attributes/:uuid", verifyToken, updateDataByIdAttributes);
 router.patch("/data/:uuid", verifyToken, updateData);
 router.delete("/data/:uuid", verifyToken, deleteData);
 

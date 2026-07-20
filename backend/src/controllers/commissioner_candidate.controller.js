@@ -65,6 +65,8 @@ const getDataTable = async (req, res) => {
   const offset = (page - 1) * limit;
   const { rows, count } = await commissionerCandidateModel.findAndCountAll({
     where: whereClause,
+    include: [{ model: votingPeriodModel, attributes: { exclude: ["id"] } }],
+    attributes: { exclude: ["id"] },
     limit,
     offset,
   });
@@ -89,6 +91,8 @@ const getDataById = async (req, res) => {
 
   const findData = await commissionerCandidateModel.findOne({
     where: { uuid },
+    include: [{ model: votingPeriodModel, attributes: { exclude: ["id"] } }],
+    attributes: { exclude: ["id"] },
   });
 
   if (!findData) {
@@ -100,6 +104,12 @@ const getDataById = async (req, res) => {
     message: "success",
     data: findData,
   });
+};
+
+const createDataAttributes = async (req, res) => {
+  const voting_period = await votingPeriodModel.findAll();
+
+  return res.status(200).json({ message: "success", data: { voting_period } });
 };
 
 const createData = async (req, res) => {
@@ -168,14 +178,39 @@ const createData = async (req, res) => {
           description: `${req.user.name} has created commissioner candidate ${name}`,
         });
 
-        return res
-          .status(201)
-          .json({ message: "success", data: commissioner_candidate });
+        return res.status(201).json({
+          message: "success",
+          data: { uuid: commissioner_candidate.uuid },
+        });
       } catch (error) {
         return res.status(500).json({ message: error.message });
       }
     },
   );
+};
+
+const updateDataByIdAttributes = async (req, res) => {
+  const { uuid } = req.params;
+  console.log(uuid);
+
+  const voting_period = await votingPeriodModel.findAll();
+
+  const findData = await commissionerCandidateModel.findOne({
+    where: { uuid },
+    include: [{ model: votingPeriodModel, attributes: { exclude: ["id"] } }],
+    attributes: { exclude: ["id"] },
+  });
+
+  if (!findData) {
+    throw new CustomHttpError("data not found", 404);
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: "success",
+    data: findData,
+    attributes: { voting_period },
+  });
 };
 
 const updateData = async (req, res) => {
@@ -348,7 +383,9 @@ module.exports = {
   getDatas,
   getDataTable,
   getDataById,
+  createDataAttributes,
   createData,
+  updateDataByIdAttributes,
   updateData,
   deleteData,
 };
