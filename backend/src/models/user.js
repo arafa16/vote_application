@@ -18,6 +18,8 @@ module.exports = (sequelize, DataTypes) => {
       user.belongsTo(models.privilege, {
         foreignKey: "privilege_id",
       });
+      user.hasMany(models.director_vote);
+      user.hasMany(models.commissioner_vote);
     }
   }
   user.init(

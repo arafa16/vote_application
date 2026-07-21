@@ -12,6 +12,10 @@ const {
 } = require("../controllers/user.controller");
 const { verifyToken } = require("../middleware/auth.middleware");
 
+const {
+  importDataUser,
+} = require("../controllers/import_export_user.controller");
+
 const router = express.Router();
 
 router.get("/table", verifyToken, getDataTable);
@@ -23,5 +27,7 @@ router.post("/data", verifyToken, createData);
 router.delete("/data/:uuid", verifyToken, deleteData);
 router.patch("/change_password", verifyToken, changePassword);
 router.patch("/change_password/:uuid", verifyToken, changePasswordById);
+
+router.post("/import", verifyToken, importDataUser);
 
 module.exports = router;
