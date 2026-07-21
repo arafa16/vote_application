@@ -194,13 +194,10 @@ const HistoryVoteViewByIdPage = () => {
             >
               <CandidateVoteView
                 data={commissionerVote?.commissioner_candidate}
-                // user_uuid={meData?.uuid}
                 voting_period_uuid={votingPeriodData?.uuid}
                 color="warning"
                 view_button={false}
                 is_check={true}
-                // handleClick={handleClickVote}
-                // is_loading={isLoadingDirectorVote}
               />
             </div>
           </div>
@@ -223,8 +220,6 @@ const HistoryVoteViewByIdPage = () => {
                 color="primary"
                 view_button={false}
                 is_check={true}
-                // handleClick={handleClickVote}
-                // is_loading={isLoadingDirectorVote}
               />
             </div>
           </div>
