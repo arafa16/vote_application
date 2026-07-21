@@ -10,6 +10,7 @@ import {
 import {
   GetStatusVotingTable,
   GetStatusVotingTableAttribute,
+  GetStatusVotingTableReport,
   resetStatusVoting,
 } from "../../stores/features/StatusVotingSlice";
 import Table from "../../base-components/Table";
@@ -18,6 +19,7 @@ import Button from "../../base-components/Button";
 import Lucide from "../../base-components/Lucide";
 import dayjs from "dayjs";
 import LoadingIcon from "../../base-components/LoadingIcon";
+import VotingReport from "../../components/GeneralReport/VotingReport";
 
 const VoteDataPage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -30,6 +32,9 @@ const VoteDataPage = () => {
   const [group, setGroup] = useState<any>("");
   const [statusDatas, setStatusDatas] = useState<any>(null);
   const [status, setStatus] = useState<any>("");
+
+  //report
+  const [dataReport, setDataReport] = useState<any>(null);
 
   const [searchParams] = useSearchParams();
 
@@ -101,11 +106,14 @@ const VoteDataPage = () => {
   //get data voting
   const {
     data: dataStatusVoting,
+    dataReport: dataReportStatusVoting,
     data_attribute: dataStatusVotingAttribute,
     isLoading: isLoadingStatusVoting,
+    isLoadingReport: isLoadingReportStatusVoting,
     isError: isErrorStatusVoting,
     isSuccess: isSuccessStatusVoting,
     message: messageStatusVoting,
+    messageReport: messageReportStatusVoting,
   } = useSelector((state: any) => state.statusVoting);
 
   useEffect(() => {
@@ -178,6 +186,7 @@ const VoteDataPage = () => {
         }
 
         const searchParams = new URLSearchParams(paramsObj);
+        console.log("searchParams", searchParams.toString());
         dispatch(GetStatusVotingTable(searchParams));
       }, 500);
 
@@ -189,6 +198,38 @@ const VoteDataPage = () => {
       setMetaTableData(null);
     }
   }, [search, group, status, page, limit, votingPeriodSelected]);
+
+  useEffect(() => {
+    if (
+      dataReportStatusVoting !== null &&
+      isSuccessStatusVoting &&
+      !isLoadingReportStatusVoting
+    ) {
+      setDataReport(dataReportStatusVoting?.data);
+      dispatch(resetStatusVoting());
+    } else if (
+      messageReportStatusVoting !== "" &&
+      isErrorStatusVoting &&
+      !isLoadingReportStatusVoting
+    ) {
+      console.log("messageReportStatusVoting", messageReportStatusVoting);
+      dispatch(resetStatusVoting());
+    }
+  }, [
+    dataReportStatusVoting,
+    isLoadingReportStatusVoting,
+    isErrorStatusVoting,
+    isSuccessStatusVoting,
+    messageReportStatusVoting,
+  ]);
+
+  useEffect(() => {
+    const paramsObj: any = {
+      voting_period_uuid: votingPeriodSelected,
+    };
+    const searchParams = new URLSearchParams(paramsObj);
+    dispatch(GetStatusVotingTableReport(searchParams));
+  }, [dispatch, votingPeriodSelected]);
 
   const handleChangeVotingPeriod = (e: any) => {
     setVotingPeriodSelected(e.target.value);
@@ -246,6 +287,9 @@ const VoteDataPage = () => {
             handleChange={handleChangeVotingPeriod}
           />
         </div>
+      </div>
+      <div className="mb-8">
+        <VotingReport dataReport={dataReport} />
       </div>
       <div className="w-full">
         <div className="grid grid-cols-12 mb-2">
