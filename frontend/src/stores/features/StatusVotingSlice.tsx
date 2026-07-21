@@ -3,20 +3,26 @@ import axios from "axios";
 
 interface variabel {
   data: any;
+  dataReport: any;
   data_attribute: any;
   isError: boolean;
   isSuccess: boolean;
   isLoading: boolean;
+  isLoadingReport: boolean;
   message: string;
+  messageReport: string;
 }
 
 const initialState: variabel = {
   data: null,
+  dataReport: null,
   data_attribute: null,
   isError: false,
   isSuccess: false,
   isLoading: false,
+  isLoadingReport: false,
   message: "",
+  messageReport: "",
 };
 
 export const GetStatusVotingTable: any = createAsyncThunk(
@@ -26,6 +32,27 @@ export const GetStatusVotingTable: any = createAsyncThunk(
       const response = await axios.get(
         import.meta.env.VITE_REACT_APP_API_URL +
           `/api/v1/status_voting/table?${datas}`,
+        {
+          withCredentials: true, // Now this is was the missing piece in the client side
+        },
+      );
+
+      return response.data;
+    } catch (error: any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response);
+      }
+    }
+  },
+);
+
+export const GetStatusVotingTableReport: any = createAsyncThunk(
+  "StatusVoting/GetStatusVotingTableReport",
+  async (datas: any, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        import.meta.env.VITE_REACT_APP_API_URL +
+          `/api/v1/status_voting/table_report?${datas}`,
         {
           withCredentials: true, // Now this is was the missing piece in the client side
         },
@@ -81,6 +108,21 @@ export const StatusVotingSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
       state.message = action.payload;
+    });
+
+    //GetStatusVotingTableReport
+    builder.addCase(GetStatusVotingTableReport.pending, (state) => {
+      state.isLoadingReport = true;
+    });
+    builder.addCase(GetStatusVotingTableReport.fulfilled, (state, action) => {
+      state.isLoadingReport = false;
+      state.isSuccess = true;
+      state.dataReport = action.payload;
+    });
+    builder.addCase(GetStatusVotingTableReport.rejected, (state, action) => {
+      state.isLoadingReport = false;
+      state.isError = true;
+      state.messageReport = action.payload;
     });
 
     //GetStatusVotingTableAttribute
