@@ -39,6 +39,10 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
+      dashboard_view_vote: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
       status_voting_anggota: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,

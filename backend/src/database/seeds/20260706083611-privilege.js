@@ -15,6 +15,7 @@ module.exports = {
         mulai_voting: true,
         riwayat_voting: true,
         dashboard: true,
+        dashboard_view_vote: true,
         status_voting_anggota: true,
         user_data: true,
         setting: true,

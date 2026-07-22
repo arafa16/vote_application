@@ -247,6 +247,7 @@ const createData = async (req, res) => {
         mulai_voting: true,
         riwayat_voting: true,
         dashboard: false,
+        dashboard_view_vote: false,
         status_voting_anggota: false,
         user_data: false,
         setting: false,
