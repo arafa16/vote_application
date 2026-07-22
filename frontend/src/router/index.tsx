@@ -68,6 +68,7 @@ import AuditLogDataTablePage from "../pages/AuditLog/AuditLogDataTablePage";
 import AuditLogDataViewByIdPage from "../pages/AuditLog/AuditLogDataViewByIdPage";
 import AuditLogDataCreatePage from "../pages/AuditLog/AuditLogDataCreatePage";
 import AuditLogDataEditPage from "../pages/AuditLog/AuditLogDataEditPage";
+import RequestResetPasswordPage from "../pages/AuthPage/RequestResetPasswordPage";
 function Router() {
   const routes = [
     {
@@ -286,14 +287,14 @@ function Router() {
     //   path: "/registration",
     //   element: <RegistrationPage />,
     // },
-    // {
-    //   path: "/req_reset",
-    //   element: <RequestResetPasswordPage />,
-    // },
-    // {
-    //   path: "/reset/:token",
-    //   element: <ResetPasswordPage />,
-    // },
+    {
+      path: "/forgot_password",
+      element: <RequestResetPasswordPage />,
+    },
+    {
+      path: "/reset/:token",
+      element: <ResetPasswordPage />,
+    },
     // {
     //   path: "/error-page",
     //   element: <ErrorPage />,
