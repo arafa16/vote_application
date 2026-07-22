@@ -27,7 +27,11 @@ const getDatas = async (req, res) => {
     };
   }
 
-  if (voting_period_uuid) {
+  if (
+    voting_period_uuid !== undefined ||
+    voting_period_uuid !== "" ||
+    voting_period_uuid !== null
+  ) {
     const findVotingPeriod = await votingPeriodModel.findOne({
       where: {
         uuid: voting_period_uuid,
@@ -36,7 +40,11 @@ const getDatas = async (req, res) => {
 
     if (findVotingPeriod) {
       where.voting_period_id = findVotingPeriod.id;
+    } else {
+      throw new CustomHttpError("periode not found", 404);
     }
+  } else {
+    throw new CustomHttpError("periode not set", 401);
   }
 
   const findDatas = await directorCandidateModel.findAll({ where });

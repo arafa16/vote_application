@@ -10,7 +10,7 @@ const CustomHttpError = require("../utils/custom_http_error.js");
 const { createLogHandler } = require("./write_log.controller.js");
 
 const getDatas = async (req, res) => {
-  const { uuid, name, sort } = req.query;
+  const { uuid, name, sort, voting_period_uuid } = req.query;
 
   const where = {};
   let order = [];
@@ -25,6 +25,26 @@ const getDatas = async (req, res) => {
     where.name = {
       [Op.like]: `%${name}%`,
     };
+  }
+
+  if (
+    voting_period_uuid !== undefined ||
+    voting_period_uuid !== "" ||
+    voting_period_uuid !== null
+  ) {
+    const findVotingPeriod = await votingPeriodModel.findOne({
+      where: {
+        uuid: voting_period_uuid,
+      },
+    });
+
+    if (findVotingPeriod) {
+      where.voting_period_id = findVotingPeriod.id;
+    } else {
+      throw new CustomHttpError("periode not found", 404);
+    }
+  } else {
+    throw new CustomHttpError("periode not set", 401);
   }
 
   const findDatas = await commissionerCandidateModel.findAll({ where });
