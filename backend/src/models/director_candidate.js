@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       director_candidate.belongsTo(models.voting_period, {
         foreignKey: "voting_period_id",
       });
+      director_candidate.hasMany(models.director_vote);
     }
   }
   director_candidate.init(
