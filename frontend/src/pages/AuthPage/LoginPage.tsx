@@ -100,10 +100,10 @@ function LoginPage() {
                     setFormData({ ...formData, password: e.target.value })
                   }
                 />
-                <div className="flex mt-8 text-slate-500">
+                <div className="flex justify-end mt-8 text-slate-500">
                   <p
-                    className="w-full flex justify-end hover:cursor-pointer"
-                    onClick={() => navigate("/req_reset")}
+                    className="w-fit flex justify-end hover:cursor-pointer hover:text-primary"
+                    onClick={() => navigate("/forgot_password")}
                   >
                     Forgot Password?
                   </p>
@@ -124,16 +124,8 @@ function LoginPage() {
                       "Login"
                     )}
                   </Button>
-                  {/* <Button
-                    variant="outline-secondary"
-                    className="w-full mt-3"
-                    type="button"
-                    onClick={() => navigate("/registration")}
-                  >
-                    Sign up
-                  </Button> */}
                 </div>
-                <div className="mt-10 flex justify-center text-primary opacity-50">
+                <div className="mt-10 flex justify-center text-primary opacity-80">
                   <p>v{packageJson.version} - Created by Ara Fa Adri</p>
                 </div>
               </div>
