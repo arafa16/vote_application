@@ -67,6 +67,27 @@ export const GetStatusVotingTableReport: any = createAsyncThunk(
   },
 );
 
+export const GetStatusVotingDashboardReport: any = createAsyncThunk(
+  "StatusVoting/GetStatusVotingDashboardReport",
+  async (datas: any, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        import.meta.env.VITE_REACT_APP_API_URL +
+          `/api/v1/status_voting/dashboard_report?${datas}`,
+        {
+          withCredentials: true, // Now this is was the missing piece in the client side
+        },
+      );
+
+      return response.data;
+    } catch (error: any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response);
+      }
+    }
+  },
+);
+
 export const GetStatusVotingTableAttribute: any = createAsyncThunk(
   "StatusVoting/GetStatusVotingTableAttribute",
   async (_, thunkAPI) => {
@@ -124,6 +145,27 @@ export const StatusVotingSlice = createSlice({
       state.isError = true;
       state.messageReport = action.payload;
     });
+
+    //GetStatusVotingTableReport
+    builder.addCase(GetStatusVotingDashboardReport.pending, (state) => {
+      state.isLoadingReport = true;
+    });
+    builder.addCase(
+      GetStatusVotingDashboardReport.fulfilled,
+      (state, action) => {
+        state.isLoadingReport = false;
+        state.isSuccess = true;
+        state.dataReport = action.payload;
+      },
+    );
+    builder.addCase(
+      GetStatusVotingDashboardReport.rejected,
+      (state, action) => {
+        state.isLoadingReport = false;
+        state.isError = true;
+        state.messageReport = action.payload;
+      },
+    );
 
     //GetStatusVotingTableAttribute
     builder.addCase(GetStatusVotingTableAttribute.pending, (state) => {
