@@ -365,6 +365,15 @@ const UserDataViewByIdPage = () => {
               </p>
             </div>
             <div className="col-span-12 md:col-span-6 grid grid-cols-12">
+              <p className="col-span-6 md:col-span-6">Dashboard View Vote</p>
+              <p className="col-span-6">
+                :{" "}
+                {userData?.privilege?.dashboard_view_vote
+                  ? "active"
+                  : "inactive"}
+              </p>
+            </div>
+            <div className="col-span-12 md:col-span-6 grid grid-cols-12">
               <p className="col-span-6 md:col-span-6">Status Voting Anggota</p>
               <p className="col-span-6">
                 :{" "}
