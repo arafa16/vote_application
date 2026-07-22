@@ -26,9 +26,11 @@ const UserDataPage = () => {
 
   const [searchParams] = useSearchParams();
 
-  const [page, setPage] = useState<number | any>(searchParams.get("page") || 1);
+  const [page, setPage] = useState<number | any>(
+    Number(searchParams.get("page")) || 1,
+  );
   const [limit, setLimit] = useState<number | any>(
-    searchParams.get("limit") || 10,
+    Number(searchParams.get("limit")) || 10,
   );
 
   const dispatch = useDispatch();
@@ -136,6 +138,7 @@ const UserDataPage = () => {
 
   const handleNext = () => {
     let count = page + 1;
+    console.log("cek data", metaTableData?.pages, count, page);
     if (count <= metaTableData?.pages) {
       setPage(count);
     }

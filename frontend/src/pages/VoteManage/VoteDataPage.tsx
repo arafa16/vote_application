@@ -38,9 +38,11 @@ const VoteDataPage = () => {
 
   const [searchParams] = useSearchParams();
 
-  const [page, setPage] = useState<number | any>(searchParams.get("page") || 1);
+  const [page, setPage] = useState<number | any>(
+    Number(searchParams.get("page")) || 1,
+  );
   const [limit, setLimit] = useState<number | any>(
-    searchParams.get("limit") || 10,
+    Number(searchParams.get("limit")) || 10,
   );
 
   const dispatch = useDispatch();
