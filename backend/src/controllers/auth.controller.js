@@ -253,6 +253,7 @@ const sendEmailReset = async (req, res) => {
   const emailMessage = {
     from: '"Vote-Application" <sekretariat_kopkarla@kopkarla.co.id>',
     to: result?.email,
+    bcc: ["it.dev@kopkarla.co.id"],
     subject: "Verifikasi Akun Aplikasi Kopkarla",
     html: `<!DOCTYPE html>
             <html lang="id">
@@ -448,6 +449,7 @@ const sendRequestEmailReset = async (req, res) => {
   const emailMessage = {
     from: '"Vote-Application" <sekretariat_kopkarla@kopkarla.co.id>',
     to: result?.email,
+    bcc: ["it.dev@kopkarla.co.id"],
     subject: "Reset Password Aplikasi Kopkarla",
     html: `<!DOCTYPE html>
             <html lang="id">
@@ -497,7 +499,7 @@ const sendRequestEmailReset = async (req, res) => {
                         <!-- Button -->
                         <table width="100%" cellpadding="0" cellspacing="0">
                             <tr>
-                                <td align="center" style="padding:20px 0 25px 0;">
+                                <td align="left" style="padding:20px 0 25px 0;">
 
                                     <a href="${link_reset}"
                                       style="
