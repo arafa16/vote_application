@@ -9,6 +9,8 @@ import { useMemo } from "react";
 interface MainProps extends React.ComponentPropsWithoutRef<"canvas"> {
   width: number;
   height: number;
+  verified: number;
+  unverified: number;
 }
 
 function Main(props: MainProps) {
@@ -17,31 +19,19 @@ function Main(props: MainProps) {
 
   const data: ChartData = useMemo(() => {
     const configData = {
-      labels: ["17 - 30 Years old", "31 - 50 Years old", ">= 50 Years old"],
+      labels: ["Unverified", "Verified"],
       datasets: [
         {
-          data: [15, 10, 65],
+          data: [props?.unverified, props?.verified],
           backgroundColor: colorScheme
-            ? [
-                getColor("pending", 0.5),
-                getColor("warning", 0.5),
-                getColor("primary", 0.5),
-              ]
+            ? [getColor("secondary", 0.5), getColor("primary", 0.5)]
             : "",
           hoverBackgroundColor: colorScheme
-            ? [
-                getColor("pending", 0.5),
-                getColor("warning", 0.5),
-                getColor("primary", 0.5),
-              ]
+            ? [getColor("secondary", 0.5), getColor("primary", 0.5)]
             : "",
           borderWidth: 1,
           borderColor: colorScheme
-            ? [
-                getColor("pending", 0.75),
-                getColor("warning", 0.9),
-                getColor("primary", 0.5),
-              ]
+            ? [getColor("secondary", 0.9), getColor("primary", 0.5)]
             : "",
         },
       ],

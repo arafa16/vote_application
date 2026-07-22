@@ -9,6 +9,8 @@ import { useMemo, useRef } from "react";
 interface MainProps extends React.ComponentPropsWithoutRef<"canvas"> {
   width: number;
   height: number;
+  lebels: any;
+  total: any;
 }
 
 function Main(props: MainProps) {
@@ -26,21 +28,10 @@ function Main(props: MainProps) {
 
   const data: ChartData = useMemo(() => {
     return {
-      labels: [
-        "03/08/26",
-        "04/08/26",
-        "05/08/26",
-        "06/08/26",
-        "07/08/26",
-        "08/08/26",
-        "09/08/26",
-        "10/08/26",
-        "11/08/26",
-        "12/08/26",
-      ],
+      labels: props.lebels,
       datasets: [
         {
-          data: [0, 40, 80, 40, 60, 30, 30, 50, 70, 40],
+          data: props.total,
           borderWidth: 1,
           borderColor: colorScheme ? getColor("primary", 0.7) : "",
           pointRadius: 3.5,
