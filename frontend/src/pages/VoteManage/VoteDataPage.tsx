@@ -394,7 +394,7 @@ const VoteDataPage = () => {
                   </Table.Th>
                   <Table.Th className="whitespace-nowrap">Group</Table.Th>
                   <Table.Th className="whitespace-nowrap">
-                    Verification Date
+                    Verification Status
                   </Table.Th>
                   <Table.Th className="whitespace-nowrap">
                     Voting Pengawas
@@ -427,10 +427,15 @@ const VoteDataPage = () => {
                       {data?.company?.name}
                     </Table.Td>
                     <Table.Td className="whitespace-nowrap">
-                      {data?.verification_date &&
-                        dayjs(data?.verification_date).format(
-                          "YYYY-MM-DD HH:mm:ss",
-                        )}
+                      {data?.is_verified ? (
+                        <p className="bg-primary/70 w-fit px-2 text-[10px] rounded-lg text-white">
+                          verified
+                        </p>
+                      ) : (
+                        <p className="bg-warning/70 w-fit px-2 text-[10px] rounded-lg text-white">
+                          unverified
+                        </p>
+                      )}
                     </Table.Td>
                     <Table.Td className="whitespace-nowrap">
                       {data?.commissioner_vote_date.length === 0

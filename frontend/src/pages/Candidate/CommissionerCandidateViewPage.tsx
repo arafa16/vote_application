@@ -288,13 +288,15 @@ const CommissionerCandidateViewPage = () => {
           <div className="col-span-12 md:col-span-8 py-4">
             <div className="grid gap-y-2 md:gap-y-4">
               <p className="text-[18px] mb-4 text-primary">e-VOTING</p>
-              <p className="capitalize text-[18px] md:text-[24px] text-primary font-bold mb-4">
+              <p
+                className={`capitalize text-[18px] md:text-[24px] text-primary font-bold mb-4 ${votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""}`}
+              >
                 {dataCheck.director_check && dataCheck.commissioner_check
                   ? "Hak Pilih Sudah Anda Sudah Terpakai"
                   : "Pilih 1 Kandidat Pengawas"}
               </p>
               <div
-                className={`${dataCheck.director_check && dataCheck.commissioner_check ? "hidden" : ""} grid gap-y-2 md:gap-y-4 text-[14px] text-primary`}
+                className={`${(dataCheck.director_check && dataCheck.commissioner_check) || votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""} grid gap-y-2 md:gap-y-4 text-[14px] text-primary`}
               >
                 <p>
                   Pilih 1 kandidat pengawas dari {commissionerDatas?.length}{" "}
@@ -316,7 +318,7 @@ const CommissionerCandidateViewPage = () => {
           </div>
         </div>
         <div
-          className={`${dataCheck.director_check && dataCheck.commissioner_check ? "" : "hidden"} grid grid-cols-12 my-2`}
+          className={`${dataCheck.director_check && dataCheck.commissioner_check && votingPeriodSelected !== "" && votingPeriodSelected === undefined ? "" : "hidden"} grid grid-cols-12 my-2`}
         >
           <div className="col-span-12">
             <Alert
@@ -336,7 +338,7 @@ const CommissionerCandidateViewPage = () => {
           </div>
         </div>
         <div
-          className={`${dataCheck.director_check && dataCheck.commissioner_check ? "hidden" : ""} grid grid-cols-12 my-2`}
+          className={`${(dataCheck.director_check && dataCheck.commissioner_check) || votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""} grid grid-cols-12 my-2`}
         >
           <div className="col-span-12">
             <Alert variant="soft-primary" className="flex items-center mb-2">
@@ -353,12 +355,12 @@ const CommissionerCandidateViewPage = () => {
           </div>
         </div>
         <div
-          className={`${dataCheck.director_check && dataCheck.commissioner_check ? "hidden" : ""} mb-4`}
+          className={`${(dataCheck.director_check && dataCheck.commissioner_check) || votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""} mb-4`}
         >
           <StepWizart button1={true} button2={false} button3={false} />
         </div>
         <div
-          className={`w-full ${votingPeriodSelected === "" ? "hidden" : ""} ${dataCheck.director_check && dataCheck.commissioner_check ? "hidden" : ""} mb-4`}
+          className={`w-full ${(dataCheck.director_check && dataCheck.commissioner_check) || votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""} mb-4`}
         >
           <div className={`w-full bg-warning rounded-md py-2 px-4 mb-4`}>
             <p className="text-[14px] text-white">KANDIDAT PENGAWAS </p>
@@ -397,7 +399,7 @@ const CommissionerCandidateViewPage = () => {
           </div>
         </div>
         <div
-          className={`${dataCheck.director_check && dataCheck.commissioner_check ? "hidden" : ""} grid grid-cols-12 gap-x-2 mb-4`}
+          className={`${(dataCheck.director_check && dataCheck.commissioner_check) || votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""} grid grid-cols-12 gap-x-2 mb-4`}
         >
           <div className="col-span-12">
             <Alert variant="soft-warning" className="flex items-center mb-2">
@@ -413,7 +415,7 @@ const CommissionerCandidateViewPage = () => {
           </div>
         </div>
         <div
-          className={`${dataCheck.director_check && dataCheck.commissioner_check ? "hidden" : ""} w-full mb-24`}
+          className={`${(dataCheck.director_check && dataCheck.commissioner_check) || votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""} w-full mb-24`}
         >
           <BackOrNextButton
             name_button="Selanjutnya"

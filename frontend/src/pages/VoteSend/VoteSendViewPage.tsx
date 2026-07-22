@@ -188,7 +188,7 @@ const VoteSendViewPage = () => {
           </div>
         </div>
         <div
-          className={`grid grid-cols-12 my-2 ${dataCheck.director_check && dataCheck.commissioner_check ? "" : "hidden"} `}
+          className={`grid grid-cols-12 my-2 ${dataCheck.director_check && dataCheck.commissioner_check && votingPeriodSelected !== "" && votingPeriodSelected === undefined ? "" : "hidden"} `}
         >
           <div className="col-span-12">
             <Alert
@@ -208,7 +208,7 @@ const VoteSendViewPage = () => {
           </div>
         </div>
         <div
-          className={`grid grid-cols-12 my-2 ${commissionerVote === null || directorVote === null ? "hidden" : ""} `}
+          className={`grid grid-cols-12 my-2 ${commissionerVote === null || directorVote === null || votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""} `}
         >
           <div className="col-span-12">
             <Alert
@@ -249,7 +249,7 @@ const VoteSendViewPage = () => {
           </div>
         </div>
         <div
-          className={`grid grid-cols-12 my-2 ${commissionerVote === null || directorVote === null ? "" : "hidden"} ${dataCheck.director_check && dataCheck.commissioner_check ? "hidden" : ""}`}
+          className={`grid grid-cols-12 my-2 ${commissionerVote !== null || directorVote !== null || (dataCheck.director_check && dataCheck.commissioner_check) || votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""}`}
         >
           <div className="col-span-12">
             <Alert
@@ -280,7 +280,7 @@ const VoteSendViewPage = () => {
           </div>
         </div>
         <div
-          className={`mb-4 ${dataCheck.director_check && dataCheck.commissioner_check ? "hidden" : ""}`}
+          className={`mb-4 ${(dataCheck.director_check && dataCheck.commissioner_check) || votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""}`}
         >
           <StepWizart button1={true} button2={true} button3={true} />
         </div>
@@ -301,13 +301,13 @@ const VoteSendViewPage = () => {
         </div>
         <div className={`w-full mb-4 md:px-4`}>
           <div
-            className={`w-full bg-primary rounded-md py-2 px-4 mb-4 ${commissionerVote === null && directorVote === null ? "hidden" : ""}`}
+            className={`w-full bg-primary rounded-md py-2 px-4 mb-4 ${(commissionerVote === null && directorVote === null) || votingPeriodSelected === "" ? "hidden" : ""}`}
           >
             <p className="text-[14px] text-white">PILIHAN ANDA</p>
           </div>
           <div className="grid grid-cols-12 gap-4">
             <div
-              className={`col-span-12 md:col-span-6 ${commissionerVote === null ? "hidden" : ""}`}
+              className={`col-span-12 md:col-span-6 ${commissionerVote === null || votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""}`}
             >
               <CandidateVoteView
                 data={commissionerVote?.commissioner_candidate}
@@ -319,7 +319,7 @@ const VoteSendViewPage = () => {
               />
             </div>
             <div
-              className={`col-span-12 md:col-span-6 ${directorVote === null ? "hidden" : ""}`}
+              className={`col-span-12 md:col-span-6 ${directorVote === null || votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""}`}
             >
               <CandidateVoteView
                 data={directorVote?.director_candidate}
@@ -333,7 +333,7 @@ const VoteSendViewPage = () => {
           </div>
         </div>
         <div
-          className={`w-full mb-24 ${dataCheck.director_check && dataCheck.commissioner_check ? "hidden" : ""}`}
+          className={`w-full mb-24 ${(dataCheck.director_check && dataCheck.commissioner_check) || votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""}`}
         >
           <BackOrNextButton
             name_button="Kirim Voting"
