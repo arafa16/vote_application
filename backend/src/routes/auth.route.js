@@ -5,6 +5,7 @@ const {
   login,
   getMe,
   sendEmailReset,
+  sendRequestEmailReset,
   getTokenReset,
   resetPassword,
   logout,
@@ -17,7 +18,8 @@ router.post("/register", register);
 router.get("/register", registerAttribute);
 router.post("/login", login);
 router.get("/me", verifyToken, getMe);
-router.post("/mail", sendEmailReset);
+router.get("/mail/:uuid", sendEmailReset);
+router.post("/mail", sendRequestEmailReset);
 router.get("/reset/:token", getTokenReset);
 router.post("/reset/:token", resetPassword);
 router.delete("/logout", logout);
