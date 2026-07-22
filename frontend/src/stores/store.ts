@@ -17,6 +17,7 @@ import CompanyReducer from "./features/CompanySlice";
 import StatusReducer from "./features/StatusSlice";
 import ApplicationReducer from "./features/ApplicationSlice";
 import AuditLogReducer from "./features/AuditLogSlice";
+import ResetPasswordReducer from "./features/ResetPasswordSlice";
 
 export const store = configureStore({
   reducer: {
@@ -38,6 +39,7 @@ export const store = configureStore({
     status: StatusReducer,
     application: ApplicationReducer,
     auditLog: AuditLogReducer,
+    resetPassword: ResetPasswordReducer,
   },
 });
 
