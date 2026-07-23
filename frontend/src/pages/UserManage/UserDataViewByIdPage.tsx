@@ -15,6 +15,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { FormInput, FormLabel } from "../../base-components/Form";
 import { NotificationChangePassword } from "../../components/Notification/NotificationChangePassword";
 import { NewNotification } from "../../components/Notification/NewNotification";
+import LoadingIcon from "../../base-components/LoadingIcon";
 
 const UserDataViewByIdPage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -258,7 +259,7 @@ const UserDataViewByIdPage = () => {
       </div>
       <div className="mt-2">
         <div
-          className={`grid grid-cols-12 bg-slate-200 rounded px-2 mb-2 py-2 ${verificationLink === null ? "hidden" : ""}`}
+          className={`grid grid-cols-12 bg-slate-200 rounded px-2 mb-2 py-2 ${verificationLink === null || isLoadingPatchUser ? "hidden" : ""}`}
         >
           <p className="col-span-12 text-center text-primary px-4 mb-2 break-all">
             {`${verificationLink}`}
@@ -294,8 +295,15 @@ const UserDataViewByIdPage = () => {
               </Menu.Button>
               <Menu.Items className="w-48 mt-1">
                 <Menu.Item onClick={handleSendResetPassword}>
-                  <Lucide icon="Send" className="w-4 h-4 mr-2" />
-                  Send Reset Password
+                  <LoadingIcon
+                    icon="tail-spin"
+                    className={`w-5 h-5 ${isLoadingPatchUser ? "" : "hidden"}`}
+                  />
+                  <Lucide
+                    icon="Send"
+                    className={`w-4 h-4 mr-2 ${isLoadingPatchUser ? "hidden" : ""}`}
+                  />
+                  {isLoadingPatchUser ? "" : "Send Reset Password"}
                 </Menu.Item>
                 <Menu.Item onClick={handleShowResetPassword}>
                   <Lucide icon="Key" className="w-4 h-4 mr-2" />
