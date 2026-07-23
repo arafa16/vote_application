@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   ChangePasswordById,
+  SendEmailResetPasswordById,
   GetUserById,
   resetUser,
 } from "../../stores/features/UserSlice";
@@ -13,11 +14,13 @@ import { Menu, Dialog } from "../../base-components/Headless";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { FormInput, FormLabel } from "../../base-components/Form";
 import { NotificationChangePassword } from "../../components/Notification/NotificationChangePassword";
+import { NewNotification } from "../../components/Notification/NewNotification";
 
 const UserDataViewByIdPage = () => {
   const [meData, setMeData] = useState<any>(null);
   const [userData, setUserData] = useState<any>(null);
   const [resetPasswordModalById, setResetPasswordModalById] = useState(false);
+  const [verificationLink, setVerificationLink] = useState<any>(null);
   const [formData, setFormData] = useState({
     password: "",
     conf_password: "",
@@ -62,11 +65,17 @@ const UserDataViewByIdPage = () => {
     message: messageUser,
     messagePassword,
     messagePasswordPatch,
+    messageSend,
   } = useSelector((state: any) => state.user);
 
   useEffect(() => {
     if (dataUser !== null && isSuccessUser && !isLoadingUser) {
       setUserData(dataUser?.data);
+      if (dataUser?.data?.verification_token !== null) {
+        setVerificationLink(
+          `${import.meta.env.VITE_REACT_APP_FRONTEND}/reset/${dataUser?.data?.verification_token}`,
+        );
+      }
       dispatch(resetUser());
     } else if (messageUser !== "" && isErrorUser && !isLoadingUser) {
       dispatch(resetUser());
@@ -92,6 +101,18 @@ const UserDataViewByIdPage = () => {
       NotificationChangePassword(messagePasswordPatch?.data?.message);
       dispatch(resetUser());
     }
+    if (messageSend !== "" && isSuccessPatchUser && !isLoadingPatchUser) {
+      NotificationChangePassword(messageSend?.message);
+      if (messageSend?.data !== null) {
+        setVerificationLink(
+          `${import.meta.env.VITE_REACT_APP_FRONTEND}/reset/${messageSend?.data}`,
+        );
+      }
+      setResetPasswordModalById(false);
+      dispatch(resetUser());
+    } else if (messageSend !== "" && isErrorPatchUser && !isLoadingPatchUser) {
+      dispatch(resetUser());
+    }
   }, [
     dataUser,
     isLoadingUser,
@@ -102,6 +123,7 @@ const UserDataViewByIdPage = () => {
     messageUser,
     messagePassword,
     messagePasswordPatch,
+    messageSend,
   ]);
 
   useEffect(() => {
@@ -129,6 +151,20 @@ const UserDataViewByIdPage = () => {
 
   const handleShowResetPassword = () => {
     setResetPasswordModalById(true);
+  };
+
+  const handleSendResetPassword = (e: any) => {
+    e.preventDefault();
+    dispatch(SendEmailResetPasswordById({ uuid: id }));
+  };
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(verificationLink);
+      NewNotification("Link berhasil disalin");
+    } catch {
+      NewNotification("Gagal menyalin link");
+    }
   };
 
   const FormPassword = (
@@ -221,6 +257,22 @@ const UserDataViewByIdPage = () => {
         </div>
       </div>
       <div className="mt-2">
+        <div
+          className={`grid grid-cols-12 bg-slate-200 rounded px-2 mb-2 py-2 ${verificationLink === null ? "hidden" : ""}`}
+        >
+          <p className="col-span-12 text-center text-primary px-4 mb-2 break-all">
+            {`${verificationLink}`}
+          </p>
+          <div className="col-span-12 flex justify-center">
+            <Button
+              variant="outline-primary"
+              className="py-0"
+              onClick={copyLink}
+            >
+              copy link
+            </Button>
+          </div>
+        </div>
         <div className="grid grid-cols-12 bg-slate-200 rounded px-2">
           <div className="col-span-6 md:col-span-2 py-1 text-[12px] text-primary">
             Data User
@@ -240,7 +292,11 @@ const UserDataViewByIdPage = () => {
               <Menu.Button as={Button} variant="primary" className="py-1">
                 Action
               </Menu.Button>
-              <Menu.Items className="w-40">
+              <Menu.Items className="w-48 mt-1">
+                <Menu.Item onClick={handleSendResetPassword}>
+                  <Lucide icon="Send" className="w-4 h-4 mr-2" />
+                  Send Reset Password
+                </Menu.Item>
                 <Menu.Item onClick={handleShowResetPassword}>
                   <Lucide icon="Key" className="w-4 h-4 mr-2" />
                   Change Password

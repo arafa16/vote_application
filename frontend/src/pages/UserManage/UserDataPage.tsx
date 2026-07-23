@@ -159,6 +159,11 @@ const UserDataPage = () => {
     navigate("/user_create");
   };
 
+  const handleSendInvitation = (data: any) => {
+    const send_by_id = data.map((item: any) => item.uuid);
+    console.log("send_by_id", send_by_id);
+  };
+
   return (
     <div>
       <div className="grid grid-cols-12 mt-6">
@@ -188,8 +193,9 @@ const UserDataPage = () => {
                 variant="outline-primary"
                 size="sm"
                 className="text-[12px] w-full"
+                onClick={() => handleSendInvitation(userDatas)}
               >
-                Export Data
+                Send Invitation
               </Button>
             </div>
             <div>

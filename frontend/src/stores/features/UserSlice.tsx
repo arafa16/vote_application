@@ -16,6 +16,7 @@ interface variabel {
   messageDelete: string;
   messagePassword: string;
   messagePasswordPatch: string;
+  messageSend: string;
 }
 
 const initialState: variabel = {
@@ -33,6 +34,7 @@ const initialState: variabel = {
   messageDelete: "",
   messagePassword: "",
   messagePasswordPatch: "",
+  messageSend: "",
 };
 
 export const GetUserDatas: any = createAsyncThunk(
@@ -244,6 +246,27 @@ export const ChangePasswordById: any = createAsyncThunk(
   },
 );
 
+export const SendEmailResetPasswordById: any = createAsyncThunk(
+  "User/SendEmailResetPasswordById",
+  async (datas: any, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        import.meta.env.VITE_REACT_APP_API_URL +
+          `/api/v1/user/mail/${datas.uuid}`,
+        {
+          withCredentials: true, // Now this is was the missing piece in the client side
+        },
+      );
+
+      return response.data;
+    } catch (error: any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response);
+      }
+    }
+  },
+);
+
 export const UserSlice = createSlice({
   name: "User",
   initialState,
@@ -399,6 +422,21 @@ export const UserSlice = createSlice({
       state.isLoadingUpdate = false;
       state.isErrorPatch = true;
       state.messagePasswordPatch = action.payload;
+    });
+
+    //SendEmailResetPasswordById
+    builder.addCase(SendEmailResetPasswordById.pending, (state) => {
+      state.isLoadingUpdate = true;
+    });
+    builder.addCase(SendEmailResetPasswordById.fulfilled, (state, action) => {
+      state.isLoadingUpdate = false;
+      state.isSuccessPatch = true;
+      state.messageSend = action.payload;
+    });
+    builder.addCase(SendEmailResetPasswordById.rejected, (state, action) => {
+      state.isLoadingUpdate = false;
+      state.isErrorPatch = true;
+      state.messageSend = action.payload;
     });
   },
 });
