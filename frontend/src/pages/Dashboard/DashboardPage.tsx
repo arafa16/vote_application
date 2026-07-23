@@ -165,8 +165,6 @@ const DashboardPage = () => {
       <div></div>
     );
 
-  console.log("dataReport?.commissioner_vote", dataReport?.commissioner_vote);
-
   const VotingCommissionerOverview =
     dataReport?.commissioner_vote?.labels !== undefined &&
     dataReport?.commissioner_vote?.vote_percent !== undefined ? (
@@ -259,8 +257,8 @@ const DashboardPage = () => {
                 </div>
               </div>
             </div>
-            <div className="mx-auto mt-6 w-52 lg:w-auto">
-              <div className="flex items-center mb-4">
+            <div className="mx-auto mt-2 w-52 lg:w-auto lg:min-h-[100px]">
+              <div className="flex items-center mb-3">
                 <div className="w-2 h-2 mr-3 border rounded-full bg-secondary/50 border-secondary/50"></div>
                 <span className="truncate">Unverified</span>
                 <span className="ml-auto">
@@ -268,7 +266,7 @@ const DashboardPage = () => {
                   {dataReport?.user_verification_status?.unverified_persent}%
                 </span>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center mb-3">
                 <div className="w-2 h-2 mr-3 border rounded-full bg-primary/50 border-primary/50"></div>
                 <span className="truncate">Verified</span>
                 <span className="ml-auto">
@@ -305,8 +303,8 @@ const DashboardPage = () => {
                 </div>
               </div>
             </div>
-            <div className="mx-auto mt-6 w-52 lg:w-auto">
-              <div className="flex items-center mb-4">
+            <div className="mx-auto mt-2 w-52 lg:w-auto lg:min-h-[100px]">
+              <div className="flex items-center mb-3">
                 <div className="w-2 h-2 mr-3 border rounded-full bg-secondary/50 border-secondary/50"></div>
                 <span className="truncate">Unvote</span>
                 <span className="ml-auto">
@@ -314,7 +312,7 @@ const DashboardPage = () => {
                   {dataReport?.voting_activity_overview?.unvote_persent}%
                 </span>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center mb-3">
                 <div className="w-2 h-2 mr-3 border rounded-full bg-primary/50 border-primary/50"></div>
                 <span className="truncate">Vote</span>
                 <span className="ml-auto">
@@ -352,12 +350,12 @@ const DashboardPage = () => {
                 </div>
               </div>
             </div>
-            <div className="mx-auto mt-2 w-52 lg:w-auto grid gap-2">
+            <div className="mx-auto mt-2 w-52 lg:w-auto lg:h-[100px]">
               {dataReport?.commissioner_vote?.data?.map(
                 (item: any, index: number) => (
-                  <div className="flex items-center" key={index}>
+                  <div className="flex items-center mb-3" key={index}>
                     <div
-                      className={`w-2 h-2 mr-3 border rounded-full bg-${item?.color}/50 border-${item?.color}/50`}
+                      className={`w-2 h-2 mr-3 border rounded-full ${item?.color === "primary" ? `bg-${item?.color}/50 border-${item?.color}/50` : `bg-${item?.color} border-${item?.color}`} `}
                     ></div>
                     <span className="truncate">{item?.name}</span>
                     <span className="ml-auto">
@@ -396,12 +394,12 @@ const DashboardPage = () => {
                 </div>
               </div>
             </div>
-            <div className="mx-auto mt-2 w-52 lg:w-auto grid gap-2">
+            <div className="mx-auto mt-2 w-52 lg:w-auto lg:min-h-[100px]">
               {dataReport?.director_vote?.data?.map(
                 (item: any, index: number) => (
-                  <div className="flex items-center" key={index}>
+                  <div className="flex items-center mb-3" key={index}>
                     <div
-                      className={`w-2 h-2 mr-3 border rounded-full bg-${item?.color}/50 border-${item?.color}/50`}
+                      className={`w-2 h-2 mr-3 border rounded-full ${item?.color === "primary" ? `bg-${item?.color}/50 border-${item?.color}/50` : `bg-${item?.color} border-${item?.color}`} `}
                     ></div>
                     <span className="truncate">{item?.name}</span>
                     <span className="ml-auto">
