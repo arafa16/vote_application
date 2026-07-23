@@ -47,6 +47,11 @@ function Main(props: MainProps) {
         legend: {
           display: false,
         },
+        tooltip: {
+          callbacks: {
+            label: (context) => `${context.label}: ${context.raw}%`,
+          },
+        },
       },
       cutout: "90%",
     };
