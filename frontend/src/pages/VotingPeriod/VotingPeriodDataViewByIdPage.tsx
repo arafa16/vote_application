@@ -176,6 +176,12 @@ const VotingPeriodDataViewByIdPage = () => {
                   : ""}
               </p>
             </div>
+            <div className="col-span-12 md:col-span-6 grid grid-cols-12">
+              <p className="col-span-6 md:col-span-6">Status</p>
+              <p className="col-span-6">
+                : {dataView?.is_active ? "active" : "inactive"}
+              </p>
+            </div>
           </div>
         </div>
       </div>

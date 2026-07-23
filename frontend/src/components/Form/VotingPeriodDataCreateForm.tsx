@@ -81,6 +81,22 @@ const VotingPeriodDataCreateForm = (props: any) => {
             />
           </div>
         </div>
+        <div className="col-span-12 md:col-span-6 grid grid-cols-12">
+          <div className="col-span-12">
+            <FormLabel htmlFor="is_active">Status</FormLabel>
+            <FormSelect
+              id="is_active"
+              formSelectSize="sm"
+              value={formData?.is_active}
+              onChange={(e) =>
+                setFormData({ ...formData, is_active: e.target.value })
+              }
+            >
+              <option value={1}>active</option>
+              <option value={0}>inactive</option>
+            </FormSelect>
+          </div>
+        </div>
       </div>
     </div>
   );

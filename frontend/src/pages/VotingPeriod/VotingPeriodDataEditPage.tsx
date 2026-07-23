@@ -18,6 +18,7 @@ const VotingPeriodDataEditPage = () => {
     description: "",
     start_date: "",
     end_date: "",
+    is_active: 1,
   });
 
   const { id } = useParams();
@@ -67,6 +68,7 @@ const VotingPeriodDataEditPage = () => {
         description: dataByIdVotingPeriod?.data?.description,
         start_date: dataByIdVotingPeriod?.data?.start_date,
         end_date: dataByIdVotingPeriod?.data?.end_date,
+        is_active: dataByIdVotingPeriod?.data?.is_active ? 1 : 0,
       });
       dispatch(resetVotingPeriod());
     } else if (

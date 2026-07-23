@@ -17,6 +17,7 @@ const VotingPeriodDataCreatePage = () => {
     description: "",
     start_date: "",
     end_date: "",
+    is_active: 1,
   });
 
   const dispatch = useDispatch();

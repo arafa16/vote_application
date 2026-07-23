@@ -99,6 +99,9 @@ const getDataById = async (req, res) => {
 
   const findData = await votingPeriodModel.findOne({
     where: { uuid },
+    attributes: {
+      exclude: ["id"],
+    },
   });
 
   if (!findData) {
@@ -277,7 +280,7 @@ const updateDataCommissionerNDirectorById = async (req, res) => {
 };
 
 const createData = async (req, res) => {
-  const { name, description, start_date, end_date } = req.body;
+  const { name, description, start_date, end_date, is_active } = req.body;
 
   if (!name) {
     throw new CustomHttpError("name cannot be null", 400);
@@ -288,6 +291,7 @@ const createData = async (req, res) => {
     description,
     start_date,
     end_date,
+    is_active,
   });
 
   await createLogHandler({
@@ -305,7 +309,7 @@ const createData = async (req, res) => {
 
 const updateData = async (req, res) => {
   const { uuid } = req.params;
-  const { name, description, start_date, end_date } = req.body;
+  const { name, description, start_date, end_date, is_active } = req.body;
 
   const findData = await votingPeriodModel.findOne({
     where: { uuid },
@@ -320,6 +324,7 @@ const updateData = async (req, res) => {
     description,
     start_date,
     end_date,
+    is_active,
   });
 
   await createLogHandler({
