@@ -9,6 +9,7 @@ const {
   deleteData,
   changePassword,
   changePasswordById,
+  sendRequestEmailReset,
 } = require("../controllers/user.controller");
 const { verifyToken } = require("../middleware/auth.middleware");
 
@@ -29,5 +30,6 @@ router.patch("/change_password", verifyToken, changePassword);
 router.patch("/change_password/:uuid", verifyToken, changePasswordById);
 
 router.post("/import", verifyToken, importDataUser);
+router.get("/mail/:uuid", verifyToken, sendRequestEmailReset);
 
 module.exports = router;
