@@ -61,7 +61,7 @@ const CandidateVoteView = (props: any) => {
           }
         >
           <Lucide icon="CheckSquare" className="block mx-2 text-white " />
-          Pilih Kandidat
+          Pilih {data?.name}
         </Button>
       </div>
     </div>
