@@ -32,6 +32,8 @@ const VoteDataPage = () => {
   const [group, setGroup] = useState<any>("");
   const [statusDatas, setStatusDatas] = useState<any>(null);
   const [status, setStatus] = useState<any>("");
+  const [sortBy, setSortBy] = useState("name");
+  const [sort, setSort] = useState<"asc" | "desc">("asc");
 
   //report
   const [dataReport, setDataReport] = useState<any>(null);
@@ -166,9 +168,11 @@ const VoteDataPage = () => {
         page,
         limit,
         voting_period_uuid: votingPeriodSelected,
+        sort,
+        sortBy,
       };
       const searchParams = new URLSearchParams(paramsObj);
-
+      console.log("searchParams", searchParams.toString());
       dispatch(GetStatusVotingTable(searchParams));
     } else if (votingPeriodSelected !== "") {
       const handler = setTimeout(() => {
@@ -176,6 +180,8 @@ const VoteDataPage = () => {
           page,
           limit,
           voting_period_uuid: votingPeriodSelected,
+          sort,
+          sortBy,
         };
         if (search !== "") {
           paramsObj.search = search;
@@ -199,7 +205,7 @@ const VoteDataPage = () => {
       setStatusVotingDatas(null);
       setMetaTableData(null);
     }
-  }, [search, group, status, page, limit, votingPeriodSelected]);
+  }, [search, group, status, page, limit, votingPeriodSelected, sort, sortBy]);
 
   useEffect(() => {
     if (
@@ -269,6 +275,20 @@ const VoteDataPage = () => {
 
   const handleChangeLimit = (data: number) => {
     setLimit(data);
+  };
+
+  const handleSort = (field: string) => {
+    if (sortBy === field) {
+      setSort((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortBy(field);
+      setSort("asc");
+    }
+  };
+
+  const getSortIcon = (field: string) => {
+    if (sortBy !== field) return "↕";
+    return sort === "asc" ? "↑" : "↓";
   };
 
   return (
@@ -390,13 +410,24 @@ const VoteDataPage = () => {
               <Table.Thead>
                 <Table.Tr>
                   <Table.Th className="whitespace-nowrap">No</Table.Th>
-                  <Table.Th className="whitespace-nowrap">Nama</Table.Th>
-                  <Table.Th className="whitespace-nowrap">
-                    Nomor Anggota
+                  <Table.Th
+                    className="whitespace-nowrap cursor-pointer hover:text-primary"
+                    onClick={() => handleSort("name")}
+                  >
+                    Nama {getSortIcon("name")}
+                  </Table.Th>
+                  <Table.Th
+                    className="whitespace-nowrap cursor-pointer hover:text-primary"
+                    onClick={() => handleSort("membership_number")}
+                  >
+                    Nomor Anggota {getSortIcon("membership_number")}
                   </Table.Th>
                   <Table.Th className="whitespace-nowrap">Group</Table.Th>
-                  <Table.Th className="whitespace-nowrap">
-                    Verification Status
+                  <Table.Th
+                    className="whitespace-nowrap cursor-pointer hover:text-primary"
+                    onClick={() => handleSort("is_verified")}
+                  >
+                    Verification Status {getSortIcon("is_verified")}
                   </Table.Th>
                   <Table.Th className="whitespace-nowrap">
                     Voting Pengawas
@@ -404,8 +435,23 @@ const VoteDataPage = () => {
                   <Table.Th className="whitespace-nowrap">
                     Voting Pengurus
                   </Table.Th>
-                  <Table.Th className="whitespace-nowrap">
-                    Status Voting
+                  <Table.Th
+                    className="whitespace-nowrap cursor-pointer hover:text-primary"
+                    onClick={() => handleSort("status_vote")}
+                  >
+                    Status Voting {getSortIcon("status_vote")}
+                  </Table.Th>
+                  <Table.Th
+                    className="whitespace-nowrap cursor-pointer hover:text-primary"
+                    onClick={() => handleSort("createdAt")}
+                  >
+                    Created Date {getSortIcon("createdAt")}
+                  </Table.Th>
+                  <Table.Th
+                    className="whitespace-nowrap cursor-pointer hover:text-primary"
+                    onClick={() => handleSort("created_by")}
+                  >
+                    Created By {getSortIcon("created_by")}
                   </Table.Th>
                 </Table.Tr>
               </Table.Thead>
@@ -477,6 +523,13 @@ const VoteDataPage = () => {
                           Belum Voting
                         </p>
                       )}
+                    </Table.Td>
+                    <Table.Td className="whitespace-nowrap">
+                      {data?.created_at &&
+                        dayjs(data?.created_at).format("YYYY-MM-DD HH:mm:ss")}
+                    </Table.Td>
+                    <Table.Td className="whitespace-nowrap">
+                      {data?.created_by}
                     </Table.Td>
                   </Table.Tr>
                 ))}

@@ -24,15 +24,15 @@ const VotingReport = (props: any) => {
             ])}
           >
             <div data-content>
-              <div className="flex justify-start gap-8 px-4">
-                <div className="flex items-center justify-center border rounded-full w-[3rem] h-[3rem] text-primary bg-primary/20 border-primary/20">
-                  <Lucide className="w-[2rem] h-[2rem]" icon="Users" />
+              <div className="flex justify-start items-center gap-8 px-2">
+                <div className="flex items-center justify-center border rounded-full w-[2.5rem] h-[2.5rem] text-primary bg-primary/20 border-primary/20">
+                  <Lucide className="w-[1.5rem] h-[1.5rem]" icon="Users" />
                 </div>
                 <div className="">
-                  <div className="mb-1 text-primary leading-7 text-[14px]">
+                  <div className="text-primary leading-7 text-[12px]">
                     Total Anggota
                   </div>
-                  <div className="flex items-center cursor-pointer text-primary text-[14px]">
+                  <div className="flex items-center cursor-pointer text-primary text-[12px]">
                     {dataReport?.user_all?.total} Anggota |{" "}
                     {dataReport?.user_all?.persent}%
                   </div>
@@ -50,15 +50,15 @@ const VotingReport = (props: any) => {
             ])}
           >
             <div data-content>
-              <div className="flex justify-start gap-8 px-4">
-                <div className="flex items-center justify-center border rounded-full w-[3rem] h-[3rem] text-primary bg-primary/20 border-primary/20">
-                  <Lucide className="w-[2rem] h-[2rem]" icon="Check" />
+              <div className="flex justify-start items-center gap-8 px-2">
+                <div className="flex items-center justify-center border rounded-full w-[2.5rem] h-[2.5rem] text-primary bg-primary/20 border-primary/20">
+                  <Lucide className="w-[1.5rem] h-[1.5rem]" icon="Check" />
                 </div>
                 <div className="">
-                  <div className="mb-1 text-primary leading-7 text-[14px]">
+                  <div className="text-primary leading-7 text-[12px]">
                     Sudah Voting
                   </div>
-                  <div className="flex items-center cursor-pointer text-primary text-[14px]">
+                  <div className="flex items-center cursor-pointer text-primary text-[12px]">
                     {dataReport?.voted_users?.total} Anggota |{" "}
                     {dataReport?.voted_users?.persent}%
                   </div>
@@ -76,15 +76,15 @@ const VotingReport = (props: any) => {
             ])}
           >
             <div data-content>
-              <div className="flex justify-start gap-8 px-4">
-                <div className="flex items-center justify-center border rounded-full w-[3rem] h-[3rem] text-primary bg-primary/20 border-primary/20">
-                  <Lucide className="w-[2rem] h-[2rem]" icon="Clock" />
+              <div className="flex justify-start items-center gap-8 px-2">
+                <div className="flex items-center justify-center border rounded-full w-[2.5rem] h-[2.5rem] text-primary bg-primary/20 border-primary/20">
+                  <Lucide className="w-[1.5rem] h-[1.5rem]" icon="Clock" />
                 </div>
                 <div className="">
-                  <div className="mb-1 text-primary leading-7 text-[14px]">
+                  <div className="text-primary leading-7 text-[12px]">
                     Belum Voting
                   </div>
-                  <div className="flex items-center cursor-pointer text-primary text-[14px]">
+                  <div className="flex items-center cursor-pointer text-primary text-[12px]">
                     {dataReport?.pending_users?.total} Anggota |{" "}
                     {dataReport?.pending_users?.persent}%
                   </div>
@@ -102,15 +102,15 @@ const VotingReport = (props: any) => {
             ])}
           >
             <div data-content>
-              <div className="flex justify-start gap-8 px-4">
-                <div className="flex items-center justify-center border rounded-full w-[3rem] h-[3rem] text-primary bg-primary/20 border-primary/20">
-                  <Lucide className="w-[2rem] h-[2rem]" icon="PieChart" />
+              <div className="flex justify-start items-center gap-8 px-2">
+                <div className="flex items-center justify-center border rounded-full w-[2.5rem] h-[2.5rem] text-primary bg-primary/20 border-primary/20">
+                  <Lucide className="w-[1.5rem] h-[1.5rem]" icon="PieChart" />
                 </div>
                 <div className="">
-                  <div className="mb-1 text-primary leading-7 text-[14px]">
+                  <div className="text-primary leading-7 text-[12px]">
                     Verified
                   </div>
-                  <div className="flex items-center cursor-pointer text-primary text-[14px]">
+                  <div className="flex items-center cursor-pointer text-primary text-[12px]">
                     {dataReport?.user_is_verified?.total} Anggota |{" "}
                     {dataReport?.user_is_verified?.persent}%
                   </div>

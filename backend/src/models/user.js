@@ -39,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       privilege_id: DataTypes.INTEGER,
       is_verified: DataTypes.BOOLEAN,
       is_member: DataTypes.BOOLEAN,
+      created_by: DataTypes.STRING,
       is_active: DataTypes.BOOLEAN,
     },
     {

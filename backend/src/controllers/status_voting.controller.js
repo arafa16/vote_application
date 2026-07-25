@@ -21,7 +21,6 @@ const getDataTable = async (req, res) => {
   const {
     search,
     is_active,
-    sort,
     status_user,
     status_vote,
     company,
@@ -32,14 +31,6 @@ const getDataTable = async (req, res) => {
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 10;
   const offset = (page - 1) * limit;
-
-  let order = [["name", "ASC"]];
-
-  if (sort) {
-    const direction = sort.startsWith("-") ? "DESC" : "ASC";
-    const column = sort.replace("-", "");
-    order = [[column, direction]];
-  }
 
   const where = {};
 
@@ -112,6 +103,56 @@ const getDataTable = async (req, res) => {
     voting_period_id: votingPeriod.id,
     is_validate: 1,
   };
+
+  //sort
+  const allowedSort = [
+    "name",
+    "createdAt",
+    "status_vote",
+    "created_by",
+    "membership_number",
+    "is_verified",
+  ];
+
+  const sortBy = allowedSort.includes(req.query.sortBy)
+    ? req.query.sortBy
+    : "name";
+
+  const sort = req.query.sort === "desc" ? "DESC" : "ASC";
+
+  let order;
+
+  if (sortBy === "status_vote") {
+    order = [
+      [
+        Sequelize.literal(`
+        CASE
+          WHEN EXISTS (
+            SELECT 1
+            FROM director_votes dv
+            WHERE
+              dv.user_id = user.id
+              AND dv.voting_period_id = ${votingPeriod.id}
+              AND dv.is_validate = 1
+          )
+          AND EXISTS (
+            SELECT 1
+            FROM commissioner_votes cv
+            WHERE
+              cv.user_id = user.id
+              AND cv.voting_period_id = ${votingPeriod.id}
+              AND cv.is_validate = 1
+          )
+          THEN 1
+          ELSE 0
+        END
+      `),
+        sort,
+      ],
+    ];
+  } else {
+    order = [[sortBy, sort]];
+  }
 
   /**
    * status_vote
@@ -199,19 +240,18 @@ const getDataTable = async (req, res) => {
     name: item.name,
     is_verified: item.is_verified,
     is_member: item.is_member,
-
     company: {
       uuid: item.company.uuid,
       name: item.company.name,
     },
-
     director_vote_date: item.director_votes,
     commissioner_vote_date: item.commissioner_votes,
-
     status_vote:
       item.director_votes.length > 0 && item.commissioner_votes.length > 0
         ? 1
         : 0,
+    created_at: item.createdAt,
+    created_by: item.created_by,
   }));
 
   return res.status(200).json({
