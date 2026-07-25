@@ -18,14 +18,14 @@ const CandidateVoteView = (props: any) => {
     <div className="box">
       <div className="grid grid-cols-12 mb-2">
         <div
-          className={`col-span-12 md:col-span-6 bg-${color} mt-2 mx-4 rounded-lg flex justify-center items-center`}
+          className={`col-span-12 md:col-span-6 mt-2 mx-4 rounded-lg flex justify-start items-center`}
         >
-          <p className="text-[14px] my-2 mx-4 text-white capitalize">
+          <p className="text-[14px] my-2 mx-4 text-primary capitalize">
             {data?.name}
           </p>
           <Lucide
             icon="CheckCircle"
-            className={`block mx-2 text-white ${is_check ? "" : "hidden"}`}
+            className={`block mx-2 text-primary ${is_check ? "" : "hidden"}`}
           />
         </div>
       </div>
