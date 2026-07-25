@@ -21,6 +21,7 @@ module.exports = {
         is_verified: true,
         is_member: false,
         is_active: true,
+        created_by: "generated",
         created_at: new Date(),
         updated_at: new Date(),
       },

@@ -102,6 +102,7 @@ const importDataUser = async (req, res) => {
           status_id: status.id,
           privilege_id: privilege.id,
           is_member: row.is_member,
+          created_by: req.user.name,
         },
         { transaction },
       );
