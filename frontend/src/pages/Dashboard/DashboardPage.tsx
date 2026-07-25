@@ -260,7 +260,7 @@ const DashboardPage = () => {
             <div className="mx-auto mt-2 w-52 lg:w-auto lg:min-h-[100px]">
               <div className="flex items-center mb-3">
                 <div className="w-2 h-2 mr-3 border rounded-full bg-secondary/50 border-secondary/50"></div>
-                <span className="truncate">Unverified</span>
+                <span className="truncate">Belum Aktivasi</span>
                 <span className="ml-auto">
                   {dataReport?.user_verification_status?.unverified} User |{" "}
                   {dataReport?.user_verification_status?.unverified_persent}%
@@ -268,7 +268,7 @@ const DashboardPage = () => {
               </div>
               <div className="flex items-center mb-3">
                 <div className="w-2 h-2 mr-3 border rounded-full bg-primary/50 border-primary/50"></div>
-                <span className="truncate">Verified</span>
+                <span className="truncate">Sudah Aktivasi</span>
                 <span className="ml-auto">
                   {dataReport?.user_verification_status?.verified} User |{" "}
                   {dataReport?.user_verification_status?.verified_persent}%
@@ -306,7 +306,7 @@ const DashboardPage = () => {
             <div className="mx-auto mt-2 w-52 lg:w-auto lg:min-h-[100px]">
               <div className="flex items-center mb-3">
                 <div className="w-2 h-2 mr-3 border rounded-full bg-secondary/50 border-secondary/50"></div>
-                <span className="truncate">Unvote</span>
+                <span className="truncate">Belum Memilih</span>
                 <span className="ml-auto">
                   {dataReport?.voting_activity_overview?.unvote} user |{" "}
                   {dataReport?.voting_activity_overview?.unvote_persent}%
@@ -314,7 +314,7 @@ const DashboardPage = () => {
               </div>
               <div className="flex items-center mb-3">
                 <div className="w-2 h-2 mr-3 border rounded-full bg-primary/50 border-primary/50"></div>
-                <span className="truncate">Vote</span>
+                <span className="truncate">Sudah Memilih</span>
                 <span className="ml-auto">
                   {dataReport?.voting_activity_overview?.vote} user |{" "}
                   {dataReport?.voting_activity_overview?.vote_persent}%

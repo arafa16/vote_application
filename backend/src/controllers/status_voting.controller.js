@@ -551,7 +551,7 @@ const getReportDashboard = async (req, res) => {
     // Tambahkan Not Voted di urutan pertama
     data.unshift({
       uuid: null,
-      name: "Not Voted",
+      name: "Belum Memilih",
       total_vote: notVoted,
       vote_percent:
         totalUser === 0 ? 0 : Number(((notVoted / totalUser) * 100).toFixed(2)),

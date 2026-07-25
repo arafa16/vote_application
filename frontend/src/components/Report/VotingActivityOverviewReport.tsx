@@ -19,7 +19,7 @@ function Main(props: MainProps) {
 
   const data: ChartData = useMemo(() => {
     const configData = {
-      labels: ["Unvote", "Vote"],
+      labels: ["Belum Memilih", "Sudah Memilih"],
       datasets: [
         {
           data: [props.unvote, props.vote],

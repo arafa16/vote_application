@@ -19,7 +19,7 @@ function Main(props: MainProps) {
 
   const data: ChartData = useMemo(() => {
     const configData = {
-      labels: ["Unverified", "Verified"],
+      labels: ["Belum Aktivasi", "Sudah Aktivasi"],
       datasets: [
         {
           data: [props?.unverified, props?.verified],
