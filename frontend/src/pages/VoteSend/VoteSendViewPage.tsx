@@ -309,6 +309,11 @@ const VoteSendViewPage = () => {
             <div
               className={`col-span-12 md:col-span-6 ${commissionerVote === null || votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""}`}
             >
+              <div
+                className={`w-full bg-warning rounded-md py-2 px-4 mb-4 ${commissionerVote === null ? "hidden" : ""}`}
+              >
+                <p className="text-[14px] text-white">PENGAWAS</p>
+              </div>
               <CandidateVoteView
                 data={commissionerVote?.commissioner_candidate}
                 user_uuid={meData?.uuid}
@@ -321,6 +326,11 @@ const VoteSendViewPage = () => {
             <div
               className={`col-span-12 md:col-span-6 ${directorVote === null || votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""}`}
             >
+              <div
+                className={`w-full bg-primary rounded-md py-2 px-4 mb-4 ${directorVote === null ? "hidden" : ""}`}
+              >
+                <p className="text-[14px] text-white">PENGURUS</p>
+              </div>
               <CandidateVoteView
                 data={directorVote?.director_candidate}
                 user_uuid={meData?.uuid}
