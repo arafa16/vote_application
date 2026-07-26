@@ -175,7 +175,7 @@ const createData = async (req, res) => {
 
   await createLogHandler({
     user_id: req.user_id,
-    activity: "commissioner_vote",
+    activity: "vote",
     description: `${req.user_name} has commissioner vote ${req.commissioner_candidate_name}`,
   });
 
@@ -232,7 +232,7 @@ const updateData = async (req, res) => {
 
   await createLogHandler({
     user_id: findUser.id,
-    activity: "commissioner_vote-update",
+    activity: "vote-update",
     description: `${findUser.name} has updated commissioner vote ${findCommissionerCandidate.name}`,
   });
 
@@ -257,7 +257,7 @@ const deleteData = async (req, res) => {
   if (Boolean(permanent) === true) {
     await createLogHandler({
       user_id: req.user.id,
-      activity: "commissioner_vote-delete",
+      activity: "vote-delete",
       description: `${req.user.name} has deleted commissioner vote ${findData.name}`,
     });
 
