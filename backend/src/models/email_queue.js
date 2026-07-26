@@ -13,7 +13,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   email_queue.init(
     {
-      uuid: DataTypes.STRING,
+      uuid: {
+        type: DataTypes.STRING,
+        defaultValue: DataTypes.UUIDV4,
+      },
       user_id: DataTypes.INTEGER,
       to: DataTypes.JSON,
       cc: DataTypes.JSON,
