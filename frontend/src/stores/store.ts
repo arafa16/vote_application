@@ -18,6 +18,7 @@ import StatusReducer from "./features/StatusSlice";
 import ApplicationReducer from "./features/ApplicationSlice";
 import AuditLogReducer from "./features/AuditLogSlice";
 import ResetPasswordReducer from "./features/ResetPasswordSlice";
+import ActivationReducer from "./features/ActivationSlice";
 
 export const store = configureStore({
   reducer: {
@@ -40,6 +41,7 @@ export const store = configureStore({
     application: ApplicationReducer,
     auditLog: AuditLogReducer,
     resetPassword: ResetPasswordReducer,
+    activation: ActivationReducer,
   },
 });
 
