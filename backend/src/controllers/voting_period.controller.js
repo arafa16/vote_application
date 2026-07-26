@@ -5,6 +5,7 @@ const {
   director_vote: directorVoteModel,
   commissioner_candidate: commissionerCandidateModel,
   commissioner_vote: commissionerVoteModel,
+  sequelize,
 } = require("../models/index.js");
 const { Op, where } = require("sequelize");
 const path = require("path");
@@ -12,6 +13,9 @@ const crypto = require("crypto");
 const fs = require("fs");
 const CustomHttpError = require("../utils/custom_http_error.js");
 const { createLogHandler } = require("./write_log.controller.js");
+const { saveEmailData } = require("./mailing.controller.js");
+const votingNotificationTemplate = require("../utils/votingNotificationTemplate");
+const dayjs = require("dayjs");
 
 const getDatas = async (req, res) => {
   const { uuid, name, sort, status } = req.query;
@@ -243,6 +247,7 @@ const updateDataCommissionerNDirectorById = async (req, res) => {
       uuid: commissioner_vote_uuid,
       voting_period_id: findVotingPeriod.id,
     },
+    include: [{ model: commissionerCandidateModel, attributes: ["name"] }],
   });
 
   if (!commissionerVoteFind) {
@@ -254,6 +259,7 @@ const updateDataCommissionerNDirectorById = async (req, res) => {
       uuid: director_vote_uuid,
       voting_period_id: findVotingPeriod.id,
     },
+    include: [{ model: directorCandidateModel, attributes: ["name"] }],
   });
 
   if (!directorVoteFind) {
@@ -262,15 +268,56 @@ const updateDataCommissionerNDirectorById = async (req, res) => {
 
   const date_now = new Date();
 
-  await commissionerVoteFind.update({
-    is_validate: true,
-    vote_time: date_now,
-  });
+  const transaction = await sequelize.transaction();
 
-  await directorVoteFind.update({
-    is_validate: true,
-    vote_time: date_now,
-  });
+  try {
+    await commissionerVoteFind.update(
+      {
+        is_validate: true,
+        vote_time: date_now,
+      },
+      { transaction },
+    );
+
+    await directorVoteFind.update(
+      {
+        is_validate: true,
+        vote_time: date_now,
+      },
+      { transaction },
+    );
+
+    await saveEmailData(
+      {
+        user_id: req?.user?.id,
+        to: req?.user?.email,
+        bcc: ["formatur@kopkarla.co.id"],
+        subject: "Konfirmasi Pemungutan Suara Aplikasi Kopkarla",
+        body: votingNotificationTemplate(
+          req?.user?.name,
+          directorVoteFind?.director_candidate?.name, // Pengurus yang dipilih
+          commissionerVoteFind?.commissioner_candidate?.name, // Pengawas yang dipilih
+          dayjs(date_now).format("YYYY-MM-DD HH:mm:ss"),
+        ),
+        type: "notification",
+      },
+      transaction,
+    );
+
+    await createLogHandler(
+      {
+        user_id: req?.user?.id,
+        activity: "vote-lock",
+        description: `${dayjs(date_now).format("YYYY-MM-DD HH:mm:ss")} - ${req?.user?.name} vote ${directorVoteFind?.director_candidate?.name} and ${commissionerVoteFind?.commissioner_candidate?.name}`,
+      },
+      transaction,
+    );
+
+    await transaction.commit();
+  } catch (error) {
+    await transaction.rollback();
+    throw new CustomHttpError(error.message, 500);
+  }
 
   return res.status(201).json({
     success: true,
