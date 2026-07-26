@@ -22,6 +22,7 @@ const ResetPasswordPage = () => {
     email: "",
     password: "",
     conf_password: "",
+    invitation: 0,
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -52,6 +53,7 @@ const ResetPasswordPage = () => {
         email: "",
         password: "",
         conf_password: "",
+        invitation: 0,
       });
       navigate("/login");
       dispatch(resetResetPassword());
