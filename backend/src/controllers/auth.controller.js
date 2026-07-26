@@ -4,6 +4,7 @@ const {
   status: statusModel,
   privilege: privilegeModel,
   audit_log: auditLogModel,
+  sequelize,
 } = require("../models/index.js");
 
 const argon = require("argon2");
@@ -11,6 +12,10 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const CustomHttpError = require("../utils/custom_http_error.js");
 const { createLogHandler } = require("./write_log.controller.js");
+const { saveEmailData } = require("./mailing.controller.js");
+
+const resetPasswordEmailTemplate = require("../utils/resetPasswordEmailTemplate.js");
+const verificationEmailTemplate = require("../utils/verificationEmailTemplate");
 
 const register = async (req, res) => {
   const {
@@ -227,163 +232,56 @@ const sendRequestEmailReset = async (req, res) => {
   });
 
   if (!result) {
-    throw new CustomHttpError("user not found", 404);
+    throw new CustomHttpError("User not found.", 404);
   }
 
-  const token = jwt.sign({ uuid: result.uuid }, process.env.JWT_SECRET, {
-    expiresIn: "60m",
-  });
+  const transaction = await sequelize.transaction();
 
-  const link_reset = `${process.env.LINK_FRONTEND}/reset/${token}`;
+  try {
+    const resetToken = jwt.sign(
+      {
+        uuid: result.uuid,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "12d",
+      },
+    );
 
-  // create reusable transporter object using the default SMTP transport
-  const transporter = nodemailer.createTransport({
-    host: process.env.MAIL_HOST,
-    port: process.env.MAIL_PORT,
-    auth: {
-      user: process.env.MAIL_USER,
-      pass: process.env.MAIL_PASS,
-    },
-  });
+    const linkReset = `${process.env.LINK_FRONTEND}/reset/${resetToken}`;
 
-  const emailMessage = {
-    from: '"Vote-Application" <sekretariat_kopkarla@kopkarla.co.id>',
-    to: result?.email,
-    bcc: ["it.dev@kopkarla.co.id"],
-    subject: "Reset Password Aplikasi Kopkarla",
-    html: `<!DOCTYPE html>
-            <html lang="id">
-            <head>
-                <meta charset="UTF-8">
-                <title>Reset Password</title>
-            </head>
+    await createLogHandler(
+      {
+        user_id: result.id,
+        activity: "send_request_password",
+        description: `${result.name} requested a password reset.`,
+      },
+      transaction,
+    );
 
-            <body style="margin:0;padding:30px;background:#f4f6f9;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#333333;line-height:1.7;">
+    await saveEmailData(
+      {
+        user_id: result.id,
+        to: result.email,
+        bcc: ["it.dev@kopkarla.co.id"],
+        subject: "Reset Password Aplikasi Kopkarla",
+        body: resetPasswordEmailTemplate(result.name, linkReset),
+        type: "password_reset",
+      },
+      transaction,
+    );
 
-            <table width="100%" cellpadding="0" cellspacing="0" border="0">
-            <tr>
-            <td align="center">
+    await transaction.commit();
+  } catch (error) {
+    await transaction.rollback();
 
-            <table width="600" cellpadding="0" cellspacing="0" border="0"
-            style="background:#ffffff;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
-
-                <!-- Header -->
-                <tr>
-                    <td align="between"
-                        style="background:#2563eb;padding:25px 20px;color:#ffffff;">
-
-                        <h2 style="margin:0;font-size:22px;font-weight:bold;">
-                            Reset Password
-                        </h2>
-
-                        <div style="margin-top:8px;font-size:13px;">
-                            Aplikasi Pemilihan Pengawas dan Pengurus Koperasi
-                        </div>
-
-                    </td>
-                </tr>
-
-                <!-- Content -->
-                <tr>
-                    <td align="left" style="padding:35px;">
-
-                        <p style="margin-top:0;">
-                            Yth. <strong>${result.name}</strong>,
-                        </p>
-
-
-                        <p>
-                            Silakan klik tombol berikut untuk reset password akun Anda.
-                        </p>
-
-                        <!-- Button -->
-                        <table width="100%" cellpadding="0" cellspacing="0">
-                            <tr>
-                                <td align="left" style="padding:20px 0 25px 0;">
-
-                                    <a href="${link_reset}"
-                                      style="
-                                            background:#2563eb;
-                                            color:#ffffff;
-                                            text-decoration:none;
-                                            display:inline-block;
-                                            padding:14px 34px;
-                                            border-radius:6px;
-                                            font-size:12px;
-                                            font-weight:bold;
-                                      ">
-                                        Reset Password
-                                    </a>
-
-                                </td>
-                            </tr>
-                        </table>
-
-                        <p>
-                            Apabila tombol di atas tidak dapat digunakan, silakan salin dan buka tautan berikut melalui browser:
-                        </p>
-
-                        <p style="word-break:break-all;">
-                            <a href="${link_reset}" style="color:#2563eb;text-decoration:none;">
-                                ${link_reset}
-                            </a>
-                        </p>
-
-                        <hr style="border:none;border-top:1px solid #e5e7eb;margin:30px 0;">
-
-                        <p>
-                            Demi keamanan akun, mohon untuk tidak membagikan tautan reset password ini kepada siapa pun.
-                        </p>
-
-                        <p>
-                            Jika Anda merasa tidak berhak menerima email ini atau terdapat kesalahan data,
-                            silakan menghubungi Kami.
-                        </p>
-
-                        <br>
-
-                        <p style="margin-bottom:0;">
-                            Hormat kami,
-                        </p>
-
-                        <p style="margin-top:5px;">
-                            <strong>KOPKARLA</strong>
-                        </p>
-
-                    </td>
-                </tr>
-
-                <!-- Footer -->
-                <tr>
-                    <td align="left" style="
-                        background:#f8f9fa;
-                        text-align:center;
-                        padding:18px;
-                        font-size:11px;
-                        color:#777777;
-                    ">
-                        Email ini dikirim secara otomatis oleh sistem Aplikasi Pemilihan Pengawas dan Pengurus Koperasi.
-                        <br>
-                        Mohon untuk tidak membalas email ini.
-                    </td>
-                </tr>
-
-            </table>
-
-            </td>
-            </tr>
-            </table>
-
-            </body>
-            </html>
-            `,
-  };
-
-  await transporter.sendMail(emailMessage);
+    throw new CustomHttpError(error.message, 500);
+  }
 
   return res.status(200).json({
     success: true,
-    message: "success, check your email for reset password",
+    message:
+      "A password reset request has been created successfully. Please check your email for further instructions.",
   });
 };
 
@@ -415,7 +313,7 @@ const getTokenReset = async (req, res) => {
 
 const resetPassword = async (req, res) => {
   const { token } = req.params;
-  const { password, conf_password } = req.body;
+  const { password, conf_password, invitation } = req.body;
 
   if (!token || token === null) {
     throw new CustomHttpError("token not found", 404);
@@ -433,17 +331,63 @@ const resetPassword = async (req, res) => {
     },
   });
 
-  const hasPassword = await argon.hash(password);
+  const transaction = await sequelize.transaction();
 
-  await user.update({
-    password: hasPassword,
-    verification_token: null,
-    is_verified: 1,
-  });
+  try {
+    const hashPassword = await argon.hash(password);
 
-  return res.status(201).json({
+    await user.update(
+      {
+        password: hashPassword,
+      },
+      { transaction },
+    );
+
+    await createLogHandler(
+      {
+        user_id: user.id,
+        activity: "setup_password",
+        description: `${user.name} set up their account password.`,
+      },
+      transaction,
+    );
+
+    if (Number(invitation) === 1) {
+      const activationToken = jwt.sign(
+        {
+          uuid: user.uuid,
+          activation: true,
+        },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "12d",
+        },
+      );
+
+      const linkVerification = `${process.env.LINK_FRONTEND}/activation/${activationToken}`;
+
+      await saveEmailData(
+        {
+          user_id: user.id,
+          to: user.email,
+          bcc: ["it@kopkarla.co.id"],
+          subject: "Verifikasi Aktivasi Akun Aplikasi Kopkarla",
+          body: verificationEmailTemplate(user.name, linkVerification),
+          type: "verification",
+        },
+        transaction,
+      );
+    }
+
+    await transaction.commit();
+  } catch (err) {
+    await transaction.rollback();
+    throw new CustomHttpError(err.message, 500);
+  }
+
+  return res.status(200).json({
     success: true,
-    message: "Reset password successed, login with your new password",
+    message: "Password has been reset successfully.",
   });
 };
 
