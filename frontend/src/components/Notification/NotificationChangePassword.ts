@@ -3,7 +3,7 @@ import Toastify from "toastify-js";
 export function NotificationChangePassword(message: any) {
   Toastify({
     text: `${message}`,
-    duration: 3000,
+    duration: 10000,
     gravity: "top",
     position: "right",
     close: true,
