@@ -257,7 +257,7 @@ const DashboardPage = () => {
                 </div>
               </div>
             </div>
-            <div className="mx-auto mt-2 w-52 lg:w-auto lg:min-h-[100px]">
+            <div className="mx-auto mt-2 w-52 lg:w-auto lg:min-h-[115px]">
               <div className="flex items-center mb-3">
                 <div className="w-2 h-2 mr-3 border rounded-full bg-secondary/50 border-secondary/50"></div>
                 <span className="truncate">Belum Aktivasi</span>
@@ -303,7 +303,7 @@ const DashboardPage = () => {
                 </div>
               </div>
             </div>
-            <div className="mx-auto mt-2 w-52 lg:w-auto lg:min-h-[100px]">
+            <div className="mx-auto mt-2 w-52 lg:w-auto lg:min-h-[115px]">
               <div className="flex items-center mb-3">
                 <div className="w-2 h-2 mr-3 border rounded-full bg-secondary/50 border-secondary/50"></div>
                 <span className="truncate">Belum Memilih</span>
@@ -350,7 +350,7 @@ const DashboardPage = () => {
                 </div>
               </div>
             </div>
-            <div className="mx-auto mt-2 w-52 lg:w-auto lg:h-[100px]">
+            <div className="mx-auto mt-2 w-52 lg:w-auto lg:h-[115px]">
               {dataReport?.commissioner_vote?.data?.map(
                 (item: any, index: number) => (
                   <div className="flex items-center mb-3" key={index}>
@@ -394,7 +394,7 @@ const DashboardPage = () => {
                 </div>
               </div>
             </div>
-            <div className="mx-auto mt-2 w-52 lg:w-auto lg:min-h-[100px]">
+            <div className="mx-auto mt-2 w-52 lg:w-auto lg:min-h-[115px]">
               {dataReport?.director_vote?.data?.map(
                 (item: any, index: number) => (
                   <div className="flex items-center mb-3" key={index}>
