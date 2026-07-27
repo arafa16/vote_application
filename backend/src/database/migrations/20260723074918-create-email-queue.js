@@ -36,6 +36,7 @@ module.exports = {
           "reminder",
           "notification",
           "password_reset",
+          "invitation",
         ),
         allowNull: false,
       },
