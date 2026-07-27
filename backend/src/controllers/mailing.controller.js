@@ -176,8 +176,73 @@ const saveEmailData = async (props, transaction = null) => {
   );
 };
 
+const sendEmailInvitationAll = async (req, res) => {
+  const users = await userModel.findAll({
+    where: {
+      is_member: 1,
+      is_active: 1,
+    },
+    attributes: ["id", "uuid", "name", "email"],
+  });
+
+  if (users.length === 0) {
+    throw new CustomHttpError("No members found.", 404);
+  }
+
+  const transaction = await sequelize.transaction();
+
+  try {
+    for (const user of users) {
+      const token = jwt.sign(
+        {
+          uuid: user.uuid,
+        },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "12d",
+        },
+      );
+
+      const linkReset = `${process.env.LINK_FRONTEND}/invite/${token}`;
+
+      await saveEmailData(
+        {
+          user_id: user.id,
+          to: user.email,
+          bcc: ["it.dev@kopkarla.co.id"],
+          subject: "Undangan Aktivasi Akun Aplikasi Kopkarla",
+          body: invitationEmailTemplate(user.name, linkReset),
+          type: "invitation",
+        },
+        transaction,
+      );
+
+      await createLogHandler(
+        {
+          user_id: user.id,
+          activity: "send_invitation_email",
+          description: `Invitation email queued for ${user.name}.`,
+        },
+        transaction,
+      );
+    }
+
+    await transaction.commit();
+
+    return res.status(200).json({
+      success: true,
+      message: `${users.length} invitation emails have been queued successfully.`,
+      total: users.length,
+    });
+  } catch (error) {
+    await transaction.rollback();
+    throw new CustomHttpError(error.message, 500);
+  }
+};
+
 module.exports = {
   sendEmailInvitation,
   activationUser,
   saveEmailData,
+  sendEmailInvitationAll,
 };
