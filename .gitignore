@@ -9,3 +9,8 @@ frontend/node_modules
 frontend/dist
 frontend/package-lock.json
 frontend/.env
+
+backend_email_worker/node_modules
+backend_email_worker/.env
+backend_email_worker/package-lock.json
+backend_email_worker/public/*
