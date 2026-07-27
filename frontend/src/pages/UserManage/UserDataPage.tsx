@@ -7,12 +7,17 @@ import {
   GetCreateAttribute,
   resetUser,
 } from "../../stores/features/UserSlice";
+import {
+  SendEmailInvitationUserAll,
+  resetEmail,
+} from "../../stores/features/EmailSlice";
 import Table from "../../base-components/Table";
 import { FormInput, FormSelect } from "../../base-components/Form";
 import Button from "../../base-components/Button";
 import Lucide from "../../base-components/Lucide";
 import LoadingIcon from "../../base-components/LoadingIcon";
 import dayjs from "dayjs";
+import { NewNotification } from "../../components/Notification/NewNotification";
 
 const UserDataPage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -23,6 +28,7 @@ const UserDataPage = () => {
   const [group, setGroup] = useState<any>("");
   const [statusDatas, setStatusDatas] = useState<any>(null);
   const [status, setStatus] = useState<any>("");
+  const [message, setMessage] = useState<any>(null);
 
   const [searchParams] = useSearchParams();
 
@@ -159,9 +165,33 @@ const UserDataPage = () => {
     navigate("/user_create");
   };
 
-  const handleSendInvitation = (data: any) => {
-    const send_by_id = data.map((item: any) => item.uuid);
-    console.log("send_by_id", send_by_id);
+  //send email all
+  const {
+    data: dataEmail,
+    isLoading: isLoadingEmail,
+    isError: isErrorEmail,
+    isSuccess: isSuccessEmail,
+    message: messageEmail,
+  } = useSelector((state: any) => state.email);
+
+  useEffect(() => {
+    if (messageEmail !== "" && isSuccessEmail && !isLoadingEmail) {
+      setMessage(messageEmail?.message);
+      dispatch(resetEmail());
+    } else if (messageEmail !== "" && isErrorEmail && !isLoadingEmail) {
+      setMessage(messageEmail?.message);
+      dispatch(resetEmail());
+    }
+  }, [dataEmail, isLoadingEmail, isErrorEmail, isSuccessEmail, messageEmail]);
+
+  useEffect(() => {
+    if (message !== null) {
+      NewNotification(message);
+    }
+  }, [message]);
+
+  const handleSendInvitation = () => {
+    dispatch(SendEmailInvitationUserAll());
   };
 
   return (
@@ -187,13 +217,20 @@ const UserDataPage = () => {
               className="w-5 h-5 "
             />
           </div>
-          <div className="col-span-10 col-start-3 md:col-span-2 md:col-start-11 flex justify-end gap-2">
-            <div>
+          <div className="col-span-10 col-start-3 md:col-span-3 md:col-start-10 flex justify-end gap-2">
+            <div className="flex justify-center items-center">
+              <div className={`h-2 ${isLoadingEmail ? "" : "hidden"}`}>
+                <LoadingIcon
+                  icon="three-dots"
+                  color="#005266"
+                  className="w-5 h-5 "
+                />
+              </div>
               <Button
                 variant="outline-primary"
                 size="sm"
-                className="text-[12px] w-full"
-                onClick={() => handleSendInvitation(userDatas)}
+                className={`text-[12px] w-full ${isLoadingEmail ? "hidden" : ""}`}
+                onClick={() => handleSendInvitation()}
               >
                 Send Invitation
               </Button>
