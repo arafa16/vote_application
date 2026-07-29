@@ -11,6 +11,8 @@ import Alert from "../../base-components/Alert";
 import CandidateVoteView from "../../components/DataView/CandidateVoteView";
 import VotingPeriodForm from "../../components/Form/VotingPeriodForm";
 import dayjs from "dayjs";
+import { PrivilegeCheck } from "../../utils/privilege-check";
+import { useNavigate, useParams } from "react-router-dom";
 
 const HistoryVoteViewPage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -21,6 +23,7 @@ const HistoryVoteViewPage = () => {
   const [directorVote, setDirectorVote] = useState<any>(null);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (votingPeriodDatas !== null) {
@@ -51,6 +54,12 @@ const HistoryVoteViewPage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.riwayat_voting, navigate);
+    }
+  }, [meData]);
 
   useEffect(() => {
     if (votingPeriodSelected !== "" && meData !== null) {

@@ -3,6 +3,7 @@ import {
   GetVotingPeriodNCommissionerNDirectorById,
   resetVotingPeriod,
 } from "../../stores/features/VotingPeriodSlice";
+import { GetMe, resetGetMe } from "../../stores/features/GetMeSlice";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Lucide from "../../base-components/Lucide";
@@ -13,6 +14,7 @@ import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import Button from "../../base-components/Button";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { PrivilegeCheck } from "../../utils/privilege-check";
 
 const HistoryVoteViewByIdPage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -29,6 +31,33 @@ const HistoryVoteViewByIdPage = () => {
   const navigate = useNavigate();
 
   const { id } = useParams();
+
+  const {
+    data: dataMe,
+    isLoading: isLoadingMe,
+    isError: isErrorMe,
+    isSuccess: isSuccessMe,
+    message: messageMe,
+  } = useSelector((state: any) => state.getMe);
+
+  useEffect(() => {
+    if (dataMe !== null && isSuccessMe && !isLoadingMe) {
+      setMeData(dataMe?.data?.user);
+      dispatch(resetGetMe());
+    } else if (messageMe !== "" && isErrorMe && !isLoadingMe) {
+      dispatch(resetGetMe());
+    }
+  }, [dataMe, isLoadingMe, isErrorMe, isSuccessMe, messageMe]);
+
+  useEffect(() => {
+    dispatch(GetMe());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.setting, navigate);
+    }
+  }, [meData]);
 
   useEffect(() => {
     if (votingPeriodDatas !== null) {
