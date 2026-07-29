@@ -20,6 +20,7 @@ import Lucide from "../../base-components/Lucide";
 import dayjs from "dayjs";
 import LoadingIcon from "../../base-components/LoadingIcon";
 import VotingReport from "../../components/GeneralReport/VotingReport";
+import { PrivilegeCheck } from "../../utils/privilege-check";
 
 const VoteDataPage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -70,6 +71,12 @@ const VoteDataPage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.status_voting_anggota, navigate);
+    }
+  }, [meData]);
 
   const {
     data: dataVotingPeriod,
@@ -172,7 +179,6 @@ const VoteDataPage = () => {
         sortBy,
       };
       const searchParams = new URLSearchParams(paramsObj);
-      console.log("searchParams", searchParams.toString());
       dispatch(GetStatusVotingTable(searchParams));
     } else if (votingPeriodSelected !== "") {
       const handler = setTimeout(() => {
@@ -183,9 +189,7 @@ const VoteDataPage = () => {
           sort,
           sortBy,
         };
-        if (search !== "") {
-          paramsObj.search = search;
-        }
+
         if (group !== "") {
           paramsObj.company = group;
         }
@@ -194,7 +198,6 @@ const VoteDataPage = () => {
         }
 
         const searchParams = new URLSearchParams(paramsObj);
-        console.log("searchParams", searchParams.toString());
         dispatch(GetStatusVotingTable(searchParams));
       }, 500);
 
@@ -220,7 +223,6 @@ const VoteDataPage = () => {
       isErrorStatusVoting &&
       !isLoadingReportStatusVoting
     ) {
-      console.log("messageReportStatusVoting", messageReportStatusVoting);
       dispatch(resetStatusVoting());
     }
   }, [
@@ -256,7 +258,9 @@ const VoteDataPage = () => {
   };
 
   const handleClickData = (id: any) => {
-    navigate(`/vote_data/${id}?page=${page}&limit=${limit}`);
+    if (meData?.privilege?.setting) {
+      navigate(`/vote_data/${id}?page=${page}&limit=${limit}`);
+    }
   };
 
   const handleNext = () => {
@@ -429,12 +433,7 @@ const VoteDataPage = () => {
                   >
                     Verification Status {getSortIcon("is_verified")}
                   </Table.Th>
-                  <Table.Th className="whitespace-nowrap">
-                    Voting Pengawas
-                  </Table.Th>
-                  <Table.Th className="whitespace-nowrap">
-                    Voting Pengurus
-                  </Table.Th>
+                  <Table.Th className="whitespace-nowrap">Voting Send</Table.Th>
                   <Table.Th
                     className="whitespace-nowrap cursor-pointer hover:text-primary"
                     onClick={() => handleSort("status_vote")}
@@ -489,20 +488,6 @@ const VoteDataPage = () => {
                       {data?.commissioner_vote_date.length === 0
                         ? "-"
                         : data?.commissioner_vote_date?.map(
-                            (item: any, index: any) => (
-                              <p key={index}>
-                                {item?.vote_time &&
-                                  dayjs(item?.vote_time).format(
-                                    "YYYY-MM-DD HH:mm:ss",
-                                  )}
-                              </p>
-                            ),
-                          )}
-                    </Table.Td>
-                    <Table.Td className="whitespace-nowrap">
-                      {data?.director_vote_date.length === 0
-                        ? "-"
-                        : data?.director_vote_date?.map(
                             (item: any, index: any) => (
                               <p key={index}>
                                 {item?.vote_time &&

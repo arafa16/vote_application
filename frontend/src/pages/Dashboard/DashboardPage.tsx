@@ -16,13 +16,12 @@ import ReportLineChart1 from "../../components/Report/VoterTrendReport";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import VotingPeriodForm from "../../components/Form/VotingPeriodForm";
+import { PrivilegeCheck } from "../../utils/privilege-check";
 
 const DashboardPage = () => {
   const [meData, setMeData] = useState<any>(null);
   const [votingPeriodDatas, setVotingPeriodDatas] = useState<any>(null);
   const [votingPeriodSelected, setVotingPeriodSelected] = useState<any>("");
-
-  console.log("meData", meData?.privilege?.dashboard_view_vote);
 
   //report
   const [dataReport, setDataReport] = useState<any>(null);
@@ -50,6 +49,12 @@ const DashboardPage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.dashboard, navigate);
+    }
+  }, [meData]);
 
   const {
     data: dataVotingPeriod,

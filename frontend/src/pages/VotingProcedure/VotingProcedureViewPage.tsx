@@ -15,6 +15,8 @@ import VotingPeriodForm from "../../components/Form/VotingPeriodForm";
 import dayjs from "dayjs";
 import Button from "../../base-components/Button";
 import TinySlider from "../../base-components/TinySlider";
+import { PrivilegeCheck } from "../../utils/privilege-check";
+import { useNavigate } from "react-router-dom";
 
 const VotingProcedureViewPage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -24,6 +26,7 @@ const VotingProcedureViewPage = () => {
   const [sliderDatas, setSliderDatas] = useState([]);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (votingPeriodDatas !== null) {
@@ -54,6 +57,12 @@ const VotingProcedureViewPage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.tata_cara_voting, navigate);
+    }
+  }, [meData]);
 
   const {
     data: dataSlider,

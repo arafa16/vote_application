@@ -15,6 +15,7 @@ import StepWizart from "../../components/Wizart/StepWizart";
 import BackOrNextButton from "../../components/ButtonCustom/BackOrNextButton";
 import { useNavigate } from "react-router-dom";
 import LoadingIcon from "../../base-components/LoadingIcon";
+import { PrivilegeCheck } from "../../utils/privilege-check";
 
 const VoteSendViewPage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -61,6 +62,12 @@ const VoteSendViewPage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.mulai_voting, navigate);
+    }
+  }, [meData]);
 
   useEffect(() => {
     if (votingPeriodSelected !== "" && meData !== null) {
