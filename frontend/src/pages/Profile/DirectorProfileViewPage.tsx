@@ -15,6 +15,8 @@ import Lucide from "../../base-components/Lucide";
 import Alert from "../../base-components/Alert";
 import VotingPeriodForm from "../../components/Form/VotingPeriodForm";
 import TinySlider from "../../base-components/TinySlider";
+import { PrivilegeCheck } from "../../utils/privilege-check";
+import { useNavigate, useParams } from "react-router-dom";
 
 const DirectorProfileViewPage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -24,6 +26,7 @@ const DirectorProfileViewPage = () => {
   const [sliderDatas, setSliderDatas] = useState([]);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     data: dataMe,
@@ -45,6 +48,12 @@ const DirectorProfileViewPage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.profile_kandidat_pengurus, navigate);
+    }
+  }, [meData]);
 
   const {
     data: dataSlider,
