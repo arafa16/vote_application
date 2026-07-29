@@ -286,7 +286,7 @@ const DirectorCandidateViewPage = () => {
                   : "Pilih 1 Kandidat Pengurus"}
               </p>
               <div
-                className={`${(dataCheck.director_check && dataCheck.commissioner_check) || votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""} grid gap-y-2 md:gap-y-4 text-[14px] text-primary`}
+                className={`${(dataCheck.director_check && dataCheck.commissioner_check) || votingPeriodSelected === "" || votingPeriodSelected === undefined || directorVoteData !== null ? "hidden" : ""} grid gap-y-2 md:gap-y-4 text-[14px] text-primary`}
               >
                 <p>
                   Pilih 1 kandidat pengurus dari {directorDatas?.length} calon
@@ -300,11 +300,11 @@ const DirectorCandidateViewPage = () => {
             </div>
           </div>
           <div className="col-span-12 md:col-span-3 col-start-1 md:col-start-10 mb-4">
-            <VotingPeriodForm
+            {/* <VotingPeriodForm
               datas={votingPeriodDatas}
               dataSelect={votingPeriodSelected}
               handleChange={handleChangeVotingPeriod}
-            />
+            /> */}
           </div>
         </div>
         <div
@@ -328,7 +328,7 @@ const DirectorCandidateViewPage = () => {
           </div>
         </div>
         <div
-          className={`${(dataCheck.director_check && dataCheck.commissioner_check) || votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""} grid grid-cols-12 my-2`}
+          className={`${(dataCheck.director_check && dataCheck.commissioner_check) || votingPeriodSelected === "" || votingPeriodSelected === undefined || directorVoteData !== null ? "hidden" : ""} grid grid-cols-12 my-2`}
         >
           <div className="col-span-12">
             <Alert variant="soft-primary" className="flex items-center mb-2">
