@@ -12,6 +12,7 @@ import {
   resetAuditLog,
 } from "../../stores/features/AuditLogSlice";
 import dayjs from "dayjs";
+import { PrivilegeCheck } from "../../utils/privilege-check";
 
 const AuditLogDataTablePage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -44,6 +45,12 @@ const AuditLogDataTablePage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.setting, navigate);
+    }
+  }, [meData]);
 
   const {
     data: dataAuditLog,

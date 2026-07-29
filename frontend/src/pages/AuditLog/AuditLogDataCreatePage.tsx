@@ -10,6 +10,7 @@ import Button from "../../base-components/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import AuditLogDataCreateForm from "../../components/Form/AuditLogDataCreateForm";
 import LoadingIcon from "../../base-components/LoadingIcon";
+import { PrivilegeCheck } from "../../utils/privilege-check";
 
 const AuditLogDataCreatePage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -43,6 +44,12 @@ const AuditLogDataCreatePage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.setting, navigate);
+    }
+  }, [meData]);
 
   const {
     data: dataAuditLog,
