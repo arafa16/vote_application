@@ -12,6 +12,7 @@ import {
   resetApplication,
 } from "../../stores/features/ApplicationSlice";
 import dayjs from "dayjs";
+import { PrivilegeCheck } from "../../utils/privilege-check";
 
 const ApplicationDataTablePage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -44,6 +45,12 @@ const ApplicationDataTablePage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.setting, navigate);
+    }
+  }, [meData]);
 
   const {
     data: dataApplication,
