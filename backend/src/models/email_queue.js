@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      email_queue.belongsTo(models.user, {
+        foreignKey: "user_id",
+      });
     }
   }
   email_queue.init(
