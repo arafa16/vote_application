@@ -10,6 +10,7 @@ import Button from "../../base-components/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import UserPrivilegeDataForm from "../../components/Form/UserPrivilegeDataForm";
 import LoadingIcon from "../../base-components/LoadingIcon";
+import { PrivilegeCheck } from "../../utils/privilege-check";
 
 const UserPrivilegeDataEditPage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -50,6 +51,12 @@ const UserPrivilegeDataEditPage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.setting, navigate);
+    }
+  }, [meData]);
 
   const {
     data: dataPrivilege,

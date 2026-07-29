@@ -16,6 +16,7 @@ import { FormInput, FormLabel } from "../../base-components/Form";
 import { NotificationChangePassword } from "../../components/Notification/NotificationChangePassword";
 import { NewNotification } from "../../components/Notification/NewNotification";
 import LoadingIcon from "../../base-components/LoadingIcon";
+import { PrivilegeCheck } from "../../utils/privilege-check";
 
 const UserDataViewByIdPage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -53,6 +54,12 @@ const UserDataViewByIdPage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.setting, navigate);
+    }
+  }, [meData]);
 
   const {
     data: dataUser,

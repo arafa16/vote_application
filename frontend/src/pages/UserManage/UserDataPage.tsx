@@ -18,6 +18,7 @@ import Lucide from "../../base-components/Lucide";
 import LoadingIcon from "../../base-components/LoadingIcon";
 import dayjs from "dayjs";
 import { NewNotification } from "../../components/Notification/NewNotification";
+import { PrivilegeCheck } from "../../utils/privilege-check";
 
 const UserDataPage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -62,6 +63,12 @@ const UserDataPage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.setting, navigate);
+    }
+  }, [meData]);
 
   const {
     data: dataUser,
