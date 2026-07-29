@@ -10,6 +10,7 @@ import Button from "../../base-components/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import CandidateDataCreateForm from "../../components/Form/CandidateDataCreateForm";
 import LoadingIcon from "../../base-components/LoadingIcon";
+import { PrivilegeCheck } from "../../utils/privilege-check";
 
 const DirectorCandidateDataCreatePage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -46,6 +47,12 @@ const DirectorCandidateDataCreatePage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.setting, navigate);
+    }
+  }, [meData]);
 
   const {
     data: dataDirectorCandidate,
