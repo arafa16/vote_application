@@ -12,6 +12,7 @@ import {
   resetCommissionerCandidate,
 } from "../../stores/features/CommissionerCandidateSlice";
 import dayjs from "dayjs";
+import { PrivilegeCheck } from "../../utils/privilege-check";
 
 const CommissionerCandidateDataTablePage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -44,6 +45,12 @@ const CommissionerCandidateDataTablePage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.setting, navigate);
+    }
+  }, [meData]);
 
   const {
     data: dataCommissionerCandidate,
