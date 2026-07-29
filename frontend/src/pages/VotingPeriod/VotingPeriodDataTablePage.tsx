@@ -12,6 +12,7 @@ import {
   resetVotingPeriod,
 } from "../../stores/features/VotingPeriodSlice";
 import dayjs from "dayjs";
+import { PrivilegeCheck } from "../../utils/privilege-check";
 
 const VotingPeriodDataTablePage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -44,6 +45,12 @@ const VotingPeriodDataTablePage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.setting, navigate);
+    }
+  }, [meData]);
 
   const {
     data: dataVotingPeriod,

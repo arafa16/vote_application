@@ -9,6 +9,7 @@ import Button from "../../base-components/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import VotingPeriodDataCreateForm from "../../components/Form/VotingPeriodDataCreateForm";
 import LoadingIcon from "../../base-components/LoadingIcon";
+import { PrivilegeCheck } from "../../utils/privilege-check";
 
 const VotingPeriodDataCreatePage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -43,6 +44,12 @@ const VotingPeriodDataCreatePage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.setting, navigate);
+    }
+  }, [meData]);
 
   const {
     isLoading: isLoadingVotingPeriod,
