@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import { Menu, Dialog } from "../../base-components/Headless";
 import { useNavigate, useParams } from "react-router-dom";
 import { FormInput, FormLabel } from "../../base-components/Form";
+import { PrivilegeCheck } from "../../utils/privilege-check";
 
 const CompanyDataViewByIdPage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -42,6 +43,12 @@ const CompanyDataViewByIdPage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.setting, navigate);
+    }
+  }, [meData]);
 
   const {
     data: dataCompany,

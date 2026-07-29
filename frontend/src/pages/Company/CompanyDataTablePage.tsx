@@ -12,6 +12,7 @@ import {
   resetCompany,
 } from "../../stores/features/CompanySlice";
 import dayjs from "dayjs";
+import { PrivilegeCheck } from "../../utils/privilege-check";
 
 const CompanyDataTablePage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -44,6 +45,12 @@ const CompanyDataTablePage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.setting, navigate);
+    }
+  }, [meData]);
 
   const {
     data: dataCompany,
