@@ -9,6 +9,7 @@ import { FormInput, FormSelect } from "../../base-components/Form";
 import { GetMe, resetGetMe } from "../../stores/features/GetMeSlice";
 import { GetSliderTable, resetSlider } from "../../stores/features/SliderSlice";
 import dayjs from "dayjs";
+import { PrivilegeCheck } from "../../utils/privilege-check";
 
 const SliderDataTablePage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -41,6 +42,12 @@ const SliderDataTablePage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.setting, navigate);
+    }
+  }, [meData]);
 
   const {
     data: dataSlider,
