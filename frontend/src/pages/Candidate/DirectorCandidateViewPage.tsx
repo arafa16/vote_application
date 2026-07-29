@@ -385,7 +385,7 @@ const DirectorCandidateViewPage = () => {
             </div>
           </div>
         </div>
-        <div
+        {/* <div
           className={`${(dataCheck.director_check && dataCheck.commissioner_check) || votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""} grid grid-cols-12 gap-x-2 mb-4`}
         >
           <div className="col-span-12">
@@ -399,7 +399,7 @@ const DirectorCandidateViewPage = () => {
               </div>
             </Alert>
           </div>
-        </div>
+        </div> */}
         <div
           className={`${(dataCheck.director_check && dataCheck.commissioner_check) || votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""} w-full mb-24`}
         >
