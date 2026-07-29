@@ -97,6 +97,12 @@ const initialState: SideMenuState = {
         },
         {
           icon: "Settings",
+          title: "email queue",
+          pathname: "/email",
+          privilege: "setting",
+        },
+        {
+          icon: "Settings",
           title: "slider",
           pathname: "/slider",
           privilege: "setting",
