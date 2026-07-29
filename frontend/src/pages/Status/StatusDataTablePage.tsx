@@ -7,11 +7,9 @@ import LoadingIcon from "../../base-components/LoadingIcon";
 import Button from "../../base-components/Button";
 import { FormInput, FormSelect } from "../../base-components/Form";
 import { GetMe, resetGetMe } from "../../stores/features/GetMeSlice";
-import {
-  GetStatusTable,
-  resetStatus,
-} from "../../stores/features/StatusSlice";
+import { GetStatusTable, resetStatus } from "../../stores/features/StatusSlice";
 import dayjs from "dayjs";
+import { PrivilegeCheck } from "../../utils/privilege-check";
 
 const StatusDataTablePage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -44,6 +42,12 @@ const StatusDataTablePage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.setting, navigate);
+    }
+  }, [meData]);
 
   const {
     data: dataStatus,
