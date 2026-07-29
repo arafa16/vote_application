@@ -51,7 +51,7 @@ const CandidateVoteView = (props: any) => {
         <Button
           size="sm"
           variant="primary"
-          className={`w-full md:w-auto md:px-10 md:py-2 ${is_loading ? "hidden" : ""}`}
+          className={`w-full md:w-auto text-[12px] md:px-10 md:py-1 ${is_loading ? "hidden" : ""}`}
           onClick={() =>
             handleClick({
               voting_period_uuid: voting_period_uuid,
