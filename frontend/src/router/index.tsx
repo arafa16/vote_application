@@ -71,6 +71,15 @@ import AuditLogDataEditPage from "../pages/AuditLog/AuditLogDataEditPage";
 import RequestResetPasswordPage from "../pages/AuthPage/RequestResetPasswordPage";
 import SetupPasswordPage from "../pages/AuthPage/SetupPasswordPage";
 import ActivationPage from "../pages/AuthPage/ActivationPage";
+
+//email_queue
+import EmailQueueTablePage from "../pages/EmailQueue/EmailQueueTablePage";
+import EmailDataViewByIdPage from "../pages/EmailQueue/EmailQueueViewByIdPage";
+import EmailDataEditPage from "../pages/EmailQueue/EmailQueueEditPage";
+
+//error
+import ErrorPage from "../pages/ErrorPage";
+
 function Router() {
   const routes = [
     {
@@ -279,6 +288,19 @@ function Router() {
           path: "/audit_log/data/:id/edit",
           element: <AuditLogDataEditPage />,
         },
+        //email_queue
+        {
+          path: "/email",
+          element: <EmailQueueTablePage />,
+        },
+        {
+          path: "/email/data/:id",
+          element: <EmailDataViewByIdPage />,
+        },
+        {
+          path: "/email/data/:id/edit",
+          element: <EmailDataEditPage />,
+        },
       ],
     },
     {
@@ -305,10 +327,10 @@ function Router() {
       path: "/activation/:token",
       element: <ActivationPage />,
     },
-    // {
-    //   path: "/error-page",
-    //   element: <ErrorPage />,
-    // },
+    {
+      path: "/error",
+      element: <ErrorPage />,
+    },
   ];
 
   return useRoutes(routes);
