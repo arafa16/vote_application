@@ -23,6 +23,7 @@ import StepWizart from "../../components/Wizart/StepWizart";
 import BackOrNextButton from "../../components/ButtonCustom/BackOrNextButton";
 import { useNavigate } from "react-router-dom";
 import LoadingIcon from "../../base-components/LoadingIcon";
+import { PrivilegeCheck } from "../../utils/privilege-check";
 
 const DirectorCandidateViewPage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -70,6 +71,12 @@ const DirectorCandidateViewPage = () => {
   useEffect(() => {
     dispatch(GetMe());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (meData !== null) {
+      PrivilegeCheck(meData?.privilege?.mulai_voting, navigate);
+    }
+  }, [meData]);
 
   const {
     data: dataVotingPeriod,
@@ -349,7 +356,7 @@ const DirectorCandidateViewPage = () => {
             className={`grid grid-cols-12 gap-4 ${directorVoteData !== null ? "hidden" : ""}`}
           >
             {directorDatas?.map((data, index) => (
-              <div className="col-span-12 md:col-span-6" key={index}>
+              <div className="col-span-12 md:col-span-4" key={index}>
                 <CandidateVoteView
                   data={data}
                   user_uuid={meData?.uuid}
@@ -365,7 +372,7 @@ const DirectorCandidateViewPage = () => {
           <div
             className={`grid grid-cols-12 gap-4 ${directorVoteData !== null ? "" : "hidden"}`}
           >
-            <div className="col-span-12 md:col-span-6">
+            <div className="col-span-12 md:col-span-4">
               <CandidateVoteView
                 data={directorVoteData}
                 user_uuid={meData?.uuid}
