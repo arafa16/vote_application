@@ -138,11 +138,11 @@ const HistoryVoteViewPage = () => {
           </div>
         </div>
         <div className="col-span-12 md:col-span-3 col-start-1 md:col-start-10 mb-4">
-          <VotingPeriodForm
+          {/* <VotingPeriodForm
             datas={votingPeriodDatas}
             dataSelect={votingPeriodSelected}
             handleChange={handleChangeVotingPeriod}
-          />
+          /> */}
         </div>
       </div>
       <div
