@@ -21,7 +21,9 @@ app.use(express.json());
 
 cron.schedule("*/30 * * * * *", async () => {
   console.log("Process Email Queue every 30 seconds");
+  console.log("start check");
   await processEmailQueue();
+  console.log("end check");
 });
 
 app.listen(process.env.BACKEND_PORT, () => {
