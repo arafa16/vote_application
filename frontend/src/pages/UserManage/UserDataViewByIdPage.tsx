@@ -161,8 +161,7 @@ const UserDataViewByIdPage = () => {
     setResetPasswordModalById(true);
   };
 
-  const handleSendResetPassword = (e: any) => {
-    e.preventDefault();
+  const handleSendResetPassword = () => {
     dispatch(SendEmailResetPasswordById({ uuid: id }));
   };
 
