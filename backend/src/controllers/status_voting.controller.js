@@ -653,6 +653,72 @@ const getReportDashboard = async (req, res) => {
 
   const directorChart = buildVoteChart(getDirectorVote, user_all);
 
+  // Company Vote
+  const companies = await companyModel.findAll({
+    attributes: ["id", "uuid", "name"],
+    include: [
+      {
+        model: userModel,
+        attributes: ["id"],
+        required: false,
+        where: {
+          is_active: 1,
+          is_member: 1,
+        },
+        include: [
+          {
+            model: directorVoteModel,
+            attributes: ["id"], // jangan []
+            required: false,
+            where: {
+              voting_period_id: votingPeriod.id,
+              is_validate: 1,
+            },
+          },
+          {
+            model: commissionerVoteModel,
+            attributes: ["id"], // jangan []
+            required: false,
+            where: {
+              voting_period_id: votingPeriod.id,
+              is_validate: 1,
+            },
+          },
+        ],
+      },
+    ],
+  });
+
+  const companyVoteResult = companies.map((company) => {
+    const users = company.users || [];
+
+    const total = users.length;
+
+    const voted = users.filter((user) => {
+      return (
+        user.director_votes?.length > 0 && user.commissioner_votes?.length > 0
+      );
+    }).length;
+
+    const unvoted = total - voted;
+
+    return {
+      uuid: company.uuid,
+      company: company.name,
+      total,
+      voted,
+      voted_percent:
+        total === 0 ? 0 : Number(((voted / total) * 100).toFixed(2)),
+      unvoted,
+      unvoted_percent:
+        total === 0 ? 0 : Number(((unvoted / total) * 100).toFixed(2)),
+    };
+  });
+
+  const company = companyVoteResult.map((item) => item.company);
+  const voted = companyVoteResult.map((item) => item.voted);
+  const unvoted = companyVoteResult.map((item) => item.unvoted);
+
   return res.status(200).json({
     success: true,
     message: "success",
@@ -679,6 +745,12 @@ const getReportDashboard = async (req, res) => {
       },
       commissioner_vote: commissionerChart,
       director_vote: directorChart,
+      company_vote: {
+        company,
+        voted,
+        unvoted,
+        data: companyVoteResult,
+      },
     },
   });
 };

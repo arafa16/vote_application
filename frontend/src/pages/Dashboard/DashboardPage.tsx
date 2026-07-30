@@ -12,6 +12,7 @@ import UserVerificationStatusReport from "../../components/Report/UserVerificati
 import VotingActivityOverviewReport from "../../components/Report/VotingActivityOverviewReport";
 import VotingCommissionerOverviewReport from "../../components/Report/VotingCommissionerOverviewReport";
 import VotingDirectorOverviewReport from "../../components/Report/VotingDirectorOverviewReport";
+import VotingCountCompanyReport from "../../components/Report/VotingCountCompanyReport";
 import ReportLineChart1 from "../../components/Report/VoterTrendReport";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -210,7 +211,19 @@ const DashboardPage = () => {
       <div></div>
     );
 
-  console.log("votingPeriodSelected", votingPeriodSelected);
+  const votingCountCompanyOverview =
+    dataReport?.vote_trend?.labels !== undefined &&
+    dataReport?.vote_trend?.total !== undefined ? (
+      <VotingCountCompanyReport
+        height={280}
+        company={dataReport?.company_vote?.company}
+        voted={dataReport?.company_vote?.voted}
+        unvoted={dataReport?.company_vote?.unvoted}
+      />
+    ) : (
+      <div></div>
+    );
+
   return (
     <div>
       <div className={`grid grid-cols-12 mt-6 `}>
@@ -428,6 +441,22 @@ const DashboardPage = () => {
               </div>
             </div>
             <div className="mt-6">{voteTrendOverview}</div>
+          </div>
+        </div>
+        {/* Vote Trend */}
+        <div className="col-span-12">
+          <div className="p-5 mt-12 intro-y box sm:mt-4">
+            <div className="items-center md:flex">
+              <div className="mr-auto">
+                <div className="flex items-center">
+                  <div className="text-lg font-medium">
+                    Voter Trend By Group
+                  </div>
+                </div>
+                <div className="mt-1 text-slate-500">Komulatif</div>
+              </div>
+            </div>
+            <div className="mt-6">{votingCountCompanyOverview}</div>
           </div>
         </div>
       </div>
