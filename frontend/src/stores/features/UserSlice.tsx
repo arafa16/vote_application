@@ -267,6 +267,27 @@ export const SendEmailResetPasswordById: any = createAsyncThunk(
   },
 );
 
+export const SetInactiveUserAll: any = createAsyncThunk(
+  "User/SetInactiveUserAll",
+  async (datas: any, thunkAPI) => {
+    try {
+      const response = await axios.patch(
+        import.meta.env.VITE_REACT_APP_API_URL + `/api/v1/user/inactive_all`,
+        datas.formData,
+        {
+          withCredentials: true, // Now this is was the missing piece in the client side
+        },
+      );
+
+      return response.data;
+    } catch (error: any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response);
+      }
+    }
+  },
+);
+
 export const UserSlice = createSlice({
   name: "User",
   initialState,
@@ -437,6 +458,21 @@ export const UserSlice = createSlice({
       state.isLoadingUpdate = false;
       state.isErrorPatch = true;
       state.messageSend = action.payload;
+    });
+
+    //SendEmailResetPasswordById
+    builder.addCase(SetInactiveUserAll.pending, (state) => {
+      state.isLoadingUpdate = true;
+    });
+    builder.addCase(SetInactiveUserAll.fulfilled, (state, action) => {
+      state.isLoadingUpdate = false;
+      state.isSuccessPatch = true;
+      state.message = action.payload;
+    });
+    builder.addCase(SetInactiveUserAll.rejected, (state, action) => {
+      state.isLoadingUpdate = false;
+      state.isErrorPatch = true;
+      state.message = action.payload;
     });
   },
 });

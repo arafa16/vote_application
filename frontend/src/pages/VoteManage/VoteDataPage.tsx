@@ -197,6 +197,10 @@ const VoteDataPage = () => {
           paramsObj.status_vote = status;
         }
 
+        if (search !== "") {
+          paramsObj.search = search;
+        }
+
         const searchParams = new URLSearchParams(paramsObj);
         dispatch(GetStatusVotingTable(searchParams));
       }, 500);

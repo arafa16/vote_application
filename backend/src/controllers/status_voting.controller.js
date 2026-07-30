@@ -65,26 +65,6 @@ const getDataTable = async (req, res) => {
     where.company_id = companyData.id;
   }
 
-  if (status_user) {
-    const statusData = await statusModel.findOne({
-      where: { uuid: status_user },
-    });
-
-    if (!statusData) {
-      throw new CustomHttpError("Status not found", 404);
-    }
-
-    where.status_id = statusData.id;
-  } else {
-    const statusData = await statusModel.findOne({
-      where: {
-        code: 2,
-      },
-    });
-
-    where.status_id = statusData.id;
-  }
-
   if (!voting_period_uuid) {
     throw new CustomHttpError("Voting period not set", 400);
   }
@@ -227,6 +207,14 @@ const getDataTable = async (req, res) => {
         required: false,
         where: whereVote,
       },
+      {
+        model: statusModel,
+        where: {
+          code: {
+            [Op.in]: [2, 3],
+          },
+        },
+      },
     ],
     order,
     limit,
@@ -297,6 +285,16 @@ const getReportTable = async (req, res) => {
       is_active: true,
       is_member: true,
     },
+    include: [
+      {
+        model: statusModel,
+        where: {
+          code: {
+            [Op.in]: [2, 3],
+          },
+        },
+      },
+    ],
   });
 
   const voted_users = await userModel.count({
@@ -319,6 +317,14 @@ const getReportTable = async (req, res) => {
           is_validate: 1,
         },
       },
+      {
+        model: statusModel,
+        where: {
+          code: {
+            [Op.in]: [2, 3],
+          },
+        },
+      },
     ],
   });
 
@@ -326,6 +332,16 @@ const getReportTable = async (req, res) => {
 
   const user_is_verified = await userModel.count({
     where: { is_active: true, is_verified: true, is_member: true },
+    include: [
+      {
+        model: statusModel,
+        where: {
+          code: {
+            [Op.in]: [2, 3],
+          },
+        },
+      },
+    ],
   });
 
   const voted_users_persent =

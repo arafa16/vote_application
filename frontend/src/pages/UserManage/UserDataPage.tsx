@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { GetMe, resetGetMe } from "../../stores/features/GetMeSlice";
 import {
+  SetInactiveUserAll,
   GetUserTable,
   GetCreateAttribute,
   resetUser,
@@ -77,6 +78,9 @@ const UserDataPage = () => {
     isError: isErrorUser,
     isSuccess: isSuccessUser,
     message: messageUser,
+    isSuccessPatch: isSuccessPatchUser,
+    isLoadingUpdate: isLoadingUpdateUser,
+    isErrorPatch: isErrorPatchUser,
   } = useSelector((state: any) => state.user);
 
   useEffect(() => {
@@ -91,7 +95,25 @@ const UserDataPage = () => {
     } else if (messageUser !== "" && isErrorUser && !isLoadingUser) {
       dispatch(resetUser());
     }
-  }, [dataUser, isLoadingUser, isErrorUser, isSuccessUser, messageUser]);
+  }, [
+    dataUser,
+    isLoadingUser,
+    isErrorUser,
+    isSuccessUser,
+    messageUser,
+    isSuccessPatchUser,
+    isLoadingUpdateUser,
+    isErrorPatchUser,
+  ]);
+
+  useEffect(() => {
+    if (messageUser !== "" && isSuccessPatchUser && !isLoadingUpdateUser) {
+      dispatch(GetUserTable());
+      dispatch(resetUser());
+    } else if (messageUser !== "" && isErrorPatchUser && !isLoadingUpdateUser) {
+      dispatch(resetUser());
+    }
+  }, [messageUser, isSuccessPatchUser, isLoadingUpdateUser, isErrorPatchUser]);
 
   useEffect(() => {
     dispatch(GetUserTable());
@@ -201,6 +223,14 @@ const UserDataPage = () => {
     dispatch(SendEmailInvitationUserAll());
   };
 
+  const handleSetStatusAll = (code: any) => {
+    const formData = {
+      uuid: meData?.uuid,
+      code: code,
+    };
+    dispatch(SetInactiveUserAll({ formData }));
+  };
+
   return (
     <div>
       <div className="grid grid-cols-12 mt-6">
@@ -216,7 +246,7 @@ const UserDataPage = () => {
       <div className="w-full">
         <div className="grid grid-cols-12 mb-2">
           <div
-            className={`col-span-2 md:col-span-1 h-1 ${isLoadingUser ? "" : "hidden"}`}
+            className={`col-span-12 md:col-span-1 mb-4 md:mb-0 h-1 ${isLoadingUser ? "" : "hidden"}`}
           >
             <LoadingIcon
               icon="three-dots"
@@ -224,8 +254,8 @@ const UserDataPage = () => {
               className="w-5 h-5 "
             />
           </div>
-          <div className="col-span-10 col-start-3 md:col-span-3 md:col-start-10 flex justify-end gap-2">
-            <div className="flex justify-center items-center">
+          <div className="col-span-12 lg:col-span-4 lg:col-start-9 grid gap-2 md:flex md:justify-end md:gap-2">
+            <div className="flex justify-center items-center ">
               <div className={`h-2 ${isLoadingEmail ? "" : "hidden"}`}>
                 <LoadingIcon
                   icon="three-dots"
@@ -242,11 +272,45 @@ const UserDataPage = () => {
                 Send Invitation
               </Button>
             </div>
+            <div className="flex justify-center items-center">
+              <div className={`h-2 ${isLoadingUpdateUser ? "" : "hidden"}`}>
+                <LoadingIcon
+                  icon="three-dots"
+                  color="#005266"
+                  className="w-5 h-5 "
+                />
+              </div>
+              <Button
+                variant="outline-primary"
+                size="sm"
+                className={`text-[12px] w-full ${isLoadingUpdateUser ? "hidden" : ""}`}
+                onClick={() => handleSetStatusAll(2)}
+              >
+                Set Active All
+              </Button>
+            </div>
+            <div className="flex justify-center items-center">
+              <div className={`h-2 ${isLoadingUpdateUser ? "" : "hidden"}`}>
+                <LoadingIcon
+                  icon="three-dots"
+                  color="#005266"
+                  className="w-5 h-5 "
+                />
+              </div>
+              <Button
+                variant="outline-primary"
+                size="sm"
+                className={`text-[12px] w-full ${isLoadingUpdateUser ? "hidden" : ""}`}
+                onClick={() => handleSetStatusAll(3)}
+              >
+                Set Inactive All
+              </Button>
+            </div>
             <div>
               <Button
                 variant="outline-primary"
                 size="sm"
-                className="text-[12px]"
+                className="text-[12px] w-full md:w-fit"
                 onClick={handleCreate}
               >
                 Create

@@ -576,18 +576,19 @@ const sendRequestEmailReset = async (req, res) => {
 };
 
 const setInactiveUserAll = async (req, res) => {
-  const { uuid } = req.body;
+  const { uuid, code } = req.body;
 
-  const users = await userModel.findAll({
-    include: [
-      {
-        model: statusModel,
-        where: {
-          code: 2,
-        },
-      },
-    ],
+  const findStatus = await statusModel.findOne({
+    where: {
+      code: code,
+    },
   });
+
+  if (!findStatus) {
+    throw new CustomHttpError("code not found", 500);
+  }
+
+  const users = await userModel.findAll();
 
   if (users.length === 0) {
     return res.status(200).json({
@@ -597,12 +598,6 @@ const setInactiveUserAll = async (req, res) => {
     });
   }
 
-  const status = await statusModel.findOne({
-    where: {
-      code: 3,
-    },
-  });
-
   const transaction = await sequelize.transaction();
 
   try {
@@ -610,7 +605,7 @@ const setInactiveUserAll = async (req, res) => {
       if (user.uuid !== uuid) {
         await user.update(
           {
-            status_id: status.id,
+            status_id: findStatus.id,
           },
           { transaction },
         );
