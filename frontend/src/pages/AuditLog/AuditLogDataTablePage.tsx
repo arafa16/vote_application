@@ -238,10 +238,8 @@ const AuditLogDataTablePage = () => {
                       {page > 1 ? (page - 1) * limit + index + 1 : index + 1}
                     </Table.Td>
                     <Table.Td className="whitespace-nowrap">
-                      {data?.user?.createdAt &&
-                        dayjs(data?.user?.createdAt).format(
-                          "YYYY-MM-DD HH:mm:ss",
-                        )}
+                      {data?.createdAt &&
+                        dayjs(data?.createdAt).format("YYYY-MM-DD HH:mm:ss")}
                     </Table.Td>
                     <Table.Td className="whitespace-nowrap">
                       {data?.user?.name}
