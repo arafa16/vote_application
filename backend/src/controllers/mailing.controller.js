@@ -125,6 +125,15 @@ const activationUser = async (req, res) => {
       { transaction },
     );
 
+    await createLogHandler(
+      {
+        user_id: user.id,
+        activity: "activation",
+        description: `activation success for ${user.name}.`,
+      },
+      transaction,
+    );
+
     await saveEmailData(
       {
         user_id: user?.id,
