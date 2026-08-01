@@ -8,7 +8,7 @@ module.exports = {
       "LINTASARTA",
       "KOPKARLA",
       "KSPS",
-      "LINTAS MEDIA DENAWA",
+      "LINTAS MEDIA DANAWA",
       "ANGGOTA NON KARYAWAN",
     ];
 
