@@ -599,7 +599,7 @@ const getReportDashboard = async (req, res) => {
 
   //commissioner vote
   const getCommissionerVote = await commissionerCandidateModel.findAll({
-    where: { is_active: 1 },
+    where: { is_active: 1, voting_period_id: votingPeriod.id },
     attributes: [
       "uuid",
       "name",
@@ -635,7 +635,7 @@ const getReportDashboard = async (req, res) => {
 
   //director vote
   const getDirectorVote = await directorCandidateModel.findAll({
-    where: { is_active: 1 },
+    where: { is_active: 1, voting_period_id: votingPeriod.id },
     attributes: [
       "uuid",
       "name",
