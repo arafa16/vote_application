@@ -328,6 +328,22 @@ const VotingProcedureViewPage = () => {
             5
           </Button>
           <Lucide
+            icon="Edit"
+            className="w-10 h-10 text-primary hidden lg:block"
+          />
+          <div className="ml-3">
+            <p className="text-base font-medium">Mulai Voting</p>
+            <p className="">Klik Menu "Mulai Voting" untuk memulai voting.</p>
+          </div>
+        </div>
+        <div className="flex items-center mt-10 intro-x gap-x-2 md:gap-x-8">
+          <Button
+            variant="primary"
+            className="w-6 h-6 md:w-10 md:h-10 rounded-full"
+          >
+            6
+          </Button>
+          <Lucide
             icon="Send"
             className="w-10 h-10 text-primary hidden lg:block"
           />
@@ -343,7 +359,7 @@ const VotingProcedureViewPage = () => {
             variant="primary"
             className="w-6 h-6 md:w-10 md:h-10 rounded-full"
           >
-            6
+            7
           </Button>
           <Lucide
             icon="CheckCircle"
