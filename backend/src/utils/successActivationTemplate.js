@@ -106,7 +106,7 @@ const successActivationTemplate = (name, loginLink) => {
 
             <p>
               Jika Anda mengalami kendala saat login, silakan menghubungi
-              <strong>Admin USP KOPKARLA</strong>.
+              <strong>Sekretariat Kopkarla</strong>.
             </p>
 
             <br>

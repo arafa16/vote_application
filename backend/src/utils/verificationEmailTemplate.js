@@ -106,7 +106,7 @@ const verificationEmailTemplate = (name, linkVerification) => {
 
                         <p>
                             Apabila Anda tidak melakukan pembuatan password atau merasa terdapat kesalahan data,
-                            silakan segera menghubungi <strong>Admin USP KOPKARLA</strong>.
+                            silakan segera menghubungi <strong>Sekretariat Kopkarla</strong>.
                         </p>
 
                         <br>

@@ -98,7 +98,7 @@ const resetPasswordEmailTemplate = (name, linkReset) => {
 
                   <p>
                     Jika Anda mengalami kendala atau merasa terdapat aktivitas yang tidak dikenal pada akun Anda,
-                    silakan segera menghubungi <strong>Admin USP KOPKARLA</strong>.
+                    silakan segera menghubungi <strong>Sekretariat Kopkarla</strong>.
                   </p>
 
                   <br>

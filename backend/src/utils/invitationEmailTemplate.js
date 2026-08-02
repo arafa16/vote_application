@@ -102,7 +102,7 @@ const invitationEmailTemplate = (name, linkReset) => {
 
                         <p>
                         Apabila Anda tidak merasa pernah menerima undangan ini atau terdapat kesalahan data, silakan segera menghubungi
-                        <strong>Admin USP KOPKARLA</strong>.
+                        <strong>Sekretariat Kopkarla</strong>.
                         </p>
 
                         <br>

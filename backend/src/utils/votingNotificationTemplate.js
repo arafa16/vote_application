@@ -71,7 +71,7 @@ const votingNotificationTemplate = (
             <hr style="border:none;border-top:1px solid #e5e7eb;margin:25px 0;">
 
             <p>
-            Suara Anda telah tersimpan di sistem dan tidak dapat diubah kembali setelah proses pemungutan suara selesai.
+            Suara Anda telah tersimpan di sistem dan dapat di lihat kembali pada halaman riwayat  dan tidak dapat diubah kembali setelah proses pemungutan suara selesai.
             </p>
 
             <p>
@@ -80,7 +80,7 @@ const votingNotificationTemplate = (
 
             <p>
             Apabila terdapat pertanyaan terkait proses pemilihan, silakan menghubungi
-            <strong>Admin USP KOPKARLA</strong>.
+            <strong>Sekretariat Kopkarla</strong>.
             </p>
 
             <br>
