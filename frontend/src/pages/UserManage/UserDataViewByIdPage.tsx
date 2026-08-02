@@ -6,6 +6,10 @@ import {
   GetUserById,
   resetUser,
 } from "../../stores/features/UserSlice";
+import {
+  SendEmailInvitationUser,
+  resetEmail,
+} from "../../stores/features/EmailSlice";
 import { GetMe, resetGetMe } from "../../stores/features/GetMeSlice";
 import Button from "../../base-components/Button";
 import Lucide from "../../base-components/Lucide";
@@ -174,6 +178,29 @@ const UserDataViewByIdPage = () => {
     }
   };
 
+  //send email invitation user
+  const {
+    data: dataEmail,
+    isLoading: isLoadingEmail,
+    isError: isErrorEmail,
+    isSuccess: isSuccessEmail,
+    message: messageEmail,
+  } = useSelector((state: any) => state.email);
+
+  useEffect(() => {
+    if (dataEmail !== null && isSuccessEmail && !isLoadingEmail) {
+      NewNotification(messageEmail?.message);
+      dispatch(resetEmail());
+    } else if (messageEmail !== "" && isErrorEmail && !isLoadingEmail) {
+      NewNotification(messageEmail?.data?.message);
+      dispatch(resetEmail());
+    }
+  }, [dataEmail, isLoadingEmail, isErrorEmail, isSuccessEmail, messageEmail]);
+
+  const handleSendEmailInvitationUser = () => {
+    dispatch(SendEmailInvitationUser(id));
+  };
+
   const FormPassword = (
     <Dialog
       open={resetPasswordModalById}
@@ -297,19 +324,30 @@ const UserDataViewByIdPage = () => {
 
             <Menu>
               <Menu.Button as={Button} variant="primary" className="py-1">
-                Action
+                {isLoadingPatchUser || isLoadingEmail ? "" : "Action"}
+                <LoadingIcon
+                  icon="three-dots"
+                  className={`w-5 h-5 ${isLoadingPatchUser || isLoadingEmail ? "" : "hidden"}`}
+                  color="white"
+                />
               </Menu.Button>
               <Menu.Items className="w-48 mt-1">
                 <Menu.Item onClick={handleSendResetPassword}>
-                  <LoadingIcon
-                    icon="tail-spin"
-                    className={`w-5 h-5 ${isLoadingPatchUser ? "" : "hidden"}`}
-                  />
                   <Lucide
                     icon="Send"
                     className={`w-4 h-4 mr-2 ${isLoadingPatchUser ? "hidden" : ""}`}
                   />
                   {isLoadingPatchUser ? "" : "Send Reset Password"}
+                </Menu.Item>
+                <Menu.Item
+                  onClick={handleSendEmailInvitationUser}
+                  className={`${isLoadingEmail ? "pointer-events-none" : ""}`}
+                >
+                  <Lucide
+                    icon="Send"
+                    className={`w-4 h-4 mr-2 ${isLoadingEmail ? "hidden" : ""}`}
+                  />
+                  {isLoadingEmail ? "" : "Send Email Invitation"}
                 </Menu.Item>
                 <Menu.Item onClick={handleShowResetPassword}>
                   <Lucide icon="Key" className="w-4 h-4 mr-2" />
