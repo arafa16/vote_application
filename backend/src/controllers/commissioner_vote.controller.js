@@ -151,7 +151,12 @@ const getDataCommissionerByUserNPeriod = async (req, res) => {
   }
 
   if (!findData) {
-    throw new CustomHttpError("data not found", 404);
+    return res.status(200).json({
+      success: true,
+      message: "success",
+      data: null,
+      data_check: null,
+    });
   }
 
   return res.status(200).json({
@@ -171,12 +176,6 @@ const createData = async (req, res) => {
     user_id: req.user_id,
     commissioner_candidate_id: req.commissioner_candidate_id,
     ip_address: req.ip,
-  });
-
-  await createLogHandler({
-    user_id: req.user_id,
-    activity: "vote",
-    description: `${req.user_name} has commissioner vote ${req.commissioner_candidate_name}`,
   });
 
   return res.status(201).json({
@@ -230,12 +229,6 @@ const updateData = async (req, res) => {
     ip_address: req.ip,
   });
 
-  await createLogHandler({
-    user_id: findUser.id,
-    activity: "vote-update",
-    description: `${findUser.name} has updated commissioner vote ${findCommissionerCandidate.name}`,
-  });
-
   return res.status(201).json({
     success: true,
     message: "success",
@@ -255,12 +248,6 @@ const deleteData = async (req, res) => {
   }
 
   if (Boolean(permanent) === true) {
-    await createLogHandler({
-      user_id: req.user.id,
-      activity: "vote-delete",
-      description: `${req.user.name} has deleted commissioner vote ${findData.name}`,
-    });
-
     await findData.destroy();
   } else {
     await findData.update({

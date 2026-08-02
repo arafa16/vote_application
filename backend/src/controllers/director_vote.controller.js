@@ -173,12 +173,6 @@ const createData = async (req, res) => {
     ip_address: req.ip,
   });
 
-  await createLogHandler({
-    user_id: req.user_id,
-    activity: "vote",
-    description: `${req.user_name} has director vote ${req.director_candidate_name}`,
-  });
-
   return res.status(201).json({
     success: true,
     message: "success",
@@ -229,12 +223,6 @@ const updateData = async (req, res) => {
     ip_address: req.ip,
   });
 
-  await createLogHandler({
-    user_id: findUser.id,
-    activity: "vote-update",
-    description: `${findUser.name} has updated director vote ${findDirectorCandidate.name}`,
-  });
-
   return res.status(201).json({
     success: true,
     message: "success",
@@ -255,12 +243,6 @@ const deleteData = async (req, res) => {
   }
 
   if (Boolean(permanent) === true) {
-    await createLogHandler({
-      user_id: req.user.id,
-      activity: "vote-delete",
-      description: `${req.user.name} has deleted director vote ${findData.name}`,
-    });
-
     await findData.destroy();
   } else {
     await findData.update({

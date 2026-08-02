@@ -10,6 +10,7 @@ import {
 import {
   CreateCommissionerVoteData,
   GetCommissionerVoteByUserNPeriod,
+  DeleteCommissionerVoteData,
   resetCommissionerVote,
 } from "../../stores/features/CommissionerVoteSlice";
 import { GetMe, resetGetMe } from "../../stores/features/GetMeSlice";
@@ -100,10 +101,12 @@ const CommissionerCandidateViewPage = () => {
     dataUserNPeriod: dataUserNPeriodCommissionerVote,
     isLoading: isLoadingCommissionerVote,
     isLoadingPatch: isLoadingPatchCommissionerVote,
+    isLoadingDelete: isLoadingDeleteCommissionerVote,
     isError: isErrorCommissionerVote,
     isSuccess: isSuccessCommissionerVote,
     message: messageCommissionerVote,
     messagePatch: messagePatchCommissionerVote,
+    messageDelete: messageDeleteCommissionerVote,
   } = useSelector((state: any) => state.commissionerVote);
 
   useEffect(() => {
@@ -119,9 +122,7 @@ const CommissionerCandidateViewPage = () => {
       isSuccessCommissionerVote &&
       !isLoadingCommissionerVote
     ) {
-      setCommissionerVoteData(
-        dataUserNPeriodCommissionerVote?.data?.commissioner_candidate,
-      );
+      setCommissionerVoteData(dataUserNPeriodCommissionerVote?.data);
       //check
       setDataCheck({
         director_check:
@@ -143,6 +144,21 @@ const CommissionerCandidateViewPage = () => {
     ) {
       dispatch(resetCommissionerVote());
     }
+
+    if (
+      messageDeleteCommissionerVote !== "" &&
+      isSuccessCommissionerVote &&
+      !isLoadingDeleteCommissionerVote
+    ) {
+      setCommissionerVoteData(null);
+      dispatch(resetCommissionerVote());
+    } else if (
+      messageDeleteCommissionerVote !== "" &&
+      isErrorCommissionerVote &&
+      !isLoadingDeleteCommissionerVote
+    ) {
+      dispatch(resetCommissionerVote());
+    }
   }, [
     dataCommissionerVote,
     dataUserNPeriodCommissionerVote,
@@ -152,6 +168,8 @@ const CommissionerCandidateViewPage = () => {
     isSuccessCommissionerVote,
     messageCommissionerVote,
     messagePatchCommissionerVote,
+    isLoadingDeleteCommissionerVote,
+    messageDeleteCommissionerVote,
   ]);
 
   useEffect(() => {
@@ -285,6 +303,12 @@ const CommissionerCandidateViewPage = () => {
     navigate("/");
   };
 
+  const handleClickCancel = () => {
+    if (commisionerVoteData?.uuid !== undefined) {
+      dispatch(DeleteCommissionerVoteData({ uuid: commisionerVoteData?.uuid }));
+    }
+  };
+
   const view_page =
     !isLoadingVotingPeriod &&
     !isLoadingCommissioner &&
@@ -394,13 +418,15 @@ const CommissionerCandidateViewPage = () => {
           >
             <div className="col-span-12 md:col-span-6">
               <CandidateVoteView
-                data={commisionerVoteData}
+                data={commisionerVoteData?.commissioner_candidate}
                 user_uuid={meData?.uuid}
                 voting_period_uuid={votingPeriodData?.uuid}
                 color="warning"
                 view_button={false}
                 is_check={true}
                 is_loading={isLoadingPatchCommissionerVote}
+                is_view_cancel={true}
+                handleClickCancel={handleClickCancel}
               />
             </div>
           </div>

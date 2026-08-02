@@ -8,8 +8,10 @@ interface variabel {
   isSuccess: boolean;
   isLoading: boolean;
   isLoadingPatch: boolean;
+  isLoadingDelete: boolean;
   message: string;
   messagePatch: string;
+  messageDelete: string;
 }
 
 const initialState: variabel = {
@@ -19,8 +21,10 @@ const initialState: variabel = {
   isSuccess: false,
   isLoading: false,
   isLoadingPatch: false,
+  isLoadingDelete: false,
   message: "",
   messagePatch: "",
+  messageDelete: "",
 };
 
 export const GetDirectorVoteDatas: any = createAsyncThunk(
@@ -157,7 +161,7 @@ export const DeleteDirectorVoteData: any = createAsyncThunk(
     try {
       const response = await axios.delete(
         import.meta.env.VITE_REACT_APP_API_URL +
-          `/api/v1/director_vote/data/${datas.uuid}`,
+          `/api/v1/director_vote/data/${datas.uuid}?permanent=1`,
         {
           withCredentials: true, // Now this is was the missing piece in the client side
         },
@@ -271,17 +275,17 @@ export const DirectorVoteSlice = createSlice({
 
     //DeleteDataDirectorVote
     builder.addCase(DeleteDirectorVoteData.pending, (state) => {
-      state.isLoading = true;
+      state.isLoadingDelete = true;
     });
     builder.addCase(DeleteDirectorVoteData.fulfilled, (state, action) => {
-      state.isLoading = false;
+      state.isLoadingDelete = false;
       state.isSuccess = true;
-      state.message = action.payload;
+      state.messageDelete = action.payload;
     });
     builder.addCase(DeleteDirectorVoteData.rejected, (state, action) => {
-      state.isLoading = false;
+      state.isLoadingDelete = false;
       state.isError = true;
-      state.message = action.payload;
+      state.messageDelete = action.payload;
     });
   },
 });

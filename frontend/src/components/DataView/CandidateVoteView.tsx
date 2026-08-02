@@ -7,18 +7,19 @@ const CandidateVoteView = (props: any) => {
     data,
     voting_period_uuid,
     user_uuid,
-    color,
     view_button,
+    is_view_cancel,
     is_loading,
     is_check,
     handleClick,
+    handleClickCancel,
   } = props;
 
   return (
     <div className="box">
       <div className="grid grid-cols-12 mb-2">
         <div
-          className={`col-span-12 md:col-span-6 mt-2 mx-4 rounded-lg flex justify-start items-center`}
+          className={`${is_view_cancel ? "col-span-8" : "col-span-12"} md:col-span-6 mt-2 mx-4 rounded-lg flex justify-start items-center`}
         >
           <p className="text-[14px] my-2 mx-4 text-primary capitalize">
             {data?.name}
@@ -26,6 +27,15 @@ const CandidateVoteView = (props: any) => {
           <Lucide
             icon="CheckCircle"
             className={`block mx-2 text-primary ${is_check ? "" : "hidden"}`}
+          />
+        </div>
+        <div
+          className={`${is_view_cancel ? "" : "hidden"} col-span-4 md:col-span-6 px-4 flex justify-end items-center`}
+        >
+          <Lucide
+            icon="XSquare"
+            className={` text-primary text-red-500 hover:bg-red-500 hover:text-white rounded cursor-pointer`}
+            onClick={handleClickCancel}
           />
         </div>
       </div>

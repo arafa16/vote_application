@@ -10,6 +10,7 @@ import {
 import {
   CreateDirectorVoteData,
   GetDirectorVoteByUserNPeriod,
+  DeleteDirectorVoteData,
   resetDirectorVote,
 } from "../../stores/features/DirectorVoteSlice";
 import { GetMe, resetGetMe } from "../../stores/features/GetMeSlice";
@@ -100,10 +101,12 @@ const DirectorCandidateViewPage = () => {
     dataUserNPeriod: dataUserNPeriodDirectorVote,
     isLoading: isLoadingDirectorVote,
     isLoadingPatch: isLoadingPatchDirectorVote,
+    isLoadingDelete: isLoadingDeleteDirectorVote,
     isError: isErrorDirectorVote,
     isSuccess: isSuccessDirectorVote,
     message: messageDirectorVote,
     messagePatch: messagePatchDirectorVote,
+    messageDelete: messageDeleteDirectorVote,
   } = useSelector((state: any) => state.directorVote);
 
   useEffect(() => {
@@ -119,9 +122,7 @@ const DirectorCandidateViewPage = () => {
       isSuccessDirectorVote &&
       !isLoadingDirectorVote
     ) {
-      setDirectorVoteData(
-        dataUserNPeriodDirectorVote?.data?.director_candidate,
-      );
+      setDirectorVoteData(dataUserNPeriodDirectorVote?.data);
       //check
       setDataCheck({
         director_check: dataUserNPeriodDirectorVote?.data_check?.director_check,
@@ -136,6 +137,21 @@ const DirectorCandidateViewPage = () => {
     ) {
       dispatch(resetDirectorVote());
     }
+
+    if (
+      messageDeleteDirectorVote !== "" &&
+      isSuccessDirectorVote &&
+      !isLoadingDeleteDirectorVote
+    ) {
+      setDirectorVoteData(null);
+      dispatch(resetDirectorVote());
+    } else if (
+      messageDeleteDirectorVote !== "" &&
+      isErrorDirectorVote &&
+      !isLoadingDeleteDirectorVote
+    ) {
+      dispatch(resetDirectorVote());
+    }
   }, [
     dataDirectorVote,
     dataUserNPeriodDirectorVote,
@@ -145,6 +161,8 @@ const DirectorCandidateViewPage = () => {
     messageDirectorVote,
     isLoadingPatchDirectorVote,
     messagePatchDirectorVote,
+    isLoadingDeleteDirectorVote,
+    messageDeleteDirectorVote,
   ]);
 
   useEffect(() => {
@@ -273,6 +291,12 @@ const DirectorCandidateViewPage = () => {
     navigate("/commissioner_candidate");
   };
 
+  const handleClickCancel = () => {
+    if (directorVoteData?.uuid !== undefined) {
+      dispatch(DeleteDirectorVoteData({ uuid: directorVoteData?.uuid }));
+    }
+  };
+
   const view_page =
     !isLoadingMe && !isLoadingDirector && !isLoadingVotingPeriod ? (
       <div>
@@ -374,13 +398,15 @@ const DirectorCandidateViewPage = () => {
           >
             <div className="col-span-12 md:col-span-4">
               <CandidateVoteView
-                data={directorVoteData}
+                data={directorVoteData?.director_candidate}
                 user_uuid={meData?.uuid}
                 voting_period_uuid={votingPeriodData?.uuid}
                 color="primary"
                 view_button={false}
                 is_check={true}
                 is_loading={isLoadingDirectorVote}
+                is_view_cancel={true}
+                handleClickCancel={handleClickCancel}
               />
             </div>
           </div>
