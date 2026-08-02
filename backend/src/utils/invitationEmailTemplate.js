@@ -129,7 +129,7 @@ const invitationEmailTemplate = (name, linkReset) => {
                         color:#777777;
                         ">
                         Email ini dikirim secara otomatis oleh sistem
-                        <strong>Aplikasi Pemilihan Pengawas dan Pengurus Koperasi</strong>.
+                        <strong>Aplikasi Pemilihan Pengawas dan Pengurus Kopkarla</strong>.
                         <br>
                         Mohon untuk tidak membalas email ini.
                     </td>

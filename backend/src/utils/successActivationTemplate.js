@@ -134,7 +134,7 @@ const successActivationTemplate = (name, loginLink) => {
             "
           >
             Email ini dikirim secara otomatis oleh sistem
-            <strong>Aplikasi Pemilihan Pengawas dan Pengurus Koperasi</strong>.
+            <strong>Aplikasi Pemilihan Pengawas dan Pengurus Kopkarla</strong>.
             <br>
             Mohon untuk tidak membalas email ini.
           </td>
