@@ -157,8 +157,6 @@ const deleteData = async (req, res) => {
 const sendEmailById = async (req, res) => {
   const { uuid } = req.params;
 
-  console.log("uuid", uuid);
-
   const email = await emailQueueModel.findOne({
     where: {
       uuid: uuid,

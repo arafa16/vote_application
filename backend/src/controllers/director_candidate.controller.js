@@ -207,7 +207,6 @@ const createData = async (req, res) => {
 
 const updateDataByIdAttributes = async (req, res) => {
   const { uuid } = req.params;
-  console.log(uuid);
 
   const voting_period = await votingPeriodModel.findAll();
 
