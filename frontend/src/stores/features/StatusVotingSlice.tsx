@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import fileDownload from "js-file-download";
 
 interface variabel {
   data: any;
@@ -109,6 +110,28 @@ export const GetStatusVotingTableAttribute: any = createAsyncThunk(
   },
 );
 
+export const ExportStatusVotingData: any = createAsyncThunk(
+  "StatusVoting/ExportStatusVotingData",
+  async (datas: any, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        import.meta.env.VITE_REACT_APP_API_URL +
+          `/api/v1/status_voting/export?${datas.searchParams}`,
+        {
+          responseType: "blob",
+          withCredentials: true, // Now this is was the missing piece in the client side
+        },
+      );
+
+      return fileDownload(response.data, datas.name);
+    } catch (error: any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response);
+      }
+    }
+  },
+);
+
 export const StatusVotingSlice = createSlice({
   name: "StatusVoting",
   initialState,
@@ -180,6 +203,21 @@ export const StatusVotingSlice = createSlice({
       },
     );
     builder.addCase(GetStatusVotingTableAttribute.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = action.payload;
+    });
+
+    //ExportStatusVotingData
+    builder.addCase(ExportStatusVotingData.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(ExportStatusVotingData.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.message = action.payload;
+    });
+    builder.addCase(ExportStatusVotingData.rejected, (state, action) => {
       state.isLoading = false;
       state.isError = true;
       state.message = action.payload;

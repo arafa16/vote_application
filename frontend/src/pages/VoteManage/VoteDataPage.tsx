@@ -11,6 +11,7 @@ import {
   GetStatusVotingTable,
   GetStatusVotingTableAttribute,
   GetStatusVotingTableReport,
+  ExportStatusVotingData,
   resetStatusVoting,
 } from "../../stores/features/StatusVotingSlice";
 import Table from "../../base-components/Table";
@@ -229,12 +230,30 @@ const VoteDataPage = () => {
     ) {
       dispatch(resetStatusVoting());
     }
+
+    if (
+      messageStatusVoting !== "" &&
+      isSuccessStatusVoting &&
+      !isLoadingStatusVoting
+    ) {
+      console.log("messageStatusVoting", messageStatusVoting);
+      dispatch(resetStatusVoting());
+    } else if (
+      messageStatusVoting !== "" &&
+      isErrorStatusVoting &&
+      !isLoadingStatusVoting
+    ) {
+      console.log("messageStatusVoting", messageStatusVoting);
+      dispatch(resetStatusVoting());
+    }
   }, [
     dataReportStatusVoting,
     isLoadingReportStatusVoting,
     isErrorStatusVoting,
     isSuccessStatusVoting,
     messageReportStatusVoting,
+    isLoadingStatusVoting,
+    messageStatusVoting,
   ]);
 
   useEffect(() => {
@@ -299,6 +318,20 @@ const VoteDataPage = () => {
     return sort === "asc" ? "↑" : "↓";
   };
 
+  const handleExportDataStatusVoting = () => {
+    const paramsObj: any = {
+      voting_period_uuid: votingPeriodSelected,
+    };
+    const searchParams = new URLSearchParams(paramsObj);
+
+    dispatch(
+      ExportStatusVotingData({
+        searchParams,
+        name: "status voting anggota" + ".xlsx",
+      }),
+    );
+  };
+
   return (
     <div>
       <div className="grid grid-cols-12 mt-6">
@@ -332,8 +365,20 @@ const VoteDataPage = () => {
               className="w-5 h-5 "
             />
           </div>
-          <div className="col-span-10 col-start-3 md:col-span-1 md:col-start-12 flex justify-end ">
-            <Button variant="outline-primary" size="sm" className="text-[12px]">
+          <div
+            className="col-span-10 col-start-3 md:col-span-1 md:col-start-12 flex justify-end"
+            onClick={handleExportDataStatusVoting}
+          >
+            <LoadingIcon
+              icon="three-dots"
+              color="#005266"
+              className={`w-5 h-5 ${isLoadingStatusVoting ? "" : "hidden"}`}
+            />
+            <Button
+              variant="outline-primary"
+              size="sm"
+              className={`text-[12px] ${isLoadingStatusVoting ? "hidden" : ""}`}
+            >
               Export Data
             </Button>
           </div>
