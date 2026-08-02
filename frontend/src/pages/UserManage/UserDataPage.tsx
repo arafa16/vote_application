@@ -254,7 +254,7 @@ const UserDataPage = () => {
               className="w-5 h-5 "
             />
           </div>
-          <div className="col-span-12 lg:col-span-4 lg:col-start-9 grid gap-2 md:flex md:justify-end md:gap-2">
+          <div className="col-span-12 lg:col-span-5 lg:col-start-8 grid gap-2 lg:flex lg:justify-end lg:gap-2">
             <div className="flex justify-center items-center ">
               <div className={`h-2 ${isLoadingEmail ? "" : "hidden"}`}>
                 <LoadingIcon
