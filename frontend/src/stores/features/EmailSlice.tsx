@@ -25,6 +25,27 @@ const initialState: variabel = {
   messageSend: "",
 };
 
+export const SendEmailInvitationUser: any = createAsyncThunk(
+  "Email/SendEmailInvitationUser",
+  async (uuid: string, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        import.meta.env.VITE_REACT_APP_API_URL +
+          `/api/v1/mail/invitation/${uuid}`,
+        {
+          withCredentials: true, // Now this is was the missing piece in the client side
+        },
+      );
+
+      return response.data;
+    } catch (error: any) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response);
+      }
+    }
+  },
+);
+
 export const SendEmailInvitationUserAll: any = createAsyncThunk(
   "Email/SendEmailInvitationUserAll",
   async (_, thunkAPI) => {
@@ -159,7 +180,22 @@ export const EmailSlice = createSlice({
     resetEmail: (state) => initialState,
   },
   extraReducers: (builder) => {
-    //SendEmail
+    //SendEmailAll
+    builder.addCase(SendEmailInvitationUser.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(SendEmailInvitationUser.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.message = action.payload;
+    });
+    builder.addCase(SendEmailInvitationUser.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = action.payload;
+    });
+
+    //SendEmailAll
     builder.addCase(SendEmailInvitationUserAll.pending, (state) => {
       state.isLoading = true;
     });
