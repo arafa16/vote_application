@@ -552,7 +552,7 @@ const DashboardPage = () => {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-12 gap-4 print-no-break">
+        <div className="grid grid-cols-12 gap-4 print-no-break mb-12">
           {/* Vote Trend */}
           <div className="col-span-12">
             <div className="p-5 mt-12 intro-y box sm:mt-4">
