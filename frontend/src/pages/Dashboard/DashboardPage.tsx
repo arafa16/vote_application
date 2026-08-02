@@ -18,6 +18,10 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import VotingPeriodForm from "../../components/Form/VotingPeriodForm";
 import { PrivilegeCheck } from "../../utils/privilege-check";
+import Button from "../../base-components/Button";
+
+import { useRef } from "react";
+import { useReactToPrint } from "react-to-print";
 
 const DashboardPage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -116,7 +120,6 @@ const DashboardPage = () => {
       isSuccessStatusVoting &&
       !isLoadingReportStatusVoting
     ) {
-      console.log("dataReportStatusVoting", dataReportStatusVoting);
       setDataReport(dataReportStatusVoting?.data);
       dispatch(resetStatusVoting());
     } else if (
@@ -124,7 +127,6 @@ const DashboardPage = () => {
       isErrorStatusVoting &&
       !isLoadingReportStatusVoting
     ) {
-      console.log("messageReportStatusVoting", messageReportStatusVoting);
       dispatch(resetStatusVoting());
     }
   }, [
@@ -142,8 +144,6 @@ const DashboardPage = () => {
     const searchParams = new URLSearchParams(paramsObj);
     dispatch(GetStatusVotingDashboardReport(searchParams));
   }, [dispatch, votingPeriodSelected]);
-
-  console.log("dataReport?.user_verification_status", dataReport);
 
   const viewReportUserVerified =
     dataReport?.user_verification_status?.verified_persent !== undefined &&
@@ -224,6 +224,100 @@ const DashboardPage = () => {
       <div></div>
     );
 
+  const printRef = useRef(null);
+
+  const handlePrintDashboard = useReactToPrint({
+    contentRef: printRef,
+    documentTitle: "Dashboard Voting",
+    pageStyle: `
+    @page {
+      size: A4 landscape;
+      margin: 12mm;
+    }
+
+    @media print {
+      .print-break {
+        break-after: page;
+      }
+
+      .print-no-break {
+        break-inside: avoid;
+      }
+
+      .print-hidden {
+        display: none !important;
+      }
+    }
+
+    @media print {
+
+      html,
+      body {
+        width: 100%;
+        height: 210mm;
+        margin: 0;
+        padding: 0;
+        background: #fff !important;
+        overflow: visible !important;
+
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      .print-container {
+        width: 100%;
+        padding: 0;
+      }
+
+      .print-page {
+        width: 100%;
+        min-height: 180mm;
+
+        page-break-after: always;
+        break-after: page;
+
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      .print-page:last-child {
+        page-break-after: auto;
+      }
+
+      .card,
+      .chart-card,
+      .apexcharts-canvas,
+      .apexcharts-svg {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      table {
+        page-break-inside: avoid;
+      }
+
+      img,
+      svg,
+      canvas {
+        max-width: 100% !important;
+        page-break-inside: avoid;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      body {
+        zoom: 0.9;
+      }
+    }
+  `,
+  });
+
   return (
     <div>
       <div className={`grid grid-cols-12 mt-6 `}>
@@ -245,218 +339,235 @@ const DashboardPage = () => {
             handleChange={handleChangeVotingPeriod}
           />
         </div>
+        <div className="col-span-12 flex justify-end">
+          <Button
+            variant="primary"
+            size="sm"
+            className="text-[12px] px-4"
+            onClick={handlePrintDashboard}
+          >
+            Print
+          </Button>
+        </div>
       </div>
       <div
-        className={`${votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""} grid grid-cols-12 gap-4 mb-24`}
+        ref={printRef}
+        className={`${votingPeriodSelected === "" || votingPeriodSelected === undefined ? "hidden" : ""} print-container`}
       >
-        {/* Populasi yang sudah aktivasi email */}
-        <div className="col-span-12 md:col-span-6 lg:col-span-3">
-          <div className="w-full p-5 mt-4 intro-y box">
-            <div className="items-center md:flex mb-5">
-              <div className="mr-auto">
-                <div className="flex items-center">
-                  <div className="text-lg font-medium">
-                    User Verification Status
+        <div className="grid grid-cols-12 gap-4 print-page">
+          {/* Populasi yang sudah aktivasi email */}
+          <div className="col-span-12 md:col-span-6 lg:col-span-3">
+            <div className="w-full p-5 mt-4 intro-y box">
+              <div className="items-center md:flex mb-5">
+                <div className="mr-auto">
+                  <div className="flex items-center">
+                    <div className="text-lg font-medium">
+                      User Verification Status
+                    </div>
+                  </div>
+                  <div className="mt-1 text-slate-500">Persent</div>
+                </div>
+              </div>
+              <div className="relative px-3">
+                <div className="w-50 mx-auto lg:w-auto">
+                  {viewReportUserVerified}
+                </div>
+                <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full h-full">
+                  <div className="text-2xl font-medium leading-7">
+                    {dataReport?.user_verification_status?.verified_persent}%
+                  </div>
+                  <div className="mt-1 text-slate-500">
+                    from {dataReport?.user_verification_status?.total} user
                   </div>
                 </div>
-                <div className="mt-1 text-slate-500">Persent</div>
+              </div>
+              <div className="mx-auto mt-2 w-52 lg:w-auto lg:min-h-[120px]">
+                <div className="flex items-center mb-3">
+                  <div className="w-2 h-2 mr-3 border rounded-full bg-secondary/50 border-secondary/50"></div>
+                  <span className="truncate">Belum Aktivasi</span>
+                  <span className="ml-auto">
+                    {dataReport?.user_verification_status?.unverified} User |{" "}
+                    {dataReport?.user_verification_status?.unverified_persent}%
+                  </span>
+                </div>
+                <div className="flex items-center mb-3">
+                  <div className="w-2 h-2 mr-3 border rounded-full bg-primary/50 border-primary/50"></div>
+                  <span className="truncate">Sudah Aktivasi</span>
+                  <span className="ml-auto">
+                    {dataReport?.user_verification_status?.verified} User |{" "}
+                    {dataReport?.user_verification_status?.verified_persent}%
+                  </span>
+                </div>
               </div>
             </div>
-            <div className="relative px-3">
-              <div className="w-50 mx-auto lg:w-auto">
-                {viewReportUserVerified}
-              </div>
-              <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full h-full">
-                <div className="text-2xl font-medium leading-7">
-                  {dataReport?.user_verification_status?.verified_persent}%
+          </div>
+          {/* Populasi Vote/No Vote */}
+          <div className="col-span-12 md:col-span-6 lg:col-span-3">
+            <div className="w-full  p-5 mt-4 intro-y box">
+              <div className="items-center md:flex mb-5">
+                <div className="mr-auto">
+                  <div className="flex items-center">
+                    <div className="text-lg font-medium">
+                      Voting Activity Overview
+                    </div>
+                  </div>
+                  <div className="mt-1 text-slate-500">Persent</div>
                 </div>
-                <div className="mt-1 text-slate-500">
-                  from {dataReport?.user_verification_status?.total} user
+              </div>
+              <div className="relative px-3">
+                <div className="w-50 mx-auto lg:w-auto">
+                  {userActivityOverview}
+                </div>
+                <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full h-full">
+                  <div className="text-2xl font-medium leading-7">
+                    {dataReport?.voting_activity_overview?.vote_persent}%
+                  </div>
+                  <div className="mt-1 text-slate-500">
+                    from {dataReport?.voting_activity_overview?.total} user
+                  </div>
+                </div>
+              </div>
+              <div className="mx-auto mt-2 w-52 lg:w-auto lg:min-h-[120px]">
+                <div className="flex items-center mb-3">
+                  <div className="w-2 h-2 mr-3 border rounded-full bg-secondary/50 border-secondary/50"></div>
+                  <span className="truncate">Belum Memilih</span>
+                  <span className="ml-auto">
+                    {dataReport?.voting_activity_overview?.unvote} user |{" "}
+                    {dataReport?.voting_activity_overview?.unvote_persent}%
+                  </span>
+                </div>
+                <div className="flex items-center mb-3">
+                  <div className="w-2 h-2 mr-3 border rounded-full bg-primary/50 border-primary/50"></div>
+                  <span className="truncate">Sudah Memilih</span>
+                  <span className="ml-auto">
+                    {dataReport?.voting_activity_overview?.vote} user |{" "}
+                    {dataReport?.voting_activity_overview?.vote_persent}%
+                  </span>
                 </div>
               </div>
             </div>
-            <div className="mx-auto mt-2 w-52 lg:w-auto lg:min-h-[115px]">
-              <div className="flex items-center mb-3">
-                <div className="w-2 h-2 mr-3 border rounded-full bg-secondary/50 border-secondary/50"></div>
-                <span className="truncate">Belum Aktivasi</span>
-                <span className="ml-auto">
-                  {dataReport?.user_verification_status?.unverified} User |{" "}
-                  {dataReport?.user_verification_status?.unverified_persent}%
-                </span>
+          </div>
+          {/* Elections Percentage Pengawas */}
+          <div
+            className={`col-span-12 md:col-span-6 lg:col-span-3 ${meData?.privilege?.dashboard_view_vote ? "" : "hidden"}`}
+          >
+            <div className="w-full  p-5 mt-4 intro-y box">
+              <div className="items-center md:flex mb-5">
+                <div className="mr-auto">
+                  <div className="flex items-center">
+                    <div className="text-lg font-medium">Voting Pengawas</div>
+                  </div>
+                  <div className="mt-1 text-slate-500">Persent</div>
+                </div>
               </div>
-              <div className="flex items-center mb-3">
-                <div className="w-2 h-2 mr-3 border rounded-full bg-primary/50 border-primary/50"></div>
-                <span className="truncate">Sudah Aktivasi</span>
-                <span className="ml-auto">
-                  {dataReport?.user_verification_status?.verified} User |{" "}
-                  {dataReport?.user_verification_status?.verified_persent}%
-                </span>
+              <div className="relative px-3">
+                <div className="w-50 mx-auto lg:w-auto">
+                  {VotingCommissionerOverview}
+                </div>
+                <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full h-full">
+                  <div className="text-2xl font-medium leading-7">
+                    {dataReport?.commissioner_vote?.voted_percent}%
+                  </div>
+                  <div className="mt-1 text-slate-500">
+                    {dataReport?.commissioner_vote?.voted} voted from{" "}
+                    {dataReport?.commissioner_vote?.total_user} user
+                  </div>
+                </div>
+              </div>
+              <div className="mx-auto mt-2 w-52 lg:w-auto lg:h-[120px]">
+                {dataReport?.commissioner_vote?.data?.map(
+                  (item: any, index: number) => (
+                    <div className="flex items-center mb-3" key={index}>
+                      <div
+                        className={`w-2 h-2 mr-3 border rounded-full ${item?.color === "primary" ? `bg-${item?.color}/50 border-${item?.color}/50` : `bg-${item?.color} border-${item?.color}`} `}
+                      ></div>
+                      <span className="truncate">{item?.name}</span>
+                      <span className="ml-auto">
+                        {item?.total_vote} | {item?.vote_percent}%
+                      </span>
+                    </div>
+                  ),
+                )}
+              </div>
+            </div>
+          </div>
+          {/* Elections Percentage Pengurus */}
+          <div
+            className={`col-span-12 md:col-span-6 lg:col-span-3 ${meData?.privilege?.dashboard_view_vote ? "" : "hidden"}`}
+          >
+            <div className="w-full  p-5 mt-4 intro-y box">
+              <div className="items-center md:flex mb-5">
+                <div className="mr-auto">
+                  <div className="flex items-center">
+                    <div className="text-lg font-medium">Voting Pengurus</div>
+                  </div>
+                  <div className="mt-1 text-slate-500">Persent</div>
+                </div>
+              </div>
+              <div className="relative px-3">
+                <div className="w-50 mx-auto lg:w-auto">
+                  {VotingDirectorOverview}
+                </div>
+                <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full h-full">
+                  <div className="text-2xl font-medium leading-7">
+                    {dataReport?.director_vote?.voted_percent}%
+                  </div>
+                  <div className="mt-1 text-slate-500">
+                    {dataReport?.director_vote?.voted} voted from{" "}
+                    {dataReport?.director_vote?.total_user} user
+                  </div>
+                </div>
+              </div>
+              <div className="mx-auto mt-2 w-52 lg:w-auto lg:min-h-[120px]">
+                {dataReport?.director_vote?.data?.map(
+                  (item: any, index: number) => (
+                    <div className="flex items-center mb-3" key={index}>
+                      <div
+                        className={`w-2 h-2 mr-3 border rounded-full ${item?.color === "primary" ? `bg-${item?.color}/50 border-${item?.color}/50` : `bg-${item?.color} border-${item?.color}`} `}
+                      ></div>
+                      <span className="truncate">{item?.name}</span>
+                      <span className="ml-auto">
+                        {item?.total_vote} | {item?.vote_percent}%
+                      </span>
+                    </div>
+                  ),
+                )}
               </div>
             </div>
           </div>
         </div>
-        {/* Populasi Vote/No Vote */}
-        <div className="col-span-12 md:col-span-6 lg:col-span-3">
-          <div className="w-full  p-5 mt-4 intro-y box">
-            <div className="items-center md:flex mb-5">
-              <div className="mr-auto">
-                <div className="flex items-center">
-                  <div className="text-lg font-medium">
-                    Voting Activity Overview
+        <div className="grid grid-cols-12 gap-4 print-no-break">
+          {/* Vote Trend */}
+          <div className="col-span-12">
+            <div className="p-5 mt-12 intro-y box sm:mt-4">
+              <div className="items-center md:flex">
+                <div className="mr-auto">
+                  <div className="flex items-center">
+                    <div className="text-lg font-medium">Voter Trend</div>
                   </div>
-                </div>
-                <div className="mt-1 text-slate-500">Persent</div>
-              </div>
-            </div>
-            <div className="relative px-3">
-              <div className="w-50 mx-auto lg:w-auto">
-                {userActivityOverview}
-              </div>
-              <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full h-full">
-                <div className="text-2xl font-medium leading-7">
-                  {dataReport?.voting_activity_overview?.vote_persent}%
-                </div>
-                <div className="mt-1 text-slate-500">
-                  from {dataReport?.voting_activity_overview?.total} user
+                  <div className="mt-1 text-slate-500">Komulatif</div>
                 </div>
               </div>
-            </div>
-            <div className="mx-auto mt-2 w-52 lg:w-auto lg:min-h-[115px]">
-              <div className="flex items-center mb-3">
-                <div className="w-2 h-2 mr-3 border rounded-full bg-secondary/50 border-secondary/50"></div>
-                <span className="truncate">Belum Memilih</span>
-                <span className="ml-auto">
-                  {dataReport?.voting_activity_overview?.unvote} user |{" "}
-                  {dataReport?.voting_activity_overview?.unvote_persent}%
-                </span>
-              </div>
-              <div className="flex items-center mb-3">
-                <div className="w-2 h-2 mr-3 border rounded-full bg-primary/50 border-primary/50"></div>
-                <span className="truncate">Sudah Memilih</span>
-                <span className="ml-auto">
-                  {dataReport?.voting_activity_overview?.vote} user |{" "}
-                  {dataReport?.voting_activity_overview?.vote_persent}%
-                </span>
-              </div>
+              <div className="mt-6">{voteTrendOverview}</div>
             </div>
           </div>
         </div>
-        {/* Elections Percentage Pengawas */}
-        <div
-          className={`col-span-12 md:col-span-6 lg:col-span-3 ${meData?.privilege?.dashboard_view_vote ? "" : "hidden"}`}
-        >
-          <div className="w-full  p-5 mt-4 intro-y box">
-            <div className="items-center md:flex mb-5">
-              <div className="mr-auto">
-                <div className="flex items-center">
-                  <div className="text-lg font-medium">Voting Pengawas</div>
-                </div>
-                <div className="mt-1 text-slate-500">Persent</div>
-              </div>
-            </div>
-            <div className="relative px-3">
-              <div className="w-50 mx-auto lg:w-auto">
-                {VotingCommissionerOverview}
-              </div>
-              <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full h-full">
-                <div className="text-2xl font-medium leading-7">
-                  {dataReport?.commissioner_vote?.voted_percent}%
-                </div>
-                <div className="mt-1 text-slate-500">
-                  {dataReport?.commissioner_vote?.voted} voted from{" "}
-                  {dataReport?.commissioner_vote?.total_user} user
-                </div>
-              </div>
-            </div>
-            <div className="mx-auto mt-2 w-52 lg:w-auto lg:h-[115px]">
-              {dataReport?.commissioner_vote?.data?.map(
-                (item: any, index: number) => (
-                  <div className="flex items-center mb-3" key={index}>
-                    <div
-                      className={`w-2 h-2 mr-3 border rounded-full ${item?.color === "primary" ? `bg-${item?.color}/50 border-${item?.color}/50` : `bg-${item?.color} border-${item?.color}`} `}
-                    ></div>
-                    <span className="truncate">{item?.name}</span>
-                    <span className="ml-auto">
-                      {item?.total_vote} | {item?.vote_percent}%
-                    </span>
+        <div className="grid grid-cols-12 gap-4 print-no-break">
+          {/* Vote Trend */}
+          <div className="col-span-12">
+            <div className="p-5 mt-12 intro-y box sm:mt-4">
+              <div className="items-center md:flex">
+                <div className="mr-auto">
+                  <div className="flex items-center">
+                    <div className="text-lg font-medium">
+                      Voter Trend By Group
+                    </div>
                   </div>
-                ),
-              )}
-            </div>
-          </div>
-        </div>
-        {/* Elections Percentage Pengurus */}
-        <div
-          className={`col-span-12 md:col-span-6 lg:col-span-3 ${meData?.privilege?.dashboard_view_vote ? "" : "hidden"}`}
-        >
-          <div className="w-full  p-5 mt-4 intro-y box">
-            <div className="items-center md:flex mb-5">
-              <div className="mr-auto">
-                <div className="flex items-center">
-                  <div className="text-lg font-medium">Voting Pengurus</div>
-                </div>
-                <div className="mt-1 text-slate-500">Persent</div>
-              </div>
-            </div>
-            <div className="relative px-3">
-              <div className="w-50 mx-auto lg:w-auto">
-                {VotingDirectorOverview}
-              </div>
-              <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full h-full">
-                <div className="text-2xl font-medium leading-7">
-                  {dataReport?.director_vote?.voted_percent}%
-                </div>
-                <div className="mt-1 text-slate-500">
-                  {dataReport?.director_vote?.voted} voted from{" "}
-                  {dataReport?.director_vote?.total_user} user
+                  <div className="mt-1 text-slate-500">Komulatif</div>
                 </div>
               </div>
+              <div className="mt-6">{votingCountCompanyOverview}</div>
             </div>
-            <div className="mx-auto mt-2 w-52 lg:w-auto lg:min-h-[115px]">
-              {dataReport?.director_vote?.data?.map(
-                (item: any, index: number) => (
-                  <div className="flex items-center mb-3" key={index}>
-                    <div
-                      className={`w-2 h-2 mr-3 border rounded-full ${item?.color === "primary" ? `bg-${item?.color}/50 border-${item?.color}/50` : `bg-${item?.color} border-${item?.color}`} `}
-                    ></div>
-                    <span className="truncate">{item?.name}</span>
-                    <span className="ml-auto">
-                      {item?.total_vote} | {item?.vote_percent}%
-                    </span>
-                  </div>
-                ),
-              )}
-            </div>
-          </div>
-        </div>
-        {/* Vote Trend */}
-        <div className="col-span-12">
-          <div className="p-5 mt-12 intro-y box sm:mt-4">
-            <div className="items-center md:flex">
-              <div className="mr-auto">
-                <div className="flex items-center">
-                  <div className="text-lg font-medium">Voter Trend</div>
-                </div>
-                <div className="mt-1 text-slate-500">Komulatif</div>
-              </div>
-            </div>
-            <div className="mt-6">{voteTrendOverview}</div>
-          </div>
-        </div>
-        {/* Vote Trend */}
-        <div className="col-span-12">
-          <div className="p-5 mt-12 intro-y box sm:mt-4">
-            <div className="items-center md:flex">
-              <div className="mr-auto">
-                <div className="flex items-center">
-                  <div className="text-lg font-medium">
-                    Voter Trend By Group
-                  </div>
-                </div>
-                <div className="mt-1 text-slate-500">Komulatif</div>
-              </div>
-            </div>
-            <div className="mt-6">{votingCountCompanyOverview}</div>
           </div>
         </div>
       </div>
