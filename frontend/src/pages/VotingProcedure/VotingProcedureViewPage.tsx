@@ -252,7 +252,6 @@ const VotingProcedureViewPage = () => {
           />
           <div className="ml-3">
             <p className="text-base font-medium">Login</p>
-            <p className="">Login Aplikasi e-Voting menggunakan akun Anda.</p>
           </div>
         </div>
         <div className="flex items-center mt-10 intro-x gap-x-2 md:gap-x-8">
@@ -268,11 +267,7 @@ const VotingProcedureViewPage = () => {
           />
           <div className="ml-3">
             <p className="text-base font-medium">
-              Amati Profil Singkat, Visi dan Misi Kandidat Pengurus dan Pengawas
-            </p>
-            <p className="">
-              Pelajari profil singkat, visi, dan misi kandidat Pengurus dan
-              Pengawas pada menu Beranda sebelum memilih.
+              Amati Profil, Visi dan Misi Paket Pengawas dan Pengurus
             </p>
           </div>
         </div>
@@ -284,18 +279,11 @@ const VotingProcedureViewPage = () => {
             3
           </Button>
           <Lucide
-            icon="Users"
+            icon="Edit"
             className="w-10 h-10 text-primary hidden lg:block"
           />
           <div className="ml-3">
-            <p className="text-base font-medium">Pilih Kandidat Pengawas</p>
-            <p className="">
-              pilih salah satu kandidat pengawas yang anda anggap paling tepat.
-            </p>
-            <p>
-              Anda hanya dapat memilih 1 kandidat dan tidak dapat merubah
-              pilihan setelah memilih
-            </p>
+            <p className="text-base font-medium">Mulai Voting</p>
           </div>
         </div>
         <div className="flex items-center mt-10 intro-x gap-x-2 md:gap-x-8">
@@ -310,14 +298,7 @@ const VotingProcedureViewPage = () => {
             className="w-10 h-10 text-primary hidden lg:block"
           />
           <div className="ml-3">
-            <p className="text-base font-medium">Pilih Kandidat Pengurus</p>
-            <p className="">
-              Pilih salah satu kandidat pengurus yang anda anggap paling tepat.
-            </p>
-            <p>
-              Anda hanya dapat memilih 1 kandidat dan tidak dapat merubah
-              pilihan setelah memilih.
-            </p>
+            <p className="text-base font-medium">⁠Pilih Paket Pengawas</p>
           </div>
         </div>
         <div className="flex items-center mt-10 intro-x gap-x-2 md:gap-x-8">
@@ -328,12 +309,11 @@ const VotingProcedureViewPage = () => {
             5
           </Button>
           <Lucide
-            icon="Edit"
+            icon="Users"
             className="w-10 h-10 text-primary hidden lg:block"
           />
           <div className="ml-3">
-            <p className="text-base font-medium">Mulai Voting</p>
-            <p className="">Klik Menu "Mulai Voting" untuk memulai voting.</p>
+            <p className="text-base font-medium">⁠Pilih Paket Pengurus</p>
           </div>
         </div>
         <div className="flex items-center mt-10 intro-x gap-x-2 md:gap-x-8">
@@ -348,10 +328,7 @@ const VotingProcedureViewPage = () => {
             className="w-10 h-10 text-primary hidden lg:block"
           />
           <div className="ml-3">
-            <p className="text-base font-medium">Kirim Voting</p>
-            <p className="">
-              Klik "Kirim Voting" untuk menyelesaikan proses voting.
-            </p>
+            <p className="text-base font-medium">⁠Kirim Voting</p>
           </div>
         </div>
         <div className="flex items-center mt-10 intro-x gap-x-2 md:gap-x-8 mb-5">
@@ -367,11 +344,7 @@ const VotingProcedureViewPage = () => {
           />
           <div className="ml-3">
             <p className="text-base font-medium">
-              Pilihan Tercatat dan Selesai
-            </p>
-            <p className="">
-              Setelah konfirmasi berhasil, pilihan Anda akan tercatat. Terima
-              kasih, Anda telah menggunakan hak pilih Anda.
+              Pilihan Anda Tercatat pada Riwayat Voting dan Selesai
             </p>
           </div>
         </div>
