@@ -19,7 +19,7 @@ app.use(
 
 app.use(express.json());
 
-cron.schedule("*/30 * * * * *", async () => {
+cron.schedule(process.env.CRON_TIME, async () => {
   console.log("Process Email Queue every 30 seconds");
   console.log("start check");
   await processEmailQueue();
