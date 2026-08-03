@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Table from "../../base-components/Table";
 import Lucide from "../../base-components/Lucide";
 import LoadingIcon from "../../base-components/LoadingIcon";
-import Button from "../../base-components/Button";
 import { FormInput, FormSelect } from "../../base-components/Form";
 import { GetMe, resetGetMe } from "../../stores/features/GetMeSlice";
 import {
@@ -17,11 +16,20 @@ const EmailQueueTablePage = () => {
   const [meData, setMeData] = useState<any>(null);
   const [dataTable, setDataTable] = useState<any>(null);
   const [metaTableData, setMetaTableData] = useState<any>(null);
-  const [search, setSearch] = useState<any>("");
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
-  const [status, setStatus] = useState("pending");
-  const [type, setType] = useState("");
+
+  const [searchParams] = useSearchParams();
+
+  const [search, setSearch] = useState<any>(searchParams.get("search") || "");
+  const [page, setPage] = useState<number>(
+    Number(searchParams.get("page")) || 1,
+  );
+  const [limit, setLimit] = useState<number>(
+    Number(searchParams.get("limit")) || 10,
+  );
+  const [status, setStatus] = useState<string>(
+    searchParams.get("status") || "pending",
+  );
+  const [type, setType] = useState<string>(searchParams.get("type") || "");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -127,7 +135,9 @@ const EmailQueueTablePage = () => {
   };
 
   const handleClickData = (id: any) => {
-    navigate(`/email/data/${id}`);
+    navigate(
+      `/email/data/${id}?page=${page}&limit=${limit}&search=${search}&status=${status}&type=${type}`,
+    );
   };
 
   const handleChangeSearch = (e: any) => {

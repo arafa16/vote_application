@@ -10,10 +10,8 @@ import {
 import { GetMe, resetGetMe } from "../../stores/features/GetMeSlice";
 import Button from "../../base-components/Button";
 import Lucide from "../../base-components/Lucide";
-import dayjs from "dayjs";
-import { Menu, Dialog } from "../../base-components/Headless";
-import { useNavigate, useParams } from "react-router-dom";
-import { FormInput, FormLabel } from "../../base-components/Form";
+import { Menu } from "../../base-components/Headless";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import LoadingIcon from "../../base-components/LoadingIcon";
 import { PrivilegeCheck } from "../../utils/privilege-check";
 
@@ -24,6 +22,8 @@ const EmailDataViewByIdPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [searchParams] = useSearchParams();
 
   const {
     data: dataMe,
@@ -108,7 +108,9 @@ const EmailDataViewByIdPage = () => {
   }, [dispatch, id]);
 
   const handleBack = () => {
-    navigate("/email");
+    navigate(
+      `/email?page=${searchParams.get("page")}&limit=${searchParams.get("limit")}&search=${searchParams.get("search")}&status=${searchParams.get("status")}&type=${searchParams.get("type")}`,
+    );
   };
 
   const handleEdit = () => {
