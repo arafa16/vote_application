@@ -71,7 +71,7 @@ const votingNotificationTemplate = (
             <hr style="border:none;border-top:1px solid #e5e7eb;margin:25px 0;">
 
             <p>
-            Suara Anda telah tersimpan di sistem dan dapat di lihat kembali pada halaman riwayat  dan tidak dapat diubah kembali setelah proses pemungutan suara selesai.
+            Suara Anda telah tersimpan di sistem dan dapat dilihat kembali pada halaman riwayat voting. Pilihan anda tidak dapat diubah kembali setelah proses pemungutan suara selesai.
             </p>
 
             <p>
