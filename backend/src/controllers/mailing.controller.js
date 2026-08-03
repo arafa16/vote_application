@@ -233,16 +233,16 @@ const sendEmailInvitationAll = async (req, res) => {
         },
         transaction,
       );
-
-      await createLogHandler(
-        {
-          user_id: user.id,
-          activity: "send_invitation_email",
-          description: `Invitation email queued for ${user.name}.`,
-        },
-        transaction,
-      );
     }
+
+    await createLogHandler(
+      {
+        user_id: req.user.id,
+        activity: "send_invitation_email",
+        description: `Sent invitation emails to ${users.length} members.`,
+      },
+      transaction,
+    );
 
     await transaction.commit();
 
