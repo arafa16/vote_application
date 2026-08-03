@@ -107,6 +107,14 @@ const activationUser = async (req, res) => {
     );
   }
 
+  if (user.is_verified) {
+    return res.status(200).json({
+      success: true,
+      message:
+        "Your account has already been activated. Please log in to access the application.",
+    });
+  }
+
   const date_now = new Date();
   const status = Boolean(verify.activation);
 
