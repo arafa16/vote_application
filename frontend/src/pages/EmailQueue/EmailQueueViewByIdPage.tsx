@@ -209,6 +209,34 @@ const EmailDataViewByIdPage = () => {
             </div>
           </div>
         </div>
+        <div className="mt-2 overflow-x-auto rounded-lg border p-4 grid grid-cols-12">
+          <div
+            className="
+              col-span-8
+              w-full
+              max-w-full
+              break-words
+              [&_*]:max-w-full
+              [&_img]:h-auto
+              [&_img]:max-w-full
+              [&_table]:w-full
+              [&_table]:max-w-full
+              [&_table]:table-auto
+              [&_td]:break-words
+              [&_th]:break-words
+              [&_pre]:overflow-x-auto
+              [&_iframe]:max-w-full
+              [&_ol]:list-decimal
+              [&_ol]:pl-6
+              [&_ul]:list-disc
+              [&_ul]:pl-6
+              [&_li]:mb-2
+            "
+            dangerouslySetInnerHTML={{
+              __html: dataView?.body,
+            }}
+          />
+        </div>
       </div>
     </div>
   );
