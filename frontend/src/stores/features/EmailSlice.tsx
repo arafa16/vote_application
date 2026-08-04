@@ -48,10 +48,11 @@ export const SendEmailInvitationUser: any = createAsyncThunk(
 
 export const SendEmailInvitationUserAll: any = createAsyncThunk(
   "Email/SendEmailInvitationUserAll",
-  async (_, thunkAPI) => {
+  async (datas: any, thunkAPI) => {
     try {
       const response = await axios.get(
-        import.meta.env.VITE_REACT_APP_API_URL + `/api/v1/mail/invitation_all`,
+        import.meta.env.VITE_REACT_APP_API_URL +
+          `/api/v1/mail/invitation_all?${datas.searchParams}`,
         {
           withCredentials: true, // Now this is was the missing piece in the client side
         },

@@ -2,6 +2,8 @@ const {
   user: userModel,
   email_queue: emailQueueModel,
   audit_log: auditLogModel,
+  status: statusModel,
+  company: companyModel,
   sequelize,
 } = require("../models");
 const argon = require("argon2");
@@ -194,11 +196,41 @@ const saveEmailData = async (props, transaction = null) => {
 };
 
 const sendEmailInvitationAll = async (req, res) => {
+  const { status, company } = req.query;
+
+  const whereCondition = {
+    is_member: 1,
+    is_active: 1,
+  };
+
+  if (status) {
+    const findStatus = await statusModel.findOne({
+      where: {
+        uuid: status,
+      },
+    });
+
+    if (!findStatus) {
+      throw new CustomHttpError("Status not found.", 404);
+    }
+
+    whereCondition.status_id = findStatus.id;
+  }
+
+  if (company) {
+    const findCompany = await companyModel.findOne({
+      where: {
+        uuid: company,
+      },
+    });
+    if (!findCompany) {
+      throw new CustomHttpError("Company not found.", 404);
+    }
+    whereCondition.company_id = findCompany.id;
+  }
+
   const users = await userModel.findAll({
-    where: {
-      is_member: 1,
-      is_active: 1,
-    },
+    where: whereCondition,
     attributes: ["id", "uuid", "name", "email"],
   });
 

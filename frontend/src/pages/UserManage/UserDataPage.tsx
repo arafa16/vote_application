@@ -220,7 +220,17 @@ const UserDataPage = () => {
   }, [message]);
 
   const handleSendInvitation = () => {
-    dispatch(SendEmailInvitationUserAll());
+    const paramsObj: any = {};
+
+    if (group !== "") {
+      paramsObj.company = group;
+    }
+    if (status !== "") {
+      paramsObj.status = status;
+    }
+
+    const searchParams = new URLSearchParams(paramsObj);
+    dispatch(SendEmailInvitationUserAll({ searchParams }));
   };
 
   const handleSetStatusAll = (code: any) => {
