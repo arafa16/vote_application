@@ -1,6 +1,6 @@
 const express = require("express");
 const {
-  register,
+  // register,
   registerAttribute,
   login,
   getMe,
@@ -13,7 +13,7 @@ const { verifyToken } = require("../middleware/auth.middleware");
 
 const router = express.Router();
 
-router.post("/register", register);
+// router.post("/register", register);
 router.get("/register", registerAttribute);
 router.post("/login", login);
 router.get("/me", verifyToken, getMe);
