@@ -48,7 +48,7 @@ const EmailDataViewByIdPage = () => {
 
   useEffect(() => {
     if (meData !== null) {
-      PrivilegeCheck(meData?.privilege?.setting, navigate);
+      PrivilegeCheck(meData?.privilege?.email_queue, navigate);
     }
   }, [meData]);
 
