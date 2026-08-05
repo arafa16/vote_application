@@ -188,7 +188,7 @@ const UserDataViewByIdPage = () => {
   } = useSelector((state: any) => state.email);
 
   useEffect(() => {
-    if (dataEmail !== null && isSuccessEmail && !isLoadingEmail) {
+    if (messageEmail !== "" && isSuccessEmail && !isLoadingEmail) {
       NewNotification(messageEmail?.message);
       dispatch(resetEmail());
     } else if (messageEmail !== "" && isErrorEmail && !isLoadingEmail) {
