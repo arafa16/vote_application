@@ -6,6 +6,7 @@ const {
 } = require("../models");
 const { Op } = require("sequelize");
 const nodemailer = require("nodemailer");
+const CustomHttpError = require("../utils/custom_http_error.js");
 
 const getDataTable = async (req, res) => {
   const { search, is_active, sort, status, type } = req.query;
