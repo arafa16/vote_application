@@ -67,6 +67,12 @@ const initialState: SideMenuState = {
       privilege: "user_data",
     },
     {
+      icon: "Mail",
+      title: "email queue",
+      pathname: "/email",
+      privilege: "email_queue",
+    },
+    {
       icon: "Settings",
       title: "Setting",
       privilege: "setting",
@@ -93,12 +99,6 @@ const initialState: SideMenuState = {
           icon: "Settings",
           title: "director candidate",
           pathname: "/director_candidate_setup",
-          privilege: "setting",
-        },
-        {
-          icon: "Settings",
-          title: "email queue",
-          pathname: "/email",
           privilege: "setting",
         },
         {

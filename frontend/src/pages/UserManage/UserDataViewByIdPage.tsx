@@ -491,6 +491,12 @@ const UserDataViewByIdPage = () => {
               </p>
             </div>
             <div className="col-span-12 md:col-span-6 grid grid-cols-12">
+              <p className="col-span-6 md:col-span-6">Email Queue</p>
+              <p className="col-span-6">
+                : {userData?.privilege?.email_queue ? "active" : "inactive"}
+              </p>
+            </div>
+            <div className="col-span-12 md:col-span-6 grid grid-cols-12">
               <p className="col-span-6 md:col-span-6">Data User</p>
               <p className="col-span-6">
                 : {userData?.privilege?.user_data ? "active" : "inactive"}

@@ -109,6 +109,7 @@ const createData = async (req, res) => {
     dashboard,
     dashboard_view_vote,
     status_voting_anggota,
+    email_queue,
     user_data,
     setting,
   } = req.body;
@@ -127,6 +128,7 @@ const createData = async (req, res) => {
     dashboard,
     dashboard_view_vote,
     status_voting_anggota,
+    email_queue,
     user_data,
     setting,
   });
@@ -150,6 +152,7 @@ const updateData = async (req, res) => {
     dashboard,
     dashboard_view_vote,
     status_voting_anggota,
+    email_queue,
     user_data,
     setting,
   } = req.body;
@@ -172,6 +175,7 @@ const updateData = async (req, res) => {
     dashboard,
     dashboard_view_vote,
     status_voting_anggota,
+    email_queue,
     user_data,
     setting,
   });

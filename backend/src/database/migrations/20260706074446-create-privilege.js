@@ -47,6 +47,10 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
+      email_queue: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
       user_data: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
