@@ -72,6 +72,21 @@ const getDataTable = async (req, res) => {
         status_id: findData.id,
       });
     }
+  } else {
+    const statuses = await statusModel.findAll({
+      where: {
+        code: {
+          [Op.in]: [1, 2, 3],
+        },
+      },
+      attributes: ["id"],
+    });
+
+    whereClause[Op.and].push({
+      status_id: {
+        [Op.in]: statuses.map((item) => item.id),
+      },
+    });
   }
 
   const { count, rows } = await userModel.findAndCountAll({
