@@ -157,6 +157,25 @@ const UserPrivilegeDataForm = (props: any) => {
         </div>
         <div className="col-span-12 md:col-span-6 grid grid-cols-12">
           <div className="col-span-12">
+            <FormLabel htmlFor="view_vote">Vote View</FormLabel>
+            <FormSelect
+              id="view_vote"
+              formSelectSize="sm"
+              value={formData?.view_vote}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  view_vote: e.target.value,
+                })
+              }
+            >
+              <option value={0}>inactive</option>
+              <option value={1}>active</option>
+            </FormSelect>
+          </div>
+        </div>
+        <div className="col-span-12 md:col-span-6 grid grid-cols-12">
+          <div className="col-span-12">
             <FormLabel htmlFor="email_queue">Email Queue</FormLabel>
             <FormSelect
               id="email_queue"

@@ -47,6 +47,10 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
+      view_vote: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
       email_queue: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,

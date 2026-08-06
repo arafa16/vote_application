@@ -269,6 +269,7 @@ const createData = async (req, res) => {
         dashboard: false,
         dashboard_view_vote: false,
         status_voting_anggota: false,
+        view_vote: false,
         email_queue: false,
         user_data: false,
         setting: false,

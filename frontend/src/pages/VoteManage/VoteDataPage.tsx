@@ -281,7 +281,7 @@ const VoteDataPage = () => {
   };
 
   const handleClickData = (id: any) => {
-    if (meData?.privilege?.setting) {
+    if (meData?.privilege?.view_vote) {
       navigate(`/vote_data/${id}?page=${page}&limit=${limit}`);
     }
   };

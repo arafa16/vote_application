@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       dashboard: DataTypes.BOOLEAN,
       dashboard_view_vote: DataTypes.BOOLEAN,
       status_voting_anggota: DataTypes.BOOLEAN,
+      view_vote: DataTypes.BOOLEAN,
       email_queue: DataTypes.BOOLEAN,
       user_data: DataTypes.BOOLEAN,
       setting: DataTypes.BOOLEAN,
