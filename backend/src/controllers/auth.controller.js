@@ -370,7 +370,7 @@ const resetPassword = async (req, res) => {
         {
           user_id: user.id,
           to: user.email,
-          bcc: ["it@kopkarla.co.id"],
+          bcc: ["it.dev@kopkarla.co.id"],
           subject: "Verifikasi Aktivasi Akun Aplikasi Kopkarla",
           body: verificationEmailTemplate(user.name, linkVerification),
           type: "verification",

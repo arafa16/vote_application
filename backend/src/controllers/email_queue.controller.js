@@ -18,6 +18,8 @@ const getDataTable = async (req, res) => {
     const direction = sort.startsWith("-") ? "DESC" : "ASC";
     const columnName = sort.replace(/^-/, "");
     order.push([columnName, direction]);
+  } else {
+    order.push(["sent_at", "DESC"]);
   }
 
   if (search) {

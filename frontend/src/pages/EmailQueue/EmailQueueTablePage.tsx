@@ -11,6 +11,7 @@ import {
   resetEmail,
 } from "../../stores/features/EmailSlice";
 import { PrivilegeCheck } from "../../utils/privilege-check";
+import dayjs from "dayjs";
 
 const EmailQueueTablePage = () => {
   const [meData, setMeData] = useState<any>(null);
@@ -258,6 +259,7 @@ const EmailQueueTablePage = () => {
                   <Table.Th className="whitespace-nowrap">Bcc</Table.Th>
                   <Table.Th className="whitespace-nowrap">Type</Table.Th>
                   <Table.Th className="whitespace-nowrap">Retry Count</Table.Th>
+                  <Table.Th className="whitespace-nowrap">Sent At</Table.Th>
                   <Table.Th className="whitespace-nowrap">Status</Table.Th>
                 </Table.Tr>
               </Table.Thead>
@@ -288,6 +290,10 @@ const EmailQueueTablePage = () => {
                     </Table.Td>
                     <Table.Td className="whitespace-nowrap">
                       {data?.retry_count}
+                    </Table.Td>
+                    <Table.Td className="whitespace-nowrap">
+                      {data?.sent_at &&
+                        dayjs(data?.sent_at).format("YYYY-MM-DD HH:mm:ss")}
                     </Table.Td>
                     <Table.Td className="whitespace-nowrap">
                       {data?.status}
